@@ -21,7 +21,6 @@ namespace Avalonia.Accelerate.Appearance.Services
     {
         private readonly IThemeLoaderService _themeLoaderService;
         private readonly IApplication _application;
-        private static SkinManager? _instance;
         private readonly Dictionary<string, Skin?> _availableSkins = new();
         private Skin? _currentSkin;
         private readonly IStylesCollection _styles;
@@ -326,13 +325,16 @@ namespace Avalonia.Accelerate.Appearance.Services
             // ✅ Add new styles (normal StyleInclude)
             foreach (var kvp in skin.StyleUris)
             {
-                var style = new StyleInclude(new Uri("avares://Avalonia.Accelerate.Appearance/"))
+                if (kvp.Value != null)
                 {
-                    Source = new Uri(kvp.Value)
-                };
+                    var style = new StyleInclude(new Uri("avares://Avalonia.Accelerate.Appearance/"))
+                    {
+                        Source = new Uri(kvp.Value)
+                    };
 
-                _styles.Add(style);
-                _appliedControlThemes.Add(style);
+                    _styles.Add(style);
+                    _appliedControlThemes.Add(style);
+                }
             }
         }
 

@@ -90,7 +90,7 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
                     // Apply theme immediately for preview
                     if (value != null)
                     {
-                        SkinManager.Instance.ApplySkin(value.Name);
+                        SkinManager.Instance?.ApplySkin(value.Name);
                         _logger.LogInformation("Skin changed to: {ThemeName}", value.Name);
                     }
                 }
@@ -102,24 +102,25 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
             try
             {
                 var skinManager = SkinManager.Instance;
-                var themeNames = skinManager.GetAvailableSkinNames();
+                var themeNames = skinManager?.GetAvailableSkinNames();
 
                 AvailableThemes.Clear();
 
-                foreach (var themeName in themeNames)
-                {
-                    var skin = skinManager.GetSkin(themeName);
-                    if (skin != null)
+                if (themeNames != null)
+                    foreach (var themeName in themeNames)
                     {
-                        var themeInfo = new ThemeInfo
+                        var skin = skinManager?.GetSkin(themeName);
+                        if (skin != null)
                         {
-                            Name = themeName,
-                            Description = GetThemeDescription(themeName),
-                            PreviewColor = new SolidColorBrush(skin.AccentColor)
-                        };
-                        AvailableThemes.Add(themeInfo);
+                            var themeInfo = new ThemeInfo
+                            {
+                                Name = themeName,
+                                Description = GetThemeDescription(themeName),
+                                PreviewColor = new SolidColorBrush(skin.AccentColor)
+                            };
+                            AvailableThemes.Add(themeInfo);
+                        }
                     }
-                }
 
                 _logger.LogInformation("Loaded {ThemeCount} available themes", AvailableThemes.Count);
             }
@@ -133,7 +134,7 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
         {
             try
             {
-                var currentSkin = SkinManager.Instance.CurrentSkin;
+                var currentSkin = SkinManager.Instance?.CurrentSkin;
                 if (currentSkin?.Name != null)
                 {
                     SelectedTheme = AvailableThemes.FirstOrDefault(t => t.Name == currentSkin.Name);
@@ -154,7 +155,7 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
             {
                 if (SelectedTheme != null)
                 {
-                    SkinManager.Instance.ApplySkin(SelectedTheme.Name);
+                    SkinManager.Instance?.ApplySkin(SelectedTheme.Name);
                     _logger.LogInformation("Applied theme: {ThemeName}", SelectedTheme.Name);
                 }
             }

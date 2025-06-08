@@ -29,7 +29,7 @@ namespace Avalonia.Accelerate.Driver.ViewModels
         private readonly ILogger<MainWindowViewModel> _logger;
         private string _currentSkinName = "Unknown";
         private int _availableSkinCount = 0;
-        public QuickSkinSwitcherViewModel QuickSkinSwitcherViewModel { get; }
+        public QuickSkinSwitcherViewModel? QuickSkinSwitcherViewModel { get; }
 
         /// <summary>
         /// Initializes a new instance of MainWindowViewModel with dependency injection
@@ -153,8 +153,6 @@ namespace Avalonia.Accelerate.Driver.ViewModels
 
         private void InitializeSkinData()
         {
-            if (_skinManager == null) return;
-
             try
             {
                 if (_skinManager.CurrentSkin == null)
@@ -177,8 +175,6 @@ namespace Avalonia.Accelerate.Driver.ViewModels
 
         private void SubscribeToSkinChanges()
         {
-            if (_skinManager == null) return;
-
             _skinManager.SkinChanged += OnSkinChanged;
         }
 
@@ -577,10 +573,7 @@ namespace Avalonia.Accelerate.Driver.ViewModels
         {
             try
             {
-                if (_dialogService != null)
-                {
-                    await _dialogService.ShowErrorAsync(title, message, exception);
-                }
+                await _dialogService.ShowErrorAsync(title, message, exception);
             }
             catch (Exception ex)
             {
@@ -601,10 +594,7 @@ namespace Avalonia.Accelerate.Driver.ViewModels
         {
             if (disposing)
             {
-                if (_skinManager != null)
-                {
-                    _skinManager.SkinChanged -= OnSkinChanged;
-                }
+                _skinManager.SkinChanged -= OnSkinChanged;
             }
             base.Dispose(disposing);
         }

@@ -208,20 +208,23 @@ namespace Avalonia.Accelerate.Appearance.Tests.Services.Unit
             var skin1 = CreateTestSkin();
             var skin2 = CreateTestSkin();
             skin2.Name = "TestSkin2";
-            var themes = new Dictionary<string, Skin>
+            if (skin1.Name != null)
             {
-                { skin1.Name, skin1 },
-                { skin2.Name, skin2 }
-            };
-            var filePath = Path.GetTempFileName();
+                var themes = new Dictionary<string, Skin>
+                {
+                    { skin1.Name, skin1 },
+                    { skin2.Name, skin2 }
+                };
+                var filePath = Path.GetTempFileName();
 
-            var result = await SkinImportExport.ExportSkinPackAsync(themes, filePath, "PackName", "desc");
+                var result = await SkinImportExport.ExportSkinPackAsync(themes, filePath, "PackName", "desc");
 
-            Assert.True(result);
-            var json = await File.ReadAllTextAsync(filePath);
-            Assert.Contains("PackName", json);
-            Assert.Contains("TestSkin2", json);
-            File.Delete(filePath);
+                Assert.True(result);
+                var json = await File.ReadAllTextAsync(filePath);
+                Assert.Contains("PackName", json);
+                Assert.Contains("TestSkin2", json);
+                File.Delete(filePath);
+            }
         }
     }
 

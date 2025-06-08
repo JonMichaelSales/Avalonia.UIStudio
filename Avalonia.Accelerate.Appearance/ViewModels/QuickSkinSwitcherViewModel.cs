@@ -32,6 +32,7 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
         /// <param name="logger">
         /// An instance of <see cref="ILogger"/> used for logging operations within the view model.
         /// </param>
+        /// <param name="skinManager"></param>
         public QuickSkinSwitcherViewModel(ILogger logger, ISkinManager skinManager)
         {
             _logger = logger;
