@@ -1,6 +1,6 @@
 ﻿namespace Avalonia.Accelerate.Appearance.Tests.Fixtures
 {
-    [CollectionDefinition("TestApp collection")]
+    [CollectionDefinition("AvaloniaTestCollection")]
     public class TestAppCollection : ICollectionFixture<TestAppFixture>
     {
         // This class has no code, and is never created. 

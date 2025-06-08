@@ -29,7 +29,7 @@ namespace Avalonia.Accelerate.Appearance.Model
             // Don't call base constructor to avoid setting default values
             // Initialize collections that are required
             ControlThemeUris = new Dictionary<string, string>();
-            StyleUris = new Dictionary<string, string>();
+            StyleUris = new();
             Typography = new TypographyScale();
             PropertyOverrides = new Dictionary<string, object>();
         }

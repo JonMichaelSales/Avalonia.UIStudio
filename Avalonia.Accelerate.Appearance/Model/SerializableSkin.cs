@@ -184,7 +184,9 @@ namespace Avalonia.Accelerate.Appearance.Model
                 FontSizeSmall = skin.FontSizeSmall,
                 FontSizeMedium = skin.FontSizeMedium,
                 FontSizeLarge = skin.FontSizeLarge,
-                FontWeight = Enum.TryParse<FontWeight>(skin.FontWeight, true, out var fw) ? fw : FontWeight.Normal,
+                FontWeight = Enum.TryParse<FontWeight>(skin.FontWeight, true, out var fw)
+                    ? fw
+                    : FontWeight.Normal,
                 BorderRadius = skin.BorderRadius,
                 BorderThickness = new Thickness(
                     skin.BorderThickness.Left,
@@ -220,10 +222,10 @@ namespace Avalonia.Accelerate.Appearance.Model
                 LetterSpacing = skin.AdvancedTypography?.LetterSpacing ?? 0,
                 EnableLigatures = skin.AdvancedTypography?.EnableLigatures ?? true,
                 ControlThemeUris = skin.ControlThemes?.ToDictionary(x => x, x => x) ?? new(),
-                StyleUris = skin.PropertyOverrides?.ToDictionary(x => x.Key, x => x.Value?.ToString()) ?? new(),
+                StyleUris = skin.PropertyOverrides?.ToDictionary(x => x.Key,
+                    x => x.Value?.ToString()) ?? new(),
                 AssetUris = skin.Assets?.ToDictionary(x => x.Key, x => x.Value) ?? new()
             };
-            
         }
     }
 

@@ -16,8 +16,14 @@ namespace Avalonia.Accelerate.Dialogs.Tests.Fixtures
                         .UsePlatformDetect()
                         .UseSkia()
                         .SetupWithoutStarting();  // SAFE, no Dispatcher loop started
-                    var lifetime = (IClassicDesktopStyleApplicationLifetime)app.ApplicationLifetime;
-                    if (lifetime != null) lifetime.MainWindow = new MainWindow();
+                    {
+                        if (app.ApplicationLifetime != null)
+                        {
+                            var lifetime = (IClassicDesktopStyleApplicationLifetime)app.ApplicationLifetime;
+                            if (lifetime != null) lifetime.MainWindow = new MainWindow();
+                        }
+                    }
+
                     app.RunWithMainWindow<MainWindow>();
                 }
                 catch (Exception e)
