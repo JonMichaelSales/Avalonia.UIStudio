@@ -1,46 +1,4 @@
-steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
-    - name: Cache NuGet packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build
-      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
-
-    - name: Run tests with coverage
-      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage" --results-directory "./coverage" --logger "console;verbosity=detailed"
-
-    # Only generate coverage reports for Release builds
-    - name: Install ReportGenerator
-      if: matrix.configuration == 'Release'
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool
-
-    - name: Generate Coverage Report
-      if: matrix.configuration == 'Release'
-      run: |
-        reportgenerator `
-          -reports:"./coverage/**/coverage.cobertura.xml" `
-          -targetdir:"./coverage/report" `
-          -reporttypes:"Html;HtmlSummary;Badges;Cobertura" `
-          -verbosity:Info
-
-    - name: Upload Coveragname: Avalonia Windows CI/CD
+name: Avalonia Windows CI/CD
 
 on:
   push:
@@ -78,71 +36,62 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build
-      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+    - name: Build Libraries (Dependencies First)
+      run: |
+        dotnet build Avalonia.Accelerate.TestUtilities/Avalonia.Accelerate.TestUtilities.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.Accelerate.Icons/Avalonia.Accelerate.Icons.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.Accelerate.Dialogs/Avalonia.Accelerate.Dialogs.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.Accelerate.Appearance/Avalonia.Accelerate.Appearance.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.Accelerate.Controls/Avalonia.Accelerate.Controls.csproj --configuration ${{ matrix.configuration }} --no-restore
 
-    - name: Run tests with coverage
+    - name: Build Test Driver Application
+      run: dotnet build Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj --configuration ${{ matrix.configuration }} --no-restore
+
+    - name: Build Test Projects
+      run: |
+        dotnet build Avalonia.Accelerate.Appearance.Tests/Avalonia.Accelerate.Appearance.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.Accelerate.Dialogs.Tests/Avalonia.Accelerate.Dialogs.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.Accelerate.Icon.Tests/Avalonia.Accelerate.Icons.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.Accelerate.Controls.Tests/Avalonia.Accelerate.Controls.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+
+    - name: Run All Tests with Coverage
       run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage" --results-directory "./coverage" --logger "console;verbosity=detailed"
 
-    # Only generate coverage reports on Linux (to avoid duplicates)
     - name: Install ReportGenerator
-      if: matrix.os == 'ubuntu-latest' && matrix.configuration == 'Release'
+      if: matrix.configuration == 'Release'
       run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
     - name: Generate Coverage Report
-      if: matrix.os == 'ubuntu-latest' && matrix.configuration == 'Release'
+      if: matrix.configuration == 'Release'
       run: |
-        reportgenerator \
-          -reports:"./coverage/**/coverage.cobertura.xml" \
-          -targetdir:"./coverage/report" \
-          -reporttypes:"Html;HtmlSummary;Badges;Cobertura" \
+        reportgenerator `
+          -reports:"./coverage/**/coverage.cobertura.xml" `
+          -targetdir:"./coverage/report" `
+          -reporttypes:"Html;HtmlSummary;Badges;Cobertura" `
           -verbosity:Info
 
     - name: Upload Coverage Reports
-      if: matrix.os == 'ubuntu-latest' && matrix.configuration == 'Release'
+      if: matrix.configuration == 'Release'
       uses: actions/upload-artifact@v4
       with:
         name: coverage-report
         path: ./coverage/report
 
     - name: Upload Coverage to Codecov
-      if: matrix.os == 'ubuntu-latest' && matrix.configuration == 'Release'
+      if: matrix.configuration == 'Release'
       uses: codecov/codecov-action@v4
       with:
         files: ./coverage/**/coverage.cobertura.xml
         fail_ci_if_error: false
         verbose: true
 
-    # Build platform-specific packages (only on Release)
-    - name: Publish Windows
-      if: matrix.os == 'windows-latest' && matrix.configuration == 'Release'
-      run: dotnet publish --configuration Release --runtime win-x64 --self-contained true --output ./publish/win-x64
+    - name: Publish Test Driver Application
+      if: matrix.configuration == 'Release'
+      run: dotnet publish Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj --configuration Release --runtime win-x64 --self-contained true --output ./publish/win-x64
 
-    - name: Publish Linux
-      if: matrix.os == 'ubuntu-latest' && matrix.configuration == 'Release'
-      run: dotnet publish --configuration Release --runtime linux-x64 --self-contained true --output ./publish/linux-x64
-
-    - name: Publish macOS
-      if: matrix.os == 'macos-latest' && matrix.configuration == 'Release'
-      run: dotnet publish --configuration Release --runtime osx-x64 --self-contained true --output ./publish/osx-x64
-
-    - name: Upload Build Artifacts (Windows)
-      if: matrix.os == 'windows-latest' && matrix.configuration == 'Release'
+    - name: Upload Build Artifacts
+      if: matrix.configuration == 'Release'
       uses: actions/upload-artifact@v4
       with:
         name: avalonia-app-windows
         path: ./publish/win-x64
-
-    - name: Upload Build Artifacts (Linux)
-      if: matrix.os == 'ubuntu-latest' && matrix.configuration == 'Release'
-      uses: actions/upload-artifact@v4
-      with:
-        name: avalonia-app-linux
-        path: ./publish/linux-x64
-
-    - name: Upload Build Artifacts (macOS)
-      if: matrix.os == 'macos-latest' && matrix.configuration == 'Release'
-      uses: actions/upload-artifact@v4
-      with:
-        name: avalonia-app-macos
-        path: ./publish/osx-x64
