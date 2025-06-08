@@ -6,7 +6,7 @@ using Avalonia.Media;
 
 namespace Avalonia.Accelerate.Appearance.Tests.Services.Integration
 {
-    [Collection("TestApp collection")]
+    [Collection("AvaloniaTestCollection")]
     public class SkinManagerIntegrationTests
     {
 

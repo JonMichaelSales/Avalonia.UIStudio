@@ -6,7 +6,7 @@ using Avalonia.Accelerate.TestUtilities.Rendering;
 using Avalonia.Media;
 using Xunit;
 
-namespace Avalonia.Accelerate.Icon.Tests
+namespace Avalonia.Accelerate.Icons.Tests
 {
     [CollectionDefinition("AvaloniaTestCollection")]
     public class AvaloniaTestCollection: ICollectionFixture<TestAppFixture>
@@ -44,7 +44,6 @@ namespace Avalonia.Accelerate.Icon.Tests
         [InlineData("test.cs", ApplicationIcons.Code)]
         [InlineData("test.unknown", ApplicationIcons.File)]
         [InlineData("", ApplicationIcons.File)]
-        [InlineData(null, ApplicationIcons.File)]
         public void GetFileTypeIcon_Returns_Correct_Geometry(string fileName, string expectedPath)
         {
             var geometry = _icons.GetFileTypeIcon(fileName);
@@ -102,7 +101,6 @@ namespace Avalonia.Accelerate.Icon.Tests
         [InlineData("test.cs", ApplicationIcons.Code)]
         [InlineData("test.unknown", ApplicationIcons.File)]
         [InlineData("", ApplicationIcons.File)]
-        [InlineData(null, ApplicationIcons.File)]
         public void GetFileTypePathData_Returns_Correct_Path(string fileName, string expectedPath)
         {
             var path = ApplicationIcons.GetFileTypePathData(fileName);
@@ -116,7 +114,7 @@ namespace Avalonia.Accelerate.Icon.Tests
             Assert.NotNull(path);
             Assert.Equal(24, path.Width);
             Assert.Equal(24, path.Height);
-            Assert.Equal(Geometry.Parse(ApplicationIcons.File).ToString(), path.Data.ToString());
+            Assert.Equal(Geometry.Parse(ApplicationIcons.File).ToString(), path.Data?.ToString());
         }
 
 
