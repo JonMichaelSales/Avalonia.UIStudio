@@ -1,4 +1,46 @@
-name: Avalonia CI/CD
+steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+
+    - name: Run tests with coverage
+      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage" --results-directory "./coverage" --logger "console;verbosity=detailed"
+
+    # Only generate coverage reports for Release builds
+    - name: Install ReportGenerator
+      if: matrix.configuration == 'Release'
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+    - name: Generate Coverage Report
+      if: matrix.configuration == 'Release'
+      run: |
+        reportgenerator `
+          -reports:"./coverage/**/coverage.cobertura.xml" `
+          -targetdir:"./coverage/report" `
+          -reporttypes:"Html;HtmlSummary;Badges;Cobertura" `
+          -verbosity:Info
+
+    - name: Upload Coveragname: Avalonia Windows CI/CD
 
 on:
   push:
@@ -11,9 +53,8 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-        os: [windows-latest, ubuntu-latest, macos-latest]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     steps:
     - name: Checkout
