@@ -1,0 +1,40 @@
+{
+  "Name": "ModernIce",
+  "Description": "A clean modern light theme with icy blue accents and subtle shadows.",
+  "Version": "1.0",
+  "Author": "ThemeGenerator",
+  "CreatedDate": "2025-05-31T11:41:27.282728",
+  "PrimaryColor": "#E6F0FA",
+  "SecondaryColor": "#FFFFFF",
+  "AccentColor": "#4A90E2",
+  "PrimaryBackground": "#F7FAFC",
+  "SecondaryBackground": "#E6ECF2",
+  "PrimaryTextColor": "#2A3B4C",
+  "SecondaryTextColor": "#6C7A89",
+  "BorderColor": "#B0C4D8",
+  "ErrorColor": "#D64545",
+  "WarningColor": "#F39C12",
+  "SuccessColor": "#27AE60",
+  "FontFamily": "Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+  "FontSizeSmall": 12,
+  "FontSizeMedium": 14,
+  "FontSizeLarge": 16,
+  "FontWeight": "Normal",
+  "BorderRadius": 6,
+  "BorderThickness": {
+    "Left": 1,
+    "Top": 1,
+    "Right": 1,
+    "Bottom": 1
+  },
+  "ControlThemes": [
+    "ControlThemes/TextBlock.axaml",
+    "ControlThemes/Button.axaml",
+    "ControlThemes/TextBox.axaml",
+    "ControlThemes/CheckBox.axaml",
+    "ControlThemes/ComboBox.axaml",
+    "ControlThemes/Slider.axaml",
+    "ControlThemes/Expander.axaml",
+    "ControlThemes/TabControl.axaml"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "Description": "Auto-converted theme with ControlThemes",
+  "Version": "1.0",
+  "Author": "System",
+  "CreatedDate": "2025-05-31T11:09:01.842464",
+  "FontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+  "FontSizeSmall": 11,
+  "FontSizeMedium": 12,
+  "FontSizeLarge": 14,
+  "FontWeight": "Normal",
+  "BorderRadius": 3,
+  "BorderThickness": {
+    "Left": 1,
+    "Top": 1,
+    "Right": 1,
+    "Bottom": 1
+  },
+  "PrimaryColor": "#1B3A2D",
+  "SecondaryColor": "#2E7D32",
+  "AccentColor": "#4CAF50",
+  "PrimaryBackground": "#0A2814",
+  "SecondaryBackground": "#1B5E20",
+  "PrimaryTextColor": "#FFFFFF",
+  "SecondaryTextColor": "#B9F6CA",
+  "BorderColor": "#388E3C",
+  "ErrorColor": "#FF5252",
+  "WarningColor": "#FFD740",
+  "SuccessColor": "#69F0AE",
+  "Name": "Forest Green",
+  "ControlThemes": [
+    "ControlThemes/TextBlock.axaml",
+    "ControlThemes/Button.axaml"
+  ]
+}

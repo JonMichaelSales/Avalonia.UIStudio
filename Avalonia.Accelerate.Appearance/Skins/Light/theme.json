@@ -1,0 +1,34 @@
+{
+  "Description": "Auto-converted theme with ControlThemes",
+  "Version": "1.0",
+  "Author": "System",
+  "CreatedDate": "2025-05-31T11:09:01.842464",
+  "FontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+  "FontSizeSmall": 11,
+  "FontSizeMedium": 12,
+  "FontSizeLarge": 14,
+  "FontWeight": "Normal",
+  "BorderRadius": 3,
+  "BorderThickness": {
+    "Left": 1,
+    "Top": 1,
+    "Right": 1,
+    "Bottom": 1
+  },
+  "PrimaryColor": "#FFFFFF",
+  "SecondaryColor": "#F0F0F0",
+  "AccentColor": "#2980B9",
+  "PrimaryBackground": "#F5F5F5",
+  "SecondaryBackground": "#E0E0E0",
+  "PrimaryTextColor": "#333333",
+  "SecondaryTextColor": "#555555",
+  "BorderColor": "#CCCCCC",
+  "ErrorColor": "#D32F2F",
+  "WarningColor": "#F57C00",
+  "SuccessColor": "#388E3C",
+  "Name": "Light",
+  "ControlThemes": [
+    "ControlThemes/TextBlock.axaml",
+    "ControlThemes/Button.axaml"
+  ]
+}

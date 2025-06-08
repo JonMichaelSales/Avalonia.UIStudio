@@ -1,0 +1,111 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ControlTheme x:Key="MaterialDesign3ButtonTheme" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="RenderTransform" Value="scale(1)" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.15" />
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+
+            </Transitions>
+        </Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Name="PART_Border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BoxShadow="0 1 3 1 #1A000000, 0 1 2 0 #33000000"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <ContentPresenter
+                        Name="PART_ContentPresenter"
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        Foreground="{TemplateBinding Foreground}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  Hover State  -->
+        <Style Selector="^:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Border">
+            <Setter Property="Background" Value="{DynamicResource PrimaryColorBrush}" />
+            <Setter Property="BoxShadow" Value="0 2 6 2 #1A000000, 0 1 2 0 #33000000" />
+        </Style>
+
+        <!--  Pressed State  -->
+        <Style Selector="^:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.96)" />
+        </Style>
+        <Style Selector="^:pressed /template/ Border#PART_Border">
+            <Setter Property="Background" Value="{DynamicResource SecondaryColorBrush}" />
+            <Setter Property="BoxShadow" Value="0 1 2 0 #1A000000" />
+        </Style>
+
+        <!--  Disabled State  -->
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.38" />
+        </Style>
+        <Style Selector="^:disabled /template/ Border#PART_Border">
+            <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BoxShadow" Value="none" />
+        </Style>
+        <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        </Style>
+
+        <!--  Filled Button Variant (Primary)  -->
+        <Style Selector="^.filled /template/ Border#PART_Border">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BoxShadow" Value="0 1 3 1 #1A000000, 0 1 2 0 #33000000" />
+        </Style>
+        <Style Selector="^.filled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="^.filled:pointerover /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#5A3F93" />
+            <Setter Property="BoxShadow" Value="0 2 6 2 #1A000000, 0 1 2 0 #33000000" />
+        </Style>
+        <Style Selector="^.filled:pressed /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#4F3783" />
+            <Setter Property="BoxShadow" Value="0 1 2 0 #1A000000" />
+        </Style>
+
+        <!--  Text Button Variant  -->
+        <Style Selector="^.text /template/ Border#PART_Border">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BoxShadow" Value="none" />
+        </Style>
+        <Style Selector="^.text /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+        <Style Selector="^.text:pointerover /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#1A6750A4" />
+        </Style>
+        <Style Selector="^.text:pressed /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#336750A4" />
+        </Style>
+    </ControlTheme>
+
+</ResourceDictionary>

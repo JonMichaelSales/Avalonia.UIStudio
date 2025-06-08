@@ -1,0 +1,128 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border
+            Width="300"
+            Padding="20"
+            Background="{DynamicResource BackgroundBrush}">
+            <StackPanel Spacing="10">
+                <CheckBox Content="Unchecked" />
+                <CheckBox Content="Checked" IsChecked="True" />
+                <CheckBox
+                    Content="Indeterminate"
+                    IsChecked="{x:Null}"
+                    IsThreeState="True" />
+                <CheckBox Content="Disabled" IsEnabled="False" />
+                <CheckBox
+                    Content="Disabled Checked"
+                    IsChecked="True"
+                    IsEnabled="False" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <ControlTheme x:Key="CustomCheckBoxTheme" TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="Padding" Value="8,2,0,0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border
+                        Name="PART_Border"
+                        Width="16"
+                        Height="16"
+                        VerticalAlignment="Center"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{DynamicResource CornerRadius}">
+                        <Panel>
+                            <!--  Checked state checkmark  -->
+                            <Path
+                                Name="CheckMark"
+                                Width="10"
+                                Height="10"
+                                Margin="0,1,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M 1,5 L 4,9 L 9,1"
+                                IsVisible="False"
+                                Stretch="Uniform"
+                                Stroke="{DynamicResource TextPrimaryBrush}"
+                                StrokeLineCap="Round"
+                                StrokeThickness="2" />
+
+                            <!--  Indeterminate state indicator  -->
+                            <Rectangle
+                                Name="IndeterminateMark"
+                                Width="9"
+                                Height="9"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Fill="{DynamicResource TextPrimaryBrush}"
+                                IsVisible="False"
+                                RadiusX="1"
+                                RadiusY="1" />
+                        </Panel>
+                    </Border>
+                    <ContentPresenter
+                        Name="PART_ContentPresenter"
+                        Grid.Column="1"
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        Foreground="{TemplateBinding Foreground}"
+                        TextWrapping="Wrap" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  Normal state  -->
+        <Style Selector="^">
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        </Style>
+
+        <!--  PointerOver state  -->
+        <Style Selector="^:pointerover /template/ Border#PART_Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <!--  Checked state  -->
+        <Style Selector="^:checked /template/ Border#PART_Border">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+
+        <Style Selector="^:checked /template/ Path#CheckMark">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <!--  Indeterminate state  -->
+        <Style Selector="^:indeterminate /template/ Border#PART_Border">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="Opacity" Value="0.7" />
+        </Style>
+
+        <Style Selector="^:indeterminate /template/ Rectangle#IndeterminateMark">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <!--  Disabled state  -->
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

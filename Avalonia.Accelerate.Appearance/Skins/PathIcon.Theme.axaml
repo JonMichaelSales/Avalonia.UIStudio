@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ControlTheme x:Key="DefaultPathIconTheme" TargetType="PathIcon">
+        <Setter Property="Foreground" Value="{DynamicResource AccentBlueBrush}" />
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+    </ControlTheme>
+
+    <ControlTheme x:Key="SmallPathIconTheme" TargetType="PathIcon">
+        <Setter Property="Foreground" Value="{DynamicResource AccentBlueBrush}" />
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+    </ControlTheme>
+
+    <ControlTheme x:Key="LargePathIconTheme" TargetType="PathIcon">
+        <Setter Property="Foreground" Value="{DynamicResource AccentBlueBrush}" />
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+    </ControlTheme>
+
+    <ControlTheme x:Key="StatusBarWarningIconTheme" TargetType="Path">
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Fill" Value="{DynamicResource WarningBrush}" />
+        <Setter Property="Stretch" Value="Uniform" />
+    </ControlTheme>
+
+</ResourceDictionary>

@@ -1,0 +1,96 @@
+<!--  TextBlock.Theme.axaml  -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme x:Key="CaptionTextBlockTheme" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+    </ControlTheme>
+
+    <ControlTheme x:Key="StatsTitleTheme" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    </ControlTheme>
+    <ControlTheme x:Key="MediumTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+    </ControlTheme>
+    <ControlTheme
+        x:Key="LabelTextBlockTheme"
+        BasedOn="{StaticResource MediumTextBlock}"
+        TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="5,0" />
+    </ControlTheme>
+    <ControlTheme
+        x:Key="SubheaderTextBlockTheme"
+        BasedOn="{StaticResource MediumTextBlock}"
+        TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </ControlTheme>
+    <ControlTheme x:Key="TextBlockLargePrimaryBrush" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    </ControlTheme>
+    <ControlTheme
+        x:Key="StatsValueTheme"
+        BasedOn="{StaticResource TextBlockLargePrimaryBrush}"
+        TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Margin" Value="0,5,0,5" />
+    </ControlTheme>
+    <ControlTheme
+        x:Key="SectionHeaderTheme"
+        BasedOn="{StaticResource TextBlockLargePrimaryBrush}"
+        TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Margin" Value="0,0,0,5" />
+    </ControlTheme>
+    <ControlTheme x:Key="HeaderTextBlockTheme" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource AccentBlueBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+    </ControlTheme>
+    <ControlTheme x:Key="TitleBarTextBlockTheme" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+    </ControlTheme>
+    <ControlTheme x:Key="StatusBarMainTextTheme" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+    </ControlTheme>
+
+    <ControlTheme x:Key="StatusBarWarningTextTheme" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource WarningBrush}" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+    </ControlTheme>
+    <!--  Design Preview for TextBlock Themes  -->
+    <Design.PreviewWith>
+        <StackPanel Spacing="8">
+            <TextBlock Text="Caption TextBlock Skin" Theme="{StaticResource CaptionTextBlockTheme}" />
+            <TextBlock Text="Stats Title Skin" Theme="{StaticResource StatsTitleTheme}" />
+            <TextBlock Text="Medium TextBlock" Theme="{StaticResource MediumTextBlock}" />
+            <TextBlock Text="Label TextBlock Skin" Theme="{StaticResource LabelTextBlockTheme}" />
+            <TextBlock Text="Subheader TextBlock Skin" Theme="{StaticResource SubheaderTextBlockTheme}" />
+            <TextBlock Text="TextBlock Large Primary Brush" Theme="{StaticResource TextBlockLargePrimaryBrush}" />
+            <TextBlock Text="Stats Value Skin" Theme="{StaticResource StatsValueTheme}" />
+            <TextBlock Text="Section Header Skin" Theme="{StaticResource SectionHeaderTheme}" />
+            <TextBlock Text="Header TextBlock Skin" Theme="{StaticResource HeaderTextBlockTheme}" />
+            <TextBlock Text="Title Bar TextBlock Skin" Theme="{StaticResource TitleBarTextBlockTheme}" />
+            <TextBlock Text="StatusBar Main Text" Theme="{StaticResource StatusBarMainTextTheme}" />
+            <TextBlock Text="StatusBar Warning Text" Theme="{StaticResource StatusBarWarningTextTheme}" />
+
+        </StackPanel>
+    </Design.PreviewWith>
+
+</ResourceDictionary>

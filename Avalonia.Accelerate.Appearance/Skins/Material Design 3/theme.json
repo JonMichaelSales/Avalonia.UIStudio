@@ -1,0 +1,30 @@
+{
+  "name": "Material Design 3",
+  "description": "Google's latest Material Design language with dynamic colors, rounded corners, and elevated surfaces",
+  "version": "1.0",
+  "author": "AvaloniaThemeManager",
+  "createdDate": "2025-01-20T00:00:00Z",
+  "primaryColor": "#E8DEF8",
+  "secondaryColor": "#E7E0EC",
+  "accentColor": "#6750A4",
+  "primaryBackground": "#FFFBFE",
+  "secondaryBackground": "#F7F2FA",
+  "primaryTextColor": "#1C1B1F",
+  "secondaryTextColor": "#49454F",
+  "borderColor": "#CAC4D0",
+  "errorColor": "#BA1A1A",
+  "warningColor": "#7D5260",
+  "successColor": "#006A6B",
+  "fontFamily": "Roboto, system-ui, sans-serif",
+  "fontSizeSmall": 12,
+  "fontSizeMedium": 14,
+  "fontSizeLarge": 18,
+  "fontWeight": "Medium",
+  "borderRadius": 12,
+  "borderThickness": {
+    "left": 1,
+    "top": 1,
+    "right": 1,
+    "bottom": 1
+  }
+}

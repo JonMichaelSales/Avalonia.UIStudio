@@ -1,0 +1,126 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ControlTheme x:Key="{x:Type DataGridColumnHeader}" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,1,1" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Border
+                        Name="BackgroundBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Content -->
+                            <ContentPresenter
+                                Name="HeaderContent"
+                                Grid.Column="0"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Foreground="{TemplateBinding Foreground}" />
+
+                            <!-- Sort Indicator -->
+                            <Grid
+                                Name="SortIndicator"
+                                Grid.Column="1"
+                                Width="16"
+                                Height="16"
+                                Margin="4,0,8,0"
+                                VerticalAlignment="Center"
+                                IsVisible="False">
+                                
+                                <!-- Ascending Arrow -->
+                                <Path
+                                    Name="SortAscending"
+                                    Width="8"
+                                    Height="8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="M 0 4 L 4 0 L 8 4 Z"
+                                    Fill="{DynamicResource AccentBlueBrush}"
+                                    IsVisible="False"
+                                    Stretch="Uniform" />
+
+                                <!-- Descending Arrow -->
+                                <Path
+                                    Name="SortDescending"
+                                    Width="8"
+                                    Height="8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="M 0 0 L 4 4 L 8 0 Z"
+                                    Fill="{DynamicResource AccentBlueBrush}"
+                                    IsVisible="False"
+                                    Stretch="Uniform" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Resize Grip -->
+                    <Thumb
+                        Name="PART_RightHeaderGripper"
+                        Width="8"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Cursor="SizeWE" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+
+        <!-- Hover State -->
+        <Style Selector="^:pointerover /template/ Border#BackgroundBorder">
+            <Setter Property="Background" Value="{DynamicResource GunMetalLightBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+
+        <!-- Pressed State -->
+        <Style Selector="^:pressed /template/ Border#BackgroundBorder">
+            <Setter Property="Background" Value="{DynamicResource GunMetalMediumBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+
+        <!-- Sort States --><!--
+        <Style Selector="^[SortDirection=Ascending] /template/ Grid#SortIndicator">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^[SortDirection=Ascending] /template/ Path#SortAscending">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <Style Selector="^[SortDirection=Descending] /template/ Grid#SortIndicator">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^[SortDirection=Descending] /template/ Path#SortDescending">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>-->
+
+        <!-- Disabled State -->
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+        <Style Selector="^:disabled /template/ ContentPresenter#HeaderContent">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        </Style>
+    </ControlTheme>
+
+</ResourceDictionary>

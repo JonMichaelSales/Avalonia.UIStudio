@@ -1,0 +1,522 @@
+<!--  Themes/MissingControlThemes.axaml  -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  TreeView Theme  -->
+    <ControlTheme x:Key="{x:Type TreeView}" TargetType="TreeView">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <ScrollViewer
+                        Name="PART_ScrollViewer"
+                        HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                        VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                        <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </ScrollViewer>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <!--  TreeViewItem Theme  -->
+    <ControlTheme x:Key="{x:Type TreeViewItem}" TargetType="TreeViewItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="4,2" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel>
+                    <Border
+                        Name="PART_Header"
+                        MinHeight="24"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="2">
+                        <Grid ColumnDefinitions="Auto,Auto,*">
+                            <Border Name="PART_Indent" Grid.Column="0" />
+                            <ToggleButton
+                                Name="PART_ExpandCollapseChevron"
+                                Grid.Column="1"
+                                Width="16"
+                                Height="16"
+                                Margin="2,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Focusable="False"
+                                IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                <Path
+                                    Width="10"
+                                    Height="10"
+                                    Data="M 0 0 L 4 4 L 0 8 Z"
+                                    Fill="{DynamicResource TextPrimaryBrush}"
+                                    RenderTransformOrigin="50%,50%"
+                                    Stretch="Uniform">
+                                    <Path.RenderTransform>
+                                        <RotateTransform Angle="90" />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </ToggleButton>
+                            <ContentPresenter
+                                Name="PART_HeaderPresenter"
+                                Grid.Column="2"
+                                Margin="{TemplateBinding Padding}"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                        </Grid>
+                    </Border>
+                    <ItemsPresenter
+                        Name="PART_ItemsPresenter"
+                        IsVisible="{TemplateBinding IsExpanded}"
+                        ItemsPanel="{TemplateBinding ItemsPanel}" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  TreeViewItem States  -->
+        <Style Selector="^:expanded /template/ RotateTransform#ExpandCollapseChevronRotateTransform">
+            <Setter Property="Angle" Value="90" />
+        </Style>
+        <Style Selector="^:selected /template/ Border#PART_Header">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Header">
+            <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        </Style>
+        <Style Selector="^:selected:pointerover /template/ Border#PART_Header">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="Opacity" Value="0.9" />
+        </Style>
+    </ControlTheme>
+
+    <!--  ListBox Theme  -->
+    <ControlTheme x:Key="{x:Type ListBox}" TargetType="ListBox">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <ScrollViewer
+                        Name="PART_ScrollViewer"
+                        HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                        VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                        <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </ScrollViewer>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <!--  ListBoxItem Theme  -->
+    <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter
+                    Name="PART_ContentPresenter"
+                    Padding="{TemplateBinding Padding}"
+                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                    CornerRadius="2" />
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        </Style>
+        <Style Selector="^:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+        <Style Selector="^:selected:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="Opacity" Value="0.9" />
+        </Style>
+    </ControlTheme>
+
+    <!--  Menu Theme  -->
+    <ControlTheme x:Key="{x:Type Menu}" TargetType="Menu">
+        <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <!--  MenuItem Theme  -->
+    <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border
+                        Name="PART_LayoutRoot"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentPresenter
+                                Name="PART_IconPresenter"
+                                Grid.Column="0"
+                                Width="16"
+                                Height="16"
+                                Margin="0,0,8,0"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Icon}" />
+
+                            <ContentPresenter
+                                Name="PART_HeaderPresenter"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" />
+
+                            <TextBlock
+                                Name="PART_InputGestureText"
+                                Grid.Column="2"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="11"
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Text="{TemplateBinding InputGesture}" />
+
+                            <Path
+                                Name="PART_ChevronPath"
+                                Grid.Column="3"
+                                Width="8"
+                                Height="8"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Data="M 0 0 L 4 4 L 0 8 Z"
+                                Fill="{DynamicResource TextSecondaryBrush}"
+                                IsVisible="False" />
+                        </Grid>
+                    </Border>
+
+                    <Popup
+                        Name="PART_Popup"
+                        HorizontalOffset="-1"
+                        IsLightDismissEnabled="False"
+                        IsOpen="{TemplateBinding IsSubMenuOpen,
+                                                 Mode=TwoWay}"
+                        OverlayInputPassThroughElement="{Binding $parent[Menu]}"
+                        Placement="RightEdgeAlignedTop"
+                        VerticalOffset="-1">
+                        <Border
+                            MinWidth="120"
+                            Padding="4"
+                            Background="{DynamicResource BackgroundBrush}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  MenuItem States  -->
+        <Style Selector="^:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        </Style>
+        <Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+        <Style Selector="^:separator">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Separator Margin="8,2" />
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="^:selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+        <Style Selector="^:submenuopen /template/ Path#PART_ChevronPath">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <!--  ProgressBar Theme  -->
+    <ControlTheme x:Key="{x:Type ProgressBar}" TargetType="ProgressBar">
+        <Setter Property="Foreground" Value="{DynamicResource AccentBlueBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="MinHeight" Value="20" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Name="PART_Track"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <Grid ClipToBounds="True">
+                        <Border
+                            Name="PART_Indicator"
+                            HorizontalAlignment="Left"
+                            Background="{TemplateBinding Foreground}"
+                            CornerRadius="{TemplateBinding CornerRadius}" />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  Indeterminate state animation  -->
+        <Style Selector="^:indeterminate /template/ Border#PART_Indicator">
+            <Style.Animations>
+                <Animation IterationCount="Infinite" Duration="0:0:2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="TranslateTransform.X" Value="{Binding $parent[ProgressBar].TemplateSettings.ContainerAnimationStartPosition}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="TranslateTransform.X" Value="{Binding $parent[ProgressBar].TemplateSettings.ContainerAnimationEndPosition}" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </ControlTheme>
+
+    <!--  Slider Theme  -->
+    <ControlTheme x:Key="{x:Type Slider}" TargetType="Slider">
+        <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource AccentBlueBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Grid.Styles>
+                        <Style Selector="Track">
+                            <Setter Property="Minimum" Value="{TemplateBinding Minimum}" />
+                            <Setter Property="Maximum" Value="{TemplateBinding Maximum}" />
+                            <Setter Property="Value" Value="{TemplateBinding Value, Mode=TwoWay}" />
+                        </Style>
+                    </Grid.Styles>
+
+                    <!--  Horizontal Slider  -->
+                    <Border
+                        Name="HorizontalTemplate"
+                        MinHeight="20"
+                        Background="Transparent">
+                        <Grid RowDefinitions="*,Auto,*">
+                            <Track
+                                Name="PART_Track"
+                                Grid.Row="1"
+                                Orientation="Horizontal">
+                                <Track.DecreaseButton>
+                                    <RepeatButton
+                                        Name="PART_DecreaseButton"
+                                        Height="4"
+                                        Background="{TemplateBinding Foreground}"
+                                        BorderThickness="0"
+                                        CornerRadius="2" />
+                                </Track.DecreaseButton>
+                                <Track.IncreaseButton>
+                                    <RepeatButton
+                                        Name="PART_IncreaseButton"
+                                        Height="4"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="2" />
+                                </Track.IncreaseButton>
+                                <Track.Thumb>
+                                    <Thumb
+                                        Width="20"
+                                        Height="20"
+                                        Background="{TemplateBinding Foreground}"
+                                        BorderBrush="{DynamicResource TextPrimaryBrush}"
+                                        BorderThickness="2"
+                                        CornerRadius="10" />
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </Border>
+
+                    <!--  Vertical Slider  -->
+                    <Border
+                        Name="VerticalTemplate"
+                        MinWidth="20"
+                        Background="Transparent">
+                        <Grid ColumnDefinitions="*,Auto,*">
+                            <Track
+                                Name="PART_Track"
+                                Grid.Column="1"
+                                Orientation="Vertical">
+                                <Track.DecreaseButton>
+                                    <RepeatButton
+                                        Name="PART_DecreaseButton"
+                                        Width="4"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="2" />
+                                </Track.DecreaseButton>
+                                <Track.IncreaseButton>
+                                    <RepeatButton
+                                        Name="PART_IncreaseButton"
+                                        Width="4"
+                                        Background="{TemplateBinding Foreground}"
+                                        BorderThickness="0"
+                                        CornerRadius="2" />
+                                </Track.IncreaseButton>
+                                <Track.Thumb>
+                                    <Thumb
+                                        Width="20"
+                                        Height="20"
+                                        Background="{TemplateBinding Foreground}"
+                                        BorderBrush="{DynamicResource TextPrimaryBrush}"
+                                        BorderThickness="2"
+                                        CornerRadius="10" />
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  Orientation-specific visibility  -->
+        <Style Selector="^:horizontal /template/ Border#VerticalTemplate">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:vertical /template/ Border#HorizontalTemplate">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <!--  Disabled state  -->
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+    </ControlTheme>
+
+    <!--  DatePicker Theme  -->
+    <ControlTheme x:Key="{x:Type DatePicker}" TargetType="DatePicker">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DataValidationErrors>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Border
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}" />
+
+                        <Button
+                            Name="PART_TextButton"
+                            Grid.Column="0"
+                            Padding="8,4"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="{TemplateBinding Foreground}" />
+
+                        <Button
+                            Name="PART_CalendarButton"
+                            Grid.Column="1"
+                            Width="30"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="{TemplateBinding Foreground}">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19M7,10V12H9V10M11,10V12H13V10M15,10V12H17V10"
+                                Fill="{DynamicResource AccentBlueBrush}"
+                                Stretch="Uniform" />
+                        </Button>
+
+                        <Popup
+                            Name="PART_Popup"
+                            Grid.Column="0"
+                            InheritsTransform="True"
+                            IsLightDismissEnabled="True"
+                            PlacementTarget="{TemplateBinding}">
+                            <Border
+                                Padding="8"
+                                Background="{DynamicResource BackgroundBrush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4">
+                                <Calendar Name="PART_Calendar" />
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </DataValidationErrors>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  States  -->
+        <Style Selector="^:pointerover /template/ Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+        <Style Selector="^:focus /template/ Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+    </ControlTheme>
+
+</ResourceDictionary>

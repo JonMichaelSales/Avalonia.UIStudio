@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Avalonia.Accelerate.Appearance/Skins/DataGridCell.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
+        <entry key="Avalonia.Accelerate.Dialogs/Dialogs/ConfirmationDialog.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
+        <entry key="Avalonia.Accelerate.Dialogs/Dialogs/NotificationDialog.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
+        <entry key="Avalonia.Accelerate.Driver/App.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
+        <entry key="Avalonia.Accelerate.Driver/Views/MainWindow.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

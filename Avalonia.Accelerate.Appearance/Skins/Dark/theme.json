@@ -1,0 +1,67 @@
+{
+  "Description": "Auto-converted theme with ControlThemes",
+  "Version": "1.0",
+  "Author": "System",
+  "CreatedDate": "2025-05-31T11:09:01.842464",
+  "FontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+  "FontSizeSmall": 11,
+  "FontSizeMedium": 12,
+  "FontSizeLarge": 14,
+  "FontWeight": "Normal",
+  "BorderRadius": 3,
+  "BorderThickness": {
+    "Left": 1,
+    "Top": 1,
+    "Right": 1,
+    "Bottom": 1
+  },
+  "PrimaryColor": "#2C313D",
+  "SecondaryColor": "#3D4654",
+  "AccentColor": "#3498DB",
+  "PrimaryBackground": "#222831",
+  "SecondaryBackground": "#464F62",
+  "PrimaryTextColor": "#FFFFFF",
+  "SecondaryTextColor": "#BBCDE5",
+  "BorderColor": "#5D6778",
+  "ErrorColor": "#E74C3C",
+  "WarningColor": "#F39C12",
+  "SuccessColor": "#2ECC71",
+  "Name": "Dark",
+
+  "BaseTheme": "",
+
+  "ControlThemes": [
+    "ControlThemes/TextBlock.axaml",
+    "ControlThemes/Button.axaml"
+  ],
+
+  "Assets": {
+    "Logo": "ControlThemes/Assets/jackrabbit.png"
+  },
+
+  "AdvancedTypography": {
+    "DisplayLarge": 57,
+    "DisplayMedium": 45,
+    "DisplaySmall": 36,
+    "HeadlineLarge": 32,
+    "HeadlineMedium": 28,
+    "HeadlineSmall": 24,
+    "TitleLarge": 22,
+    "TitleMedium": 16,
+    "TitleSmall": 14,
+    "LabelLarge": 14,
+    "LabelMedium": 12,
+    "LabelSmall": 11,
+    "BodyLarge": 16,
+    "BodyMedium": 14,
+    "BodySmall": 12,
+    "HeaderFontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+    "BodyFontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+    "MonospaceFontFamily": "Consolas, Monaco, 'Courier New', monospace",
+    "LineHeight": 1.5,
+    "LetterSpacing": 0,
+    "EnableLigatures": true
+  }
+
+
+}

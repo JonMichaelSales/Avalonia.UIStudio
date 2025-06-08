@@ -1,0 +1,269 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Remove="Skins\Cyberpunk\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Cyberpunk\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Dark\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Dark\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Forest Green\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Forest Green\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\High Contrast\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\High Contrast\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Light\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Light\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Material Design 3\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Material Design 3\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\CheckBox.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\ComboBox.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\Expander.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\Slider.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\TabControl.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\CheckBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\ComboBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\Expander.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\Slider.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\TabControl.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Purple Haze\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Purple Haze\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\CheckBox.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\ComboBox.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\Expander.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\Slider.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\TabControl.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Windows 11 Modern\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Windows 11 Modern\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Zen Garden\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Zen Garden\ControlThemes\TextBox.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Skins\Cyberpunk\theme.json" />
+    <None Remove="Skins\Dark\ControlThemes\Assets\jackrabbit.png" />
+    <None Remove="Skins\Dark\theme.json" />
+    <None Remove="Skins\Forest Green\theme.json" />
+    <None Remove="Skins\High Contrast\theme.json" />
+    <None Remove="Skins\Light\theme.json" />
+    <None Remove="Skins\Material Design 3\theme.json" />
+    <None Remove="Skins\ModernIce\theme.json" />
+    <None Remove="Skins\Ocean Blue\theme.json" />
+    <None Remove="Skins\Purple Haze\theme.json" />
+    <None Remove="Skins\RetroTerminal\theme.json" />
+    <None Remove="Skins\Windows 11 Modern\theme.json" />
+    <None Remove="Skins\Zen Garden\theme.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Skins\Cyberpunk\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Cyberpunk\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Cyberpunk\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Dark\ControlThemes\Assets\jackrabbit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Dark\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Dark\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Dark\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Forest Green\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Forest Green\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Forest Green\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\High Contrast\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\High Contrast\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\High Contrast\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Light\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Light\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Light\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Material Design 3\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Material Design 3\ControlThemes\TextBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Material Design 3\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\CheckBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\ComboBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\Expander.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\Slider.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\TabControl.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\ControlThemes\TextBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\ModernIce\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\CheckBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\ComboBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\Expander.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\Slider.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\TabControl.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\TextBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Ocean Blue\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Purple Haze\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Purple Haze\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Purple Haze\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\CheckBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\ComboBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\Expander.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\Slider.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\TabControl.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\ControlThemes\TextBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\RetroTerminal\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Windows 11 Modern\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Windows 11 Modern\ControlThemes\TextBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Windows 11 Modern\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Zen Garden\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Zen Garden\ControlThemes\TextBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Zen Garden\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Avalonia.Accelerate.Icons\Avalonia.Accelerate.Icons.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Update="Skins\Cyberpunk\ControlThemes\TextBox.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaXaml>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controls\QuickSkinSwitcher.axaml.cs">
+      <DependentUpon>QuickSkinSwitcher.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SkinSettingsDialog.axaml.cs">
+      <DependentUpon>SkinSettingsDialog.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,1675 @@
+﻿
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\App.axaml
+================================================================================
+
+<Application
+    x:Class="Avalonia.Accelerate.Driver.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Avalonia.Accelerate.Driver"
+    RequestedThemeVariant="Default">
+    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Avalonia.Accelerate.Appearance/Skins/ColorTheme.axaml" />
+                <ResourceInclude Source="avares://Avalonia.Accelerate.Appearance/Skins/CustomThemes.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!--  Include the skin manager ControlTheme resources  -->
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+</Application>
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\App.axaml.cs
+================================================================================
+
+using Avalonia.Accelerate.Dialogs.Services;
+using Avalonia.Accelerate.Driver.ViewModels;
+using Avalonia.Accelerate.Driver.Views;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
+using System;
+using Avalonia.Accelerate.Appearance.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Avalonia.Accelerate.Driver
+{
+    public partial class App : Application
+    {
+        public static IServiceProvider Services { get; set; } = default!;
+
+        public override void Initialize()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        public override void OnFrameworkInitializationCompleted()
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                AppBuilderExtensions.InitializeSkinManager(); // first!
+
+                // Do NOT overwrite Services here!
+                // Services = DialogServiceLocator.ServiceProvider; // REMOVE THIS LINE
+
+                if (Avalonia.Application.Current != null)
+                {
+                    var vm = App.Services.GetRequiredService<MainWindowViewModel>();
+                    desktop.MainWindow = new MainWindow { DataContext = vm };
+                }
+            }
+
+            base.OnFrameworkInitializationCompleted();
+        }
+    }
+
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\Avalonia.Accelerate.Driver.csproj
+================================================================================
+
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Avalonia.Accelerate.Appearance\Avalonia.Accelerate.Appearance.csproj" />
+    <ProjectReference Include="..\Avalonia.Accelerate.Dialogs\Avalonia.Accelerate.Dialogs.csproj" />
+    <ProjectReference Include="..\Avalonia.Accelerate.Icons\Avalonia.Accelerate.Icons.csproj" />
+  </ItemGroup>
+</Project>
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\Program.cs
+================================================================================
+
+using Avalonia.ReactiveUI;
+using Avalonia.Accelerate.Dialogs.Extensions;
+using System;
+using Avalonia.Accelerate.Appearance.Extensions;
+using Avalonia.Accelerate.Appearance.Interfaces;
+using Avalonia.Accelerate.Appearance.Services;
+using Avalonia.Accelerate.Driver.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Avalonia.Accelerate.Driver
+{
+    internal sealed class Program
+    {
+        // Initialization code. Don't use any Avalonia, third-party APIs or any
+        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+        // yet and stuff might break.
+        [STAThread]
+        public static void Main(string[] args) => BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
+
+        // Avalonia configuration, don't remove; also used by visual designer.
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .WithInterFont()
+                .UseSkinManager(services =>
+                {
+                    services.AddDialogServices(); // ✅ adds dialog services to main container
+                    services.AddSkinManagerServices();
+                    
+                    services.AddTransient<MainWindowViewModel>();
+                }, onBuilt: sp => App.Services = sp)
+                .LogToTrace()
+                .UseReactiveUI();
+
+    }
+}
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\ViewLocator.cs
+================================================================================
+
+using Avalonia.Accelerate.Driver.ViewModels;
+using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using System;
+
+namespace Avalonia.Accelerate.Driver
+{
+    public class ViewLocator : IDataTemplate
+    {
+
+        public Control? Build(object? data)
+        {
+            if (data is null)
+                return null;
+
+            var name = data.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
+            var type = Type.GetType(name);
+
+            if (type != null)
+            {
+                var control = (Control)Activator.CreateInstance(type)!;
+                control.DataContext = data;
+                return control;
+            }
+
+            return new TextBlock { Text = "Not Found: " + name };
+        }
+
+        public bool Match(object? data)
+        {
+            return data is ViewModelBase;
+        }
+    }
+}
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\ViewModels\MainWindowViewModel.cs
+================================================================================
+
+using System;
+using System.Collections.Generic;
+using System.Reactive;
+using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
+using Avalonia.Controls.ApplicationLifetimes;
+
+using ReactiveUI;
+using Microsoft.Extensions.Logging;
+using Avalonia.Accelerate.Appearance.Interfaces;
+using Avalonia.Accelerate.Dialogs.Interfaces;
+
+using Avalonia.Accelerate.Appearance.Services;
+using Avalonia.Accelerate.Appearance.Views;
+
+using System.Linq;
+using Avalonia.Accelerate.Appearance.ViewModels;
+
+namespace Avalonia.Accelerate.Driver.ViewModels
+{
+    /// <summary>
+    /// Main window view model demonstrating integration of all Avalonia.Accelerate libraries:
+    /// Icons, Appearance (Skins), and Dialogs
+    /// </summary>
+    public class MainWindowViewModel : ViewModelBase
+    {
+        private readonly ISkinManager _skinManager;
+        private readonly IDialogService _dialogService;
+        private readonly ILogger<MainWindowViewModel> _logger;
+        private string _currentSkinName = "Unknown";
+        private int _availableSkinCount = 0;
+        public QuickSkinSwitcherViewModel QuickSkinSwitcherViewModel { get; }
+
+        /// <summary>
+        /// Initializes a new instance of MainWindowViewModel with dependency injection
+        /// </summary>
+        public MainWindowViewModel(
+            IDialogService dialogService,
+            ISkinManager skinManager,
+            ILogger<MainWindowViewModel> logger)
+        {
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+            _skinManager = skinManager ?? throw new ArgumentNullException(nameof(skinManager));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            InitializeCommands();
+            InitializeSkinData();
+            SubscribeToSkinChanges();
+            CurrentSkinName = _skinManager.CurrentSkin?.Name ?? "No Active Skin";
+            _logger.LogInformation("MainWindowViewModel initialized successfully");
+        }
+
+        // <summary>
+        // Parameterless constructor for design-time support
+        // </summary>
+        public MainWindowViewModel()
+        {
+            // Design-time fallbacks
+            _skinManager = null!;
+            _dialogService = null!;
+            _logger = Microsoft.Extensions.Logging.Abstractions.NullLogger<MainWindowViewModel>.Instance;
+
+            InitializeCommands();
+            CurrentSkinName = "Design-Time Skin";
+            AvailableSkinCount = 7;
+        }
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the name of the currently active skin
+        /// </summary>
+        public string CurrentSkinName
+        {
+            get => _currentSkinName;
+            set => this.RaiseAndSetIfChanged(ref _currentSkinName, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the count of available skins
+        /// </summary>
+        public int AvailableSkinCount
+        {
+            get => _availableSkinCount;
+            set => this.RaiseAndSetIfChanged(ref _availableSkinCount, value);
+        }
+
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// Command to open the skin settings dialog
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> OpenSkinSettingsCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to show an information dialog
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ShowInfoDialogCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to show a warning dialog
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ShowWarningDialogCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to show an error dialog
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ShowErrorDialogCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to show a confirmation dialog
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ShowConfirmationDialogCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to show a validation dialog with sample errors and warnings
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ShowValidationDialogCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to export the current skin to a file
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ExportSkinCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to import a skin from a file
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ImportSkinCommand { get; private set; } = null!;
+
+        /// <summary>
+        /// Command to run an integration demo showing all libraries working together
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> RunIntegrationDemoCommand { get; private set; } = null!;
+
+        #endregion
+
+        #region Private Methods
+
+        private void InitializeCommands()
+        {
+            OpenSkinSettingsCommand = ReactiveCommand.CreateFromTask(OpenSkinSettingsAsync);
+            ShowInfoDialogCommand = ReactiveCommand.CreateFromTask(ShowInfoDialogAsync);
+            ShowWarningDialogCommand = ReactiveCommand.CreateFromTask(ShowWarningDialogAsync);
+            ShowErrorDialogCommand = ReactiveCommand.CreateFromTask(ShowErrorDialogAsync);
+            ShowConfirmationDialogCommand = ReactiveCommand.CreateFromTask(ShowConfirmationDialogAsync);
+            ShowValidationDialogCommand = ReactiveCommand.CreateFromTask(ShowValidationDialogAsync);
+            ExportSkinCommand = ReactiveCommand.CreateFromTask(ExportSkinAsync);
+            ImportSkinCommand = ReactiveCommand.CreateFromTask(ImportSkinAsync);
+            RunIntegrationDemoCommand = ReactiveCommand.CreateFromTask(RunIntegrationDemoAsync);
+        }
+
+        private void InitializeSkinData()
+        {
+            if (_skinManager == null) return;
+
+            try
+            {
+                if (_skinManager.CurrentSkin == null)
+                {
+                    _skinManager.ApplySkin("Dark");
+                }
+                CurrentSkinName = _skinManager.CurrentSkin?.Name ?? "No Active Skin";
+                AvailableSkinCount = _skinManager.GetAvailableSkinNames().Count;
+
+                _logger.LogDebug("Initialized skin data - Current: {CurrentSkin}, Available: {Count}",
+                    CurrentSkinName, AvailableSkinCount);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to initialize skin data");
+                CurrentSkinName = "Error Loading";
+                AvailableSkinCount = 0;
+            }
+        }
+
+        private void SubscribeToSkinChanges()
+        {
+            if (_skinManager == null) return;
+
+            _skinManager.SkinChanged += OnSkinChanged;
+        }
+
+        private void OnSkinChanged(object? sender, EventArgs e)
+        {
+            try
+            {
+                CurrentSkinName = _skinManager?.CurrentSkin?.Name ?? "Unknown";
+                _logger.LogInformation("Skin changed to: {SkinName}", CurrentSkinName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error handling skin change event");
+            }
+        }
+
+        private async Task OpenSkinSettingsAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Opening skin settings dialog");
+
+                var settingsDialog = new SkinSettingsDialog();
+
+                if (GetMainWindow() is { } mainWindow)
+                {
+                    await settingsDialog.ShowDialog(mainWindow);
+                }
+                else
+                {
+                    settingsDialog.Show();
+                }
+
+                _logger.LogInformation("Skin settings dialog closed");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to open skin settings dialog");
+                await ShowErrorAsync("Settings Error", "Failed to open skin settings dialog", ex);
+            }
+        }
+
+        private async Task ShowInfoDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing information dialog");
+
+                await _dialogService.ShowInfoAsync(
+                    "Information Demo",
+                    "This is an information dialog from the Avalonia.Accelerate.Dialogs library. " +
+                    "It demonstrates how to show informational messages to users with consistent styling " +
+                    "that adapts to the current skin.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show information dialog");
+            }
+        }
+
+        private async Task ShowWarningDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing warning dialog");
+
+                await _dialogService.ShowWarningAsync(
+                    "Warning Demo",
+                    "This is a warning dialog that alerts users to potential issues. " +
+                    "Notice how the styling automatically adapts to the current skin's warning color scheme.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show warning dialog");
+            }
+        }
+
+        private async Task ShowErrorDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing error dialog");
+
+                var sampleException = new InvalidOperationException(
+                    "This is a sample exception to demonstrate error dialog functionality. " +
+                    "In a real application, this would be an actual exception with stack trace details.");
+
+                await _dialogService.ShowErrorAsync(
+                    "Error Demo",
+                    "This demonstrates how errors are presented to users with technical details " +
+                    "that can be expanded for troubleshooting. The dialog automatically uses the " +
+                    "current skin's error color scheme.",
+                    sampleException);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show error dialog");
+            }
+        }
+
+        private async Task ShowConfirmationDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing confirmation dialog");
+
+                var result = await _dialogService.ShowConfirmationAsync(
+                    "Confirmation Demo",
+                    "This is a confirmation dialog that asks users to make a decision. " +
+                    "Would you like to proceed with this demo action?",
+                    "Yes, Proceed",
+                    "Cancel");
+
+                _logger.LogInformation("Confirmation dialog result: {Result}", result);
+
+                if (result)
+                {
+                    await _dialogService.ShowInfoAsync(
+                        "Demo Result",
+                        "You confirmed the action! This demonstrates the flow of user interaction " +
+                        "through multiple dialogs.");
+                }
+                else
+                {
+                    await _dialogService.ShowInfoAsync(
+                        "Demo Result",
+                        "You cancelled the action. This shows how to handle user cancellation gracefully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show confirmation dialog");
+            }
+        }
+
+        private async Task ShowValidationDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing validation dialog");
+
+                var sampleErrors = new List<string>
+                {
+                    "Primary text contrast ratio (3.2:1) is below WCAG AA standard (4.5:1)",
+                    "Border color has insufficient contrast against secondary background",
+                    "Skin name contains invalid characters that may cause file system issues"
+                };
+
+                var sampleWarnings = new List<string>
+                {
+                    "Primary text contrast ratio (5.1:1) is below WCAG AAA standard (7.0:1)",
+                    "Medium and large font sizes are very similar, reducing visual hierarchy",
+                    "Skin name is quite long (45 characters) and may be truncated in UI displays",
+                    "Accent color is similar to primary color, which may reduce emphasis effectiveness"
+                };
+
+                await _dialogService.ShowValidationErrorsAsync(
+                    "Skin Validation Results",
+                    sampleErrors,
+                    sampleWarnings);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show validation dialog");
+            }
+        }
+
+        private async Task ExportSkinAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Starting skin export");
+
+                var currentSkin = _skinManager?.CurrentSkin;
+                if (currentSkin == null)
+                {
+                    await _dialogService.ShowWarningAsync(
+                        "Export Warning",
+                        "No skin is currently active to export.");
+                    return;
+                }
+
+                var mainWindow = GetMainWindow();
+                if (mainWindow?.StorageProvider == null)
+                {
+                    await ShowErrorAsync("Storage Error", "Storage provider is not available for file operations.");
+                    return;
+                }
+
+                var fileTypeChoices = new FilePickerFileType[]
+                {
+                    new("Skin Files") { Patterns = new[] { "*.json" } },
+                    FilePickerFileTypes.All
+                };
+
+                var saveOptions = new FilePickerSaveOptions
+                {
+                    Title = "Export Current Skin",
+                    FileTypeChoices = fileTypeChoices,
+                    SuggestedFileName = $"{currentSkin.Name}_Skin.json",
+                    DefaultExtension = "json"
+                };
+
+                var result = await mainWindow.StorageProvider.SaveFilePickerAsync(saveOptions);
+                if (result != null)
+                {
+                    var filePath = result.Path.LocalPath;
+                    var success = await SkinImportExport.ExportSkinAsync(
+                        currentSkin,
+                        filePath,
+                        $"Exported from Avalonia.Accelerate Demo on {DateTime.Now:yyyy-MM-dd}",
+                        "Demo User"
+                    );
+
+                    if (success)
+                    {
+                        _logger.LogInformation("Skin exported successfully to: {FilePath}", filePath);
+                        await _dialogService.ShowInfoAsync(
+                            "Export Successful",
+                            $"Skin '{currentSkin.Name}' has been exported successfully to:\n{filePath}");
+                    }
+                    else
+                    {
+                        _logger.LogError("Skin export failed to: {FilePath}", filePath);
+                        await ShowErrorAsync("Export Failed", "Failed to export the current skin. Please check the file path and permissions.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception during skin export");
+                await ShowErrorAsync("Export Error", "An error occurred while exporting the skin", ex);
+            }
+        }
+
+        private async Task ImportSkinAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Starting skin import");
+
+                var mainWindow = GetMainWindow();
+                if (mainWindow?.StorageProvider == null)
+                {
+                    await ShowErrorAsync("Storage Error", "Storage provider is not available for file operations.");
+                    return;
+                }
+
+                var fileTypeChoices = new FilePickerFileType[]
+                {
+                    new("Skin Files") { Patterns = new[] { "*.json" } },
+                    FilePickerFileTypes.All
+                };
+
+                var openOptions = new FilePickerOpenOptions
+                {
+                    Title = "Import Skin",
+                    FileTypeFilter = fileTypeChoices,
+                    AllowMultiple = false
+                };
+
+                var result = await mainWindow.StorageProvider.OpenFilePickerAsync(openOptions);
+                if (result.Count > 0)
+                {
+                    var filePath = result[0].Path.LocalPath;
+                    var importResult = await SkinImportExport.ImportSkinAsync(filePath);
+
+                    if (importResult.Success && importResult.Skin != null)
+                    {
+                        _skinManager?.RegisterSkin(importResult.Skin.Name, importResult.Skin);
+
+                        _logger.LogInformation("Skin imported successfully from: {FilePath}", filePath);
+
+                        var shouldApply = await _dialogService.ShowConfirmationAsync(
+                            "Import Successful",
+                            $"Skin '{importResult.Skin.Name}' has been imported successfully. " +
+                            "Would you like to apply it now?",
+                            "Apply Now",
+                            "Keep Current");
+
+                        if (shouldApply)
+                        {
+                            _skinManager?.ApplySkin(importResult.Skin.Name);
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError("Skin import failed from: {FilePath}. Error: {Error}", filePath, importResult.ErrorMessage);
+
+                        if (importResult.Warnings.Any())
+                        {
+                            await _dialogService.ShowValidationErrorsAsync(
+                                "Import Issues",
+                                new List<string> { importResult.ErrorMessage ?? "Unknown error" },
+                                importResult.Warnings);
+                        }
+                        else
+                        {
+                            await ShowErrorAsync("Import Failed", importResult.ErrorMessage ?? "Failed to import the skin file.");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception during skin import");
+                await ShowErrorAsync("Import Error", "An error occurred while importing the skin", ex);
+            }
+        }
+
+        private async Task RunIntegrationDemoAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Running integration demo");
+
+                // Step 1: Show info about what we're going to demonstrate
+                await _dialogService.ShowInfoAsync(
+                    "Integration Demo Starting",
+                    "This demo will show how all three Avalonia.Accelerate libraries work together:\n\n" +
+                    "1. Icons - Consistent iconography\n" +
+                    "2. Appearance - Dynamic skin switching\n" +
+                    "3. Dialogs - User interaction and feedback");
+
+                // Step 2: Show current skin info (Appearance library)
+                var currentSkin = _skinManager?.CurrentSkin;
+                await _dialogService.ShowInfoAsync(
+                    "Current Skin Information",
+                    $"Active Skin: {currentSkin?.Name ?? "None"}\n" +
+                    $"Available Skins: {AvailableSkinCount}\n" +
+                    $"Icons: Dynamically colored based on skin\n" +
+                    $"Dialogs: Automatically styled to match skin");
+
+                // Step 3: Demonstrate skin switching with confirmation
+                var availableSkins = _skinManager?.GetAvailableSkinNames() ?? new List<string>();
+                if (availableSkins.Any())
+                {
+                    var shouldSwitch = await _dialogService.ShowConfirmationAsync(
+                        "Skin Switching Demo",
+                        "Would you like to demonstrate dynamic skin switching? " +
+                        "This will temporarily change to a different skin and then back.",
+                        "Yes, Demo Switching",
+                        "Skip This Demo");
+
+                    if (shouldSwitch)
+                    {
+                        // Find a different skin to switch to
+                        var currentSkinName = currentSkin?.Name;
+                        var demoSkin = availableSkins.FirstOrDefault(s => s != currentSkinName) ?? availableSkins.First();
+
+                        // Switch to demo skin
+                        _skinManager?.ApplySkin(demoSkin);
+
+                        await _dialogService.ShowInfoAsync(
+                            "Skin Changed!",
+                            $"Notice how:\n" +
+                            $"• All colors updated automatically\n" +
+                            $"• Icons maintain proper contrast\n" +
+                            $"• This dialog uses the new skin colors\n" +
+                            $"• All controls are consistently styled\n\n" +
+                            $"Current skin: {demoSkin}");
+
+                        // Switch back
+                        if (!string.IsNullOrEmpty(currentSkinName))
+                        {
+                            _skinManager?.ApplySkin(currentSkinName);
+
+                            await _dialogService.ShowInfoAsync(
+                                "Skin Restored",
+                                $"Switched back to: {currentSkinName}\n\n" +
+                                "This demonstrates the real-time skin switching capability!");
+                        }
+                    }
+                }
+
+                // Step 4: Final summary
+                await _dialogService.ShowInfoAsync(
+                    "Integration Demo Complete",
+                    "Demo completed! This showcased:\n\n" +
+                    "✓ Icons library providing consistent vector graphics\n" +
+                    "✓ Appearance library managing skins and real-time switching\n" +
+                    "✓ Dialogs library providing styled user interactions\n" +
+                    "✓ All libraries working together seamlessly\n\n" +
+                    "Each library can be used independently or together for maximum flexibility.");
+
+                _logger.LogInformation("Integration demo completed successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to run integration demo");
+                await ShowErrorAsync("Demo Error", "An error occurred during the integration demo", ex);
+            }
+        }
+
+        private async Task ShowErrorAsync(string title, string message, Exception? exception = null)
+        {
+            try
+            {
+                if (_dialogService != null)
+                {
+                    await _dialogService.ShowErrorAsync(title, message, exception);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to show error dialog");
+            }
+        }
+
+        private static Avalonia.Controls.Window? GetMainWindow()
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                return desktop.MainWindow;
+            }
+            return null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_skinManager != null)
+                {
+                    _skinManager.SkinChanged -= OnSkinChanged;
+                }
+            }
+            base.Dispose(disposing);
+        }
+
+        #endregion
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\ViewModels\ViewModelBase.cs
+================================================================================
+
+using ReactiveUI;
+using System;
+
+namespace Avalonia.Accelerate.Driver.ViewModels
+{
+    public class ViewModelBase : ReactiveObject, IDisposable
+    {
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // TODO release managed resources here
+            }
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="ViewModelBase"/> instance.
+        /// </summary>
+        /// <remarks>
+        /// This method calls the <see cref="Dispose(bool)"/> method with a value of <c>true</c> 
+        /// to release managed resources and suppresses finalization of the object.
+        /// </remarks>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+    }
+}
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\Views\MainWindow.axaml
+================================================================================
+
+<Window
+    x:Class="Avalonia.Accelerate.Driver.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Avalonia.Accelerate.Appearance.Controls"
+    xmlns:icons="using:Avalonia.Accelerate.Icons"
+    xmlns:vm="using:Avalonia.Accelerate.Driver.ViewModels"
+    Title="Avalonia Accelerate Demo"
+    Width="1200"
+    MinWidth="1000"
+    x:DataType="vm:MainWindowViewModel"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="True"
+    Icon="avares://Avalonia.Accelerate.Icons/Assets/jonBuilt.ico"
+    SizeToContent="Height">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header with Skin Switcher  -->
+        <Border
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    Spacing="15">
+                    <Path
+                        Width="32"
+                        Height="32"
+                        Data="{x:Static icons:ApplicationIcons.SettingsGeometry}"
+                        Fill="{DynamicResource AccentBlueBrush}"
+                        Stretch="Uniform" />
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
+                            Text="Avalonia Accelerate Demo" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextSecondaryBrush}"
+                            Text="Comprehensive demonstration of Icons, Appearance (Skins), and Dialogs libraries" />
+                    </StackPanel>
+                </StackPanel>
+
+                <controls:QuickSkinSwitcher
+                    Grid.Column="1"
+                    Margin="0,0,15,0"
+                    DataContext="{Binding QuickSkinSwitcherViewModel}" />
+
+                <StackPanel
+                    Grid.Column="2"
+                    Orientation="Horizontal"
+                    Spacing="10">
+                    <Button Command="{Binding OpenSkinSettingsCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="{x:Static icons:ApplicationIcons.SettingsGeometry}"
+                                Fill="{DynamicResource TextPrimaryBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock Text="Skin Settings" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--  Main Content Area  -->
+        <TabControl
+            Grid.Row="1"
+            Margin="20"
+            Theme="{StaticResource CustomTabControlTheme}">
+            <TabItem Theme="{StaticResource CustomTabItemTheme}">
+                <TabItem.Header>
+                    <TextBlock Text="Icon Showcase" Theme="{StaticResource SubheaderTextBlockTheme}" />
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Border
+                        Padding="20"
+                        Background="{DynamicResource BackgroundLightBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <StackPanel Spacing="20">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <Path
+                                    Width="24"
+                                    Height="24"
+                                    Data="{x:Static icons:ApplicationIcons.Image}"
+                                    Fill="{DynamicResource AccentBlueBrush}"
+                                    Stretch="Uniform" />
+                                <TextBlock
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Foreground="{DynamicResource TextPrimaryBrush}"
+                                    Text="Icons Library Showcase" />
+                            </StackPanel>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  System Icons  -->
+                                <StackPanel Grid.Column="0" Spacing="10">
+                                    <TextBlock FontWeight="Medium" Text="System Icons" />
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.FileGeometry}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="File" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.FolderGeometry}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Folder" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.SearchGeometry}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Search" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  Status Icons  -->
+                                <StackPanel Grid.Column="1" Spacing="10">
+                                    <TextBlock FontWeight="Medium" Text="Status Icons" />
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.InformationGeometry}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Information" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                                                Fill="{DynamicResource WarningBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Warning" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                                                Fill="{DynamicResource ErrorBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Error" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  Media Icons  -->
+                                <StackPanel Grid.Column="2" Spacing="10">
+                                    <TextBlock FontWeight="Medium" Text="Media Icons" />
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.Image}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Image" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.Video}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Video" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.Audio}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Audio" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  Document Icons  -->
+                                <StackPanel Grid.Column="3" Spacing="10">
+                                    <TextBlock FontWeight="Medium" Text="Document Icons" />
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.WordDocument}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Word" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.ExcelDocument}"
+                                                Fill="{DynamicResource AccentBlueBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="Excel" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Path
+                                                Width="20"
+                                                Height="20"
+                                                Data="{x:Static icons:ApplicationIcons.PdfDocument}"
+                                                Fill="{DynamicResource AccentBrush}"
+                                                Stretch="Uniform" />
+                                            <TextBlock VerticalAlignment="Center" Text="PDF" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </TabItem.Content>
+
+            </TabItem>
+            <TabItem Header="Dialog Showcase" Theme="{StaticResource CustomTabItemTheme}">
+                <Border
+                    Padding="20"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <StackPanel Spacing="20">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Path
+                                Width="24"
+                                Height="24"
+                                Data="{x:Static icons:ApplicationIcons.InformationGeometry}"
+                                Fill="{DynamicResource AccentBlueBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="Dialogs Library Showcase" />
+                        </StackPanel>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Spacing="15">
+                                <TextBlock FontWeight="Medium" Text="Basic Dialogs" />
+                                <StackPanel Spacing="10">
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowInfoDialogCommand}"
+                                        Content="Show Information Dialog" />
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowWarningDialogCommand}"
+                                        Content="Show Warning Dialog" />
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowErrorDialogCommand}"
+                                        Content="Show Error Dialog" />
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowConfirmationDialogCommand}"
+                                        Content="Show Confirmation Dialog" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="15">
+                                <TextBlock FontWeight="Medium" Text="Advanced Dialogs" />
+                                <StackPanel Spacing="10">
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowValidationDialogCommand}"
+                                        Content="Show Validation Dialog" />
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ExportSkinCommand}"
+                                        Content="Export Current Skin" />
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ImportSkinCommand}"
+                                        Content="Import Skin File" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+            <TabItem
+                Header="Skin Showcase"
+                IsSelected="True"
+                Theme="{StaticResource CustomTabItemTheme}">
+                <!--  Appearance (Skin) Showcase  -->
+                <Border
+                    Padding="20"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <StackPanel Spacing="20">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Path
+                                Width="24"
+                                Height="24"
+                                Data="{x:Static icons:ApplicationIcons.BrowseGeometry}"
+                                Fill="{DynamicResource AccentBlueBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="Appearance (Skins) Library Showcase" />
+                        </StackPanel>
+
+                        <!--  Current Skin Info  -->
+                        <StackPanel Spacing="10">
+                            <TextBlock FontWeight="Medium" Text="Current Skin Information" />
+                            <Border
+                                Padding="15"
+                                Background="{DynamicResource BackgroundBrush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4">
+                                <StackPanel Spacing="8">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <TextBlock FontWeight="Medium" Text="Active Skin:" />
+                                        <TextBlock Text="{Binding CurrentSkinName}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <TextBlock FontWeight="Medium" Text="Available Skins:" />
+                                        <TextBlock Text="{Binding AvailableSkinCount}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!--  Color Palette Preview  -->
+                        <StackPanel Spacing="15">
+                            <TextBlock FontWeight="Medium" Text="Current Skin Color Palette" />
+
+                            <!--  Primary Colors Section  -->
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Text="Primary Colors" />
+                                <WrapPanel
+                                    Margin="10,0"
+                                    ItemSpacing="40"
+                                    LineSpacing="25">
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource BackgroundBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Background" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource BackgroundLightBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Background Light" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource BackgroundDarkBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Background Dark" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource PrimaryColorBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Primary Color" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource SecondaryColorBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Secondary Color" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource AccentBlueBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Accent" />
+                                    </StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <!--  GunMetal Colors Section  -->
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Text="GunMetal Variants" />
+                                <WrapPanel
+                                    Margin="10,0"
+                                    ItemSpacing="40"
+                                    LineSpacing="25">
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource GunMetalDarkBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="GunMetal Dark" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource GunMetalMediumBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="GunMetal Medium" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource GunMetalLightBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="GunMetal Light" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource GunMetalAccentBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="GunMetal Accent" />
+                                    </StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <!--  Text Colors Section  -->
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Text="Text Colors" />
+                                <WrapPanel
+                                    Margin="10,0"
+                                    ItemSpacing="40"
+                                    LineSpacing="25">
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource TextPrimaryBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Primary Text" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource TextSecondaryBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Secondary Text" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource BorderBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Border" />
+                                    </StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <!--  Status Colors Section  -->
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Text="Status Colors" />
+                                <WrapPanel
+                                    Margin="10,0"
+                                    ItemSpacing="40"
+                                    LineSpacing="25">
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource ErrorBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Error" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource WarningBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Warning" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Spacing="3">
+                                        <Border
+                                            Width="40"
+                                            Height="40"
+                                            Background="{DynamicResource SuccessBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Success" />
+                                    </StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!--  Control Examples  -->
+                        <StackPanel Spacing="10">
+                            <TextBlock FontWeight="Medium" Text="Styled Control Examples" />
+                            <WrapPanel
+                                ItemSpacing="10"
+                                LineSpacing="10"
+                                Orientation="Horizontal">
+                                <Button Content="Primary Button" Theme="{StaticResource PrimaryButtonTheme}" />
+                                <Button Content="Secondary Button" Theme="{StaticResource SecondaryButtonTheme}" />
+                                <Button Content="Glass Button" Theme="{StaticResource GlassButtonTheme}" />
+                                <Button Content="Ghost Button" Theme="{StaticResource GhostButtonTheme}" />
+                                <Button Content="Browse Button" Theme="{StaticResource BrowseButtonTheme}" />
+                                <Button Content="Elevated Primary Button" Theme="{StaticResource ElevatedPrimaryButtonTheme}" />
+                                <Button Content="Modern Primary Button" Theme="{StaticResource GradientPrimaryButtonTheme}" />
+                                <Button Content="Neon Button" Theme="{StaticResource NeonButtonTheme}" />
+                                <CheckBox Content="Sample Checkbox" IsChecked="True" />
+                                <TextBox Width="150" Text="Sample Input" />
+                                <ComboBox Width="120" PlaceholderText="Select Option">
+                                    <ComboBoxItem>Option 1</ComboBoxItem>
+                                    <ComboBoxItem>Option 2</ComboBoxItem>
+                                    <ComboBoxItem>Option 3</ComboBoxItem>
+                                </ComboBox>
+                            </WrapPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+            <TabItem Header="Integration Example" Theme="{StaticResource CustomTabItemTheme}">
+                <!--  Integration Example  -->
+                <Border
+                    Padding="20"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <StackPanel Spacing="15">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Path
+                                Width="24"
+                                Height="24"
+                                Data="{x:Static icons:ApplicationIcons.SuccessGeometry}"
+                                Fill="{DynamicResource SuccessBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="Integration Example" />
+                        </StackPanel>
+
+                        <TextBlock TextWrapping="Wrap">
+                            <Run Text="This demo shows how all three Avalonia.Accelerate libraries work together:" />
+                            <LineBreak />
+                            <Run Text="• " />
+                            <Run FontWeight="Medium" Text="Icons" />
+                            <Run Text=" - Provides consistent iconography throughout the application" />
+                            <LineBreak />
+                            <Run Text="• " />
+                            <Run FontWeight="Medium" Text="Appearance" />
+                            <Run Text=" - Handles skin/theme management with real-time switching" />
+                            <LineBreak />
+                            <Run Text="• " />
+                            <Run FontWeight="Medium" Text="Dialogs" />
+                            <Run Text=" - Provides consistent user notifications and interactions" />
+                        </TextBlock>
+
+                        <Button HorizontalAlignment="Left" Command="{Binding RunIntegrationDemoCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Path
+                                    Width="16"
+                                    Height="16"
+                                    Data="{x:Static icons:ApplicationIcons.RefreshGeometry}"
+                                    Fill="{DynamicResource TextPrimaryBrush}"
+                                    Stretch="Uniform" />
+                                <TextBlock Text="Run Integration Demo" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+
+        </TabControl>
+
+        <!--  Status Bar  -->
+        <Border
+            Grid.Row="2"
+            Padding="15,8"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    Spacing="15">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Path
+                            Width="12"
+                            Height="12"
+                            Data="{x:Static icons:ApplicationIcons.SuccessGeometry}"
+                            Fill="{DynamicResource SuccessBrush}"
+                            Stretch="Uniform" />
+                        <TextBlock FontSize="12" Text="All libraries loaded successfully" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    Spacing="15">
+                    <TextBlock FontSize="11" Text="Avalonia.Accelerate Demo v1.0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\Views\MainWindow.axaml.cs
+================================================================================
+
+using Avalonia.Controls;
+
+namespace Avalonia.Accelerate.Driver.Views
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Driver\bin\Debug\net8.0\Skins\Cyberpunk\ControlThemes\TextBox.axaml
+================================================================================
+
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme x:Key="{x:Type TextBox}" TargetType="TextBox">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource AccentBlueBrush}" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}" />
+        <Setter Property="FontWeight" Value="{DynamicResource DefaultFontWeight}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <ScrollViewer
+                        Margin="2"
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Hidden">
+                        <TextPresenter x:Name="PART_TextPresenter" />
+                    </ScrollViewer>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    <Design.PreviewWith>
+        <StackPanel Margin="50" Spacing="20">
+            <TextBox Width="150" />
+            <TextBox Width="150" Watermark="watermark text" />
+        </StackPanel>
+    </Design.PreviewWith>
+</ResourceDictionary>

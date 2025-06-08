@@ -1,0 +1,34 @@
+{
+  "name": "Windows 11 Modern",
+  "description": "Clean, modern theme inspired by Windows 11 design language with rounded corners and subtle shadows",
+  "version": "1.0",
+  "author": "AvaloniaThemeManager",
+  "createdDate": "2025-01-20T00:00:00Z",
+  "primaryColor": "#F3F3F3",
+  "secondaryColor": "#FAFAFA",
+  "accentColor": "#0078D4",
+  "primaryBackground": "#FFFFFF",
+  "secondaryBackground": "#F9F9F9",
+  "primaryTextColor": "#1F1F1F",
+  "secondaryTextColor": "#616161",
+  "borderColor": "#E1E1E1",
+  "errorColor": "#D13438",
+  "warningColor": "#FF8C00",
+  "successColor": "#107C10",
+  "fontFamily": "Segoe UI, system-ui, sans-serif",
+  "fontSizeSmall": 12,
+  "fontSizeMedium": 14,
+  "fontSizeLarge": 18,
+  "fontWeight": "Normal",
+  "borderRadius": 8,
+  "borderThickness": {
+    "left": 1,
+    "top": 1,
+    "right": 1,
+    "bottom": 1
+  },
+  "ControlThemes": [
+    "ControlThemes/TextBlock.axaml",
+    "ControlThemes/Button.axaml"
+  ]
+}

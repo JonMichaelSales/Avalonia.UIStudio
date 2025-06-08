@@ -1,0 +1,83 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=netstandard">
+
+    <!--  Color Brushes  -->
+    <!--  Base colors  -->
+    <Color x:Key="GunMetalDark">#343B48</Color>
+    <Color x:Key="GunMetalMedium">#3D4654</Color>
+    <Color x:Key="GunMetalLight">#464F62</Color>
+
+    <Color x:Key="PrimaryColor">#2C313D</Color>
+    <Color x:Key="SecondaryColor">#3D4654</Color>
+    <Color x:Key="BackgroundLight">#F5F5F5</Color>
+    <Color x:Key="BackgroundDark">#222831</Color>
+
+    <Color x:Key="TextPrimaryLight">Pink</Color>
+    <Color x:Key="TextPrimaryDark">#FFFFFF</Color>
+    <Color x:Key="TextSecondaryLight">#555555</Color>
+    <Color x:Key="TextSecondaryDark">#BBCDE5</Color>
+    <Color x:Key="BorderLight">#CCCCCC</Color>
+    <Color x:Key="BorderDark">#5D6778</Color>
+
+
+    <!--  Accent Colors  -->
+    <Color x:Key="AccentBlue">#2D7DD2</Color>
+    <Color x:Key="AccentGreen">#52A447</Color>
+    <Color x:Key="AccentRed">#E45649</Color>
+    <Color x:Key="AccentOrange">#E5C07B</Color>
+    <Color x:Key="AccentPurple">#C678DD</Color>
+    <Color x:Key="AccentCyan">#56B6C2</Color>
+
+
+    <!--  Status colors  -->
+    <Color x:Key="ErrorColor">#E74C3C</Color>
+    <Color x:Key="WarningColor">#F39C12</Color>
+    <Color x:Key="SuccessColor">#2ECC71</Color>
+
+    <!--  Brushes - Dynamic based on theme  -->
+    <SolidColorBrush x:Key="GunMetalDarkBrush" Color="{DynamicResource GunMetalDark}" />
+    <SolidColorBrush x:Key="GunMetalMediumBrush" Color="{DynamicResource GunMetalMedium}" />
+    <SolidColorBrush x:Key="GunMetalLightBrush" Color="{DynamicResource GunMetalLight}" />
+    <SolidColorBrush x:Key="GunMetalAccentBrush" Color="{DynamicResource GunMetalLight}" />
+    <SolidColorBrush x:Key="AccentBlueBrush" Color="{DynamicResource AccentBlue}" />
+    <SolidColorBrush x:Key="PrimaryColorBrush" Color="{DynamicResource PrimaryColor}" />
+    <SolidColorBrush x:Key="SecondaryColorBrush" Color="{DynamicResource SecondaryColor}" />
+
+    <!--  Dynamic Background Brushes  -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundDark}" />
+    <SolidColorBrush x:Key="BackgroundLightBrush" Color="{DynamicResource GunMetalLight}" />
+    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{DynamicResource BackgroundDark}" />
+
+    <!--  Dynamic Text Brushes  -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{DynamicResource TextPrimaryDark}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{DynamicResource TextSecondaryDark}" />
+
+    <!--  Border Brush  -->
+    <SolidColorBrush x:Key="BorderBrush" Color="{DynamicResource BorderDark}" />
+
+    <!--  Status Brushes  -->
+    <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
+    <SolidColorBrush x:Key="WarningBrush" Color="{DynamicResource WarningColor}" />
+    <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
+
+    <!--  Font Settings  -->
+    <FontFamily x:Key="DefaultFontFamily">Segoe UI, San Francisco, Helvetica, Arial, sans-serif</FontFamily>
+    <sys:Double x:Key="FontSizeSmall">12</sys:Double>
+    <sys:Double x:Key="FontSizeNormal">14</sys:Double>
+    <sys:Double x:Key="FontSizeMedium">16</sys:Double>
+    <sys:Double x:Key="FontSizeLarge">24</sys:Double>
+    <FontWeight x:Key="DefaultFontWeight">Normal</FontWeight>
+    <FontWeight x:Key="HeadingFontWeight">SemiBold</FontWeight>
+
+    <!--  Border Settings  -->
+    <Thickness x:Key="BorderThickness">1</Thickness>
+    <CornerRadius x:Key="CornerRadius">4</CornerRadius>
+
+    <!--  Margin and Padding Presets  -->
+    <Thickness x:Key="StandardMargin">16</Thickness>
+    <Thickness x:Key="StandardPadding">16</Thickness>
+    <Thickness x:Key="SmallMargin">8</Thickness>
+    <Thickness x:Key="SmallPadding">8</Thickness>
+</ResourceDictionary>

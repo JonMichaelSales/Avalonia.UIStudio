@@ -1,0 +1,1685 @@
+﻿
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Avalonia.Accelerate.Dialogs.csproj
+================================================================================
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Avalonia.Accelerate.Icons\Avalonia.Accelerate.Icons.csproj" />
+  </ItemGroup>
+
+</Project>
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\ConfirmationDialog.axaml
+================================================================================
+
+<Window
+    x:Class="Avalonia.Accelerate.Dialogs.Dialogs.ConfirmationDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:Avalonia.Accelerate.Icons;assembly=Avalonia.Accelerate.Icons"
+    Title="Confirmation"
+    Width="400"
+    Height="250"
+    MinWidth="350"
+    MinHeight="200"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="False"
+    Icon="avares://Avalonia.Accelerate.Icons/Assets/jonBuilt.ico"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Border
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource AccentBlueBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path
+                    Width="24"
+                    Height="24"
+                    Data="{x:Static icons:ApplicationIcons.InformationGeometry}"
+                    Fill="{DynamicResource TextPrimaryBrush}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    x:Name="TitleText"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="Confirmation" />
+            </StackPanel>
+        </Border>
+
+        <!--  Content  -->
+        <Grid Grid.Row="1" Margin="20">
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="15">
+                <!--  Question Icon  -->
+                <Path
+                    Width="48"
+                    Height="48"
+                    HorizontalAlignment="Center"
+                    Data="{x:Static icons:ApplicationIcons.InformationGeometry}"
+                    Fill="{DynamicResource AccentBlueBrush}"
+                    Stretch="Uniform" />
+
+                <!--  Main Message  -->
+                <TextBlock
+                    x:Name="MessageText"
+                    MaxWidth="320"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    FontSize="14"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+
+        <!--  Footer  -->
+        <Border
+            Grid.Row="2"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <Button
+                    x:Name="CancelButton"
+                    Padding="20,8"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    Content="Cancel"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsCancel="True" />
+                <Button
+                    x:Name="ConfirmButton"
+                    Padding="20,8"
+                    Background="{DynamicResource AccentBlueBrush}"
+                    Content="Yes"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\ConfirmationDialog.axaml.cs
+================================================================================
+
+using Avalonia.Accelerate.Dialogs.Utility;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+
+namespace Avalonia.Accelerate.Dialogs.Dialogs
+{
+    /// <summary>
+    /// A dialog for requesting user confirmation with customizable buttons.
+    /// </summary>
+    public partial class ConfirmationDialog : Window
+    {
+        /// <summary>
+        /// Gets or sets the message to display in the confirmation dialog.
+        /// </summary>
+        public string Message { get; set; } = "";
+
+        /// <summary>
+        /// Gets or sets the text for the confirm button.
+        /// </summary>
+        public string ConfirmText { get; set; } = "Yes";
+
+        /// <summary>
+        /// Gets or sets the text for the cancel button.
+        /// </summary>
+        public string CancelText { get; set; } = "No";
+
+        /// <summary>
+        /// Gets the result of the dialog interaction.
+        /// </summary>
+        public bool? DialogResult { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the ConfirmationDialog class.
+        /// </summary>
+        public ConfirmationDialog()
+        {
+            InitializeComponent();
+            ConfirmButton.Click += ConfirmButton_Click;
+            CancelButton.Click += CancelButton_Click;
+        }
+
+        /// <summary>
+        /// Called when the window is opened to update the dialog content.
+        /// </summary>
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            UpdateContent();
+        }
+
+        private void UpdateContent()
+        {
+            MessageText.Text = Message;
+            ConfirmButton.Content = ConfirmText;
+            CancelButton.Content = CancelText;
+        }
+
+        private void ConfirmButton_Click(object? sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close(true);
+        }
+
+        private void CancelButton_Click(object? sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close(false);
+        }
+
+        /// <summary>
+        /// Shows the confirmation dialog and returns the user's choice.
+        /// </summary>
+        /// <param name="owner">The parent window</param>
+        /// <returns>True if confirmed, false if cancelled, null if closed without choice</returns>
+        public new async Task<bool?> ShowDialog(Window? owner = null)
+        {
+            if (owner != null)
+            {
+                return await ShowDialog<bool?>(owner);
+            }
+            else
+            {
+                return await ShowDialog<bool?>(WindowTools.GetMainWindow()!);
+            }
+        }
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\ErrorDialog.axaml
+================================================================================
+
+<Window
+    x:Class="Avalonia.Accelerate.Dialogs.Dialogs.ErrorDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:Avalonia.Accelerate.Icons;assembly=Avalonia.Accelerate.Icons"
+    Title="Error"
+    Width="500"
+    Height="400"
+    MinWidth="400"
+    MinHeight="300"
+    MaxHeight="700"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="True"
+    Icon="avares://Avalonia.Accelerate.Icons/Assets/jonBuilt.ico"
+    ShowInTaskbar="False"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Border
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource ErrorBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path
+                    Width="24"
+                    Height="24"
+                    Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                    Fill="{DynamicResource TextPrimaryBrush}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    x:Name="TitleText"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="Error" />
+            </StackPanel>
+        </Border>
+
+        <!--  Content  -->
+        <StackPanel
+            Grid.Row="1"
+            Margin="20"
+            Spacing="15">
+
+            <!--  Main Message  -->
+            <TextBlock
+                x:Name="MessageText"
+                FontSize="14"
+                Foreground="{DynamicResource TextPrimaryBrush}"
+                TextWrapping="Wrap" />
+
+            <!--  Exception Details Expander  -->
+            <Expander
+                x:Name="ExceptionExpander"
+                Header="Technical Details"
+                IsVisible="False">
+                <Border
+                    Margin="0,10,0,0"
+                    Padding="12"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                    <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                        <TextBlock
+                            x:Name="ExceptionText"
+                            FontFamily="Consolas, Monaco, 'Courier New', monospace"
+                            FontSize="11"
+                            Foreground="{DynamicResource TextSecondaryBrush}"
+                            TextWrapping="Wrap" />
+                    </ScrollViewer>
+                </Border>
+            </Expander>
+
+            <!--  Help Text  -->
+            <Border
+                Padding="12"
+                Background="{DynamicResource BackgroundLightBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        FontSize="12"
+                        FontWeight="Medium"
+                        Foreground="{DynamicResource TextPrimaryBrush}"
+                        Text="What you can do:" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Try the operation again"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Check if the file or resource is accessible"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• If the problem persists, please report this error"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--  Footer  -->
+        <Border
+            Grid.Row="2"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <Button
+                    x:Name="CopyButton"
+                    Padding="12,6"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    Content="Copy Details"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsVisible="False" />
+                <Button
+                    x:Name="CloseButton"
+                    Padding="12,6"
+                    Background="{DynamicResource AccentBlueBrush}"
+                    Content="Close"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\ErrorDialog.axaml.cs
+================================================================================
+
+using System.Text;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+
+namespace Avalonia.Accelerate.Dialogs.Dialogs
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class ErrorDialog : Window
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Message { get; set; } = "";
+        /// <summary>
+        /// 
+        /// </summary>
+        public Exception? Exception { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ErrorDialog()
+        {
+            InitializeComponent();
+            CloseButton.Click += CloseButton_Click;
+            CopyButton.Click += CopyButton_Click;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            UpdateContent();
+        }
+
+        private void UpdateContent()
+        {
+            // Update title
+            if (!string.IsNullOrEmpty(Title))
+            {
+                TitleText.Text = Title;
+            }
+
+            // Update message
+            MessageText.Text = Message;
+
+            // Update exception details
+            if (Exception != null)
+            {
+                ExceptionExpander.IsVisible = true;
+                CopyButton.IsVisible = true;
+                ExceptionText.Text = FormatException(Exception);
+            }
+        }
+
+        private string FormatException(Exception ex)
+        {
+            var sb = new StringBuilder();
+
+            var currentEx = ex;
+            var level = 0;
+
+            while (currentEx != null)
+            {
+                if (level > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"--- Inner Exception {level} ---");
+                }
+
+                sb.AppendLine($"Type: {currentEx.GetType().FullName}");
+                sb.AppendLine($"Message: {currentEx.Message}");
+
+                if (!string.IsNullOrEmpty(currentEx.StackTrace))
+                {
+                    sb.AppendLine("Stack Trace:");
+                    sb.AppendLine(currentEx.StackTrace);
+                }
+
+                currentEx = currentEx.InnerException;
+                level++;
+            }
+
+            return sb.ToString();
+        }
+
+        private void CloseButton_Click(object? sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private async void CopyButton_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var clipboard = GetTopLevel(this)?.Clipboard;
+                if (clipboard != null)
+                {
+                    var details = new StringBuilder();
+                    details.AppendLine($"Error: {Title}");
+                    details.AppendLine($"Message: {Message}");
+                    details.AppendLine($"Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+
+                    if (Exception != null)
+                    {
+                        details.AppendLine();
+                        details.AppendLine("Exception Details:");
+                        details.AppendLine(FormatException(Exception));
+                    }
+
+                    await clipboard.SetTextAsync(details.ToString());
+
+                    // Briefly show feedback
+                    var originalText = CopyButton.Content?.ToString();
+                    CopyButton.Content = "Copied!";
+                    await Task.Delay(1000);
+                    CopyButton.Content = originalText;
+                }
+            }
+            catch
+            {
+                // Ignore clipboard errors
+            }
+        }
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\NotificationDialog.axaml
+================================================================================
+
+<Window
+    x:Class="Avalonia.Accelerate.Dialogs.Dialogs.NotificationDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:Avalonia.Accelerate.Icons;assembly=Avalonia.Accelerate.Icons"
+    Title="Notification"
+    Width="450"
+    MinWidth="350"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="True"
+    Icon="avares://Avalonia.Accelerate.Icons/Assets/jonBuilt.ico"
+    ShowInTaskbar="False"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Border
+            x:Name="HeaderBorder"
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource AccentBlueBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path
+                    x:Name="HeaderIcon"
+                    Width="24"
+                    Height="24"
+                    Data="{x:Static icons:ApplicationIcons.InformationGeometry}"
+                    Fill="{DynamicResource TextPrimaryBrush}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    x:Name="TitleText"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="Information" />
+            </StackPanel>
+        </Border>
+
+        <!--  Content  -->
+
+        <StackPanel Grid.Row="1" Spacing="15">
+            <!--  Main Message  -->
+            <TextBlock
+                x:Name="MessageText"
+                Margin="20"
+                FontSize="14"
+                Foreground="{DynamicResource TextPrimaryBrush}"
+                TextWrapping="Wrap" />
+
+            <!--  Additional Content Area  -->
+            <ContentPresenter x:Name="AdditionalContent" Content="{Binding AdditionalContent, RelativeSource={RelativeSource AncestorType=Window}}" />
+        </StackPanel>
+
+        <!--  Footer  -->
+        <Border
+            Grid.Row="2"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <Button
+                    x:Name="OkButton"
+                    Padding="20,8"
+                    Background="{DynamicResource AccentBlueBrush}"
+                    Content="OK"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\NotificationDialog.axaml.cs
+================================================================================
+
+using Avalonia.Accelerate.Dialogs.Models;
+using Avalonia.Accelerate.Dialogs.Utility;
+using Avalonia.Accelerate.Icons;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+
+namespace Avalonia.Accelerate.Dialogs.Dialogs
+{
+    /// <summary>
+    /// A dialog for displaying notification messages with different types (Information, Warning, Error).
+    /// </summary>
+    public partial class NotificationDialog : Window
+    {
+        /// <summary>
+        /// Gets or sets the message to display in the dialog.
+        /// </summary>
+        public string Message { get; set; } = "";
+
+        /// <summary>
+        /// Gets or sets the type of notification dialog.
+        /// </summary>
+        public NotificationDialogType DialogType { get; set; } = NotificationDialogType.Information;
+
+        /// <summary>
+        /// Initializes a new instance of the NotificationDialog class.
+        /// </summary>
+        public NotificationDialog()
+        {
+            InitializeComponent();
+            OkButton.Click += OkButton_Click;
+        }
+
+        /// <summary>
+        /// Called when the window is opened to configure the dialog based on its type.
+        /// </summary>
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            ConfigureDialogType();
+            UpdateContent();
+        }
+
+        private void ConfigureDialogType()
+        {
+            switch (DialogType)
+            {
+                case NotificationDialogType.Information:
+                    Title = "Information";
+                    TitleText.Text = "Information";
+                    HeaderIcon.Data = ApplicationIcons.InformationGeometry;
+                    HeaderBorder.Background = WindowTools.GetMainWindow()!.FindResource("AccentBlueBrush") as IBrush;
+                    break;
+
+                case NotificationDialogType.Warning:
+                    Title = "Warning";
+                    TitleText.Text = "Warning";
+                    HeaderIcon.Data = ApplicationIcons.WarningGeometry;
+                    HeaderBorder.Background = WindowTools.GetMainWindow()!.FindResource("WarningBrush") as IBrush;
+                    break;
+
+                case NotificationDialogType.Error:
+                    Title = "Error";
+                    TitleText.Text = "Error";
+                    HeaderIcon.Data = ApplicationIcons.ErrorGeometry;
+                    HeaderBorder.Background = WindowTools.GetMainWindow()!.FindResource("ErrorBrush") as IBrush;
+                    break;
+            }
+        }
+
+        private void UpdateContent()
+        {
+            MessageText.Text = Message;
+        }
+
+        private void OkButton_Click(object? sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\ValidationErrorDialog.axaml
+================================================================================
+
+<Window
+    x:Class="Avalonia.Accelerate.Dialogs.Dialogs.ValidationErrorDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:Avalonia.Accelerate.Icons;assembly=Avalonia.Accelerate.Icons"
+    Title="Validation Errors"
+    MinHeight="300"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="True"
+    Icon="avares://Avalonia.Accelerate.Icons/Assets/jonBuilt.ico"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Border
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource ErrorBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path
+                    Width="24"
+                    Height="24"
+                    Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                    Fill="{DynamicResource TextPrimaryBrush}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    x:Name="TitleText"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="Validation Issues" />
+            </StackPanel>
+        </Border>
+
+        <!--  Content  -->
+        <StackPanel
+            Grid.Row="1"
+            Margin="20"
+            Spacing="20">
+
+            <!--  Summary  -->
+            <Border
+                Padding="15"
+                Background="{DynamicResource BackgroundLightBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        FontSize="14"
+                        FontWeight="Medium"
+                        Foreground="{DynamicResource TextPrimaryBrush}"
+                        Text="Validation Summary" />
+                    <StackPanel Orientation="Horizontal" Spacing="20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                                Fill="{DynamicResource ErrorBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                x:Name="ErrorCountText"
+                                FontSize="12"
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Text="0 Errors" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                                Fill="{DynamicResource WarningBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                x:Name="WarningCountText"
+                                FontSize="12"
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Text="0 Warnings" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  Errors Section  -->
+            <StackPanel x:Name="ErrorsSection" Spacing="10">
+                <StackPanel
+                    x:Name="ErrorsHeader"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <Path
+                        Width="20"
+                        Height="20"
+                        Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                        Fill="{DynamicResource ErrorBrush}"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource ErrorBrush}"
+                        Text="Errors" />
+                </StackPanel>
+
+                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="ErrorsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,2"
+                                    Padding="12,8"
+                                    Background="{DynamicResource BackgroundLightBrush}"
+                                    BorderBrush="{DynamicResource ErrorBrush}"
+                                    BorderThickness="1,0,0,0"
+                                    CornerRadius="2">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Path
+                                            Width="14"
+                                            Height="14"
+                                            VerticalAlignment="Top"
+                                            Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                                            Fill="{DynamicResource ErrorBrush}"
+                                            Stretch="Uniform" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextPrimaryBrush}"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+
+            <!--  Warnings Section  -->
+            <StackPanel x:Name="WarningsSection" Spacing="10">
+                <StackPanel
+                    x:Name="WarningsHeader"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <Path
+                        Width="20"
+                        Height="20"
+                        Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                        Fill="{DynamicResource WarningBrush}"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource WarningBrush}"
+                        Text="Warnings" />
+                </StackPanel>
+
+                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="WarningsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,2"
+                                    Padding="12,8"
+                                    Background="{DynamicResource BackgroundLightBrush}"
+                                    BorderBrush="{DynamicResource WarningBrush}"
+                                    BorderThickness="1,0,0,0"
+                                    CornerRadius="2">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Path
+                                            Width="14"
+                                            Height="14"
+                                            VerticalAlignment="Top"
+                                            Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                                            Fill="{DynamicResource WarningBrush}"
+                                            Stretch="Uniform" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextPrimaryBrush}"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+
+            <!--  Help Text  -->
+            <Border
+                Padding="15"
+                Background="{DynamicResource BackgroundLightBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        FontSize="12"
+                        FontWeight="Medium"
+                        Foreground="{DynamicResource TextPrimaryBrush}"
+                        Text="What these mean:" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Errors must be fixed before the theme can be applied"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Warnings indicate potential issues but don't prevent theme usage"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Fix these issues to ensure optimal appearance and accessibility"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+
+        <!--  Footer  -->
+        <Border
+            Grid.Row="2"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <Button
+                    x:Name="CloseButton"
+                    Padding="20,8"
+                    Background="{DynamicResource AccentBlueBrush}"
+                    Content="Close"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Dialogs\ValidationErrorDialog.axaml.cs
+================================================================================
+
+using Avalonia.Accelerate.Dialogs.Utility;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+
+namespace Avalonia.Accelerate.Dialogs.Dialogs
+{
+    /// <summary>
+    /// A dialog for displaying validation errors and warnings in a structured format.
+    /// </summary>
+    public partial class ValidationErrorDialog : Window
+    {
+        /// <summary>
+        /// Gets or sets the list of error messages to display.
+        /// </summary>
+        public List<string> Errors { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets the list of warning messages to display.
+        /// </summary>
+        public List<string> Warnings { get; set; } = new();
+
+        /// <summary>
+        /// Initializes a new instance of the ValidationErrorDialog class.
+        /// </summary>
+        public ValidationErrorDialog()
+        {
+            InitializeComponent();
+            CloseButton.Click += CloseButton_Click;
+        }
+
+        /// <summary>
+        /// Called when the window is opened to populate the dialog with error and warning data.
+        /// </summary>
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            PopulateValidationResults();
+        }
+
+        private void PopulateValidationResults()
+        {
+            // Update counts
+            ErrorCountText.Text = $"{Errors.Count} Error{(Errors.Count != 1 ? "s" : "")}";
+            WarningCountText.Text = $"{Warnings.Count} Warning{(Warnings.Count != 1 ? "s" : "")}";
+
+            // Populate errors
+            if (Errors.Any())
+            {
+                ErrorsList.ItemsSource = Errors;
+                ErrorsSection.IsVisible = true;
+            }
+            else
+            {
+                ErrorsSection.IsVisible = false;
+            }
+
+            // Populate warnings
+            if (Warnings.Any())
+            {
+                WarningsList.ItemsSource = Warnings;
+                WarningsSection.IsVisible = true;
+            }
+            else
+            {
+                WarningsSection.IsVisible = false;
+            }
+
+            // Update title based on content
+            if (Errors.Any() && Warnings.Any())
+            {
+                Title = "Validation Errors and Warnings";
+                TitleText.Text = "Validation Issues";
+            }
+            else if (Errors.Any())
+            {
+                Title = "Validation Errors";
+                TitleText.Text = "Validation Errors";
+            }
+            else if (Warnings.Any())
+            {
+                Title = "Validation Warnings";
+                TitleText.Text = "Validation Warnings";
+                // Change header color for warnings-only dialog
+                var headerBorder = this.FindControl<Border>("HeaderBorder");
+                if (headerBorder != null)
+                {
+                    headerBorder.Background = WindowTools.GetMainWindow()!.FindResource("WarningBrush") as Avalonia.Media.IBrush;
+                }
+            }
+            else
+            {
+                Title = "Validation Complete";
+                TitleText.Text = "No Issues Found";
+                // Change header color for success
+                var headerBorder = this.FindControl<Border>("HeaderBorder");
+                if (headerBorder != null)
+                {
+                    headerBorder.Background = WindowTools.GetMainWindow()!.FindResource("SuccessBrush") as Avalonia.Media.IBrush;
+                }
+            }
+        }
+
+        private void CloseButton_Click(object? sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        /// <summary>
+        /// Sets the validation results and updates the dialog display.
+        /// </summary>
+        /// <param name="errors">List of error messages</param>
+        /// <param name="warnings">List of warning messages</param>
+        public void SetValidationResults(IEnumerable<string> errors, IEnumerable<string> warnings)
+        {
+            Errors = errors.ToList();
+            Warnings = warnings.ToList();
+
+            if (IsVisible)
+            {
+                PopulateValidationResults();
+            }
+        }
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Extensions\DialogAppBuilderExtensions.cs
+================================================================================
+
+//using Avalonia;
+//using Avalonia.Accelerate.Dialogs.Extensions;
+//using Microsoft.Extensions.DependencyInjection;
+//using Microsoft.Extensions.Logging;
+
+//namespace Avalonia.Accelerate.Dialogs.Extensions
+//{
+//    /// <summary>
+//    /// Provides extension methods for configuring dialog services with the Avalonia AppBuilder.
+//    /// </summary>
+//    public static class DialogAppBuilderExtensions
+//    {
+//        /// <summary>
+//        /// Adds dialog services to the Avalonia application using dependency injection.
+//        /// </summary>
+//        /// <param name="builder">The AppBuilder instance</param>
+//        /// <param name="configureServices">Action to configure services including dialog services</param>
+//        /// <returns>The AppBuilder instance for method chaining</returns>
+//        public static AppBuilder ConfigureDialogServices(this AppBuilder builder, Action<IServiceCollection> configureServices)
+//        {
+//            return builder.AfterSetup(app =>
+//            {
+//                var services = new ServiceCollection();
+//                configureServices(services);
+
+//                // Build the service provider and store it somewhere accessible
+//                // Note: You'll need to decide how to make this available to your app
+//                var serviceProvider = services.BuildServiceProvider();
+
+//                // You could store this in App.Current or use a service locator pattern
+//                // Example: ((App)app).ServiceProvider = serviceProvider;
+//            });
+//        }
+
+//        /// <summary>
+//        /// Adds dialog services with default configuration to the Avalonia application.
+//        /// </summary>
+//        /// <param name="builder">The AppBuilder instance</param>
+//        /// <param name="initializeMessageBox">Whether to initialize the static MessageBox class</param>
+//        /// <returns>The AppBuilder instance for method chaining</returns>
+//        public static AppBuilder UseDialogServices(this AppBuilder builder, bool initializeMessageBox = true)
+//        {
+//            return builder.ConfigureDialogServices(services =>
+//            {
+//                if (initializeMessageBox)
+//                {
+//                    services.AddDialogServicesWithMessageBox();
+//                }
+//                else
+//                {
+//                    services.AddDialogServices();
+//                }
+//            });
+//        }
+
+//        /// <summary>
+//        /// Adds dialog services with custom logging configuration.
+//        /// </summary>
+//        /// <param name="builder">The AppBuilder instance</param>
+//        /// <param name="configureLogging">Action to configure logging</param>
+//        /// <param name="initializeMessageBox">Whether to initialize the static MessageBox class</param>
+//        /// <returns>The AppBuilder instance for method chaining</returns>
+//        public static AppBuilder UseDialogServices(this AppBuilder builder, Action<ILoggingBuilder> configureLogging, bool initializeMessageBox = true)
+//        {
+//            return builder.ConfigureDialogServices(services =>
+//            {
+//                if (initializeMessageBox)
+//                {
+//                    services.AddDialogServicesWithMessageBox(configureLogging);
+//                }
+//                else
+//                {
+//                    services.AddDialogServices(configureLogging);
+//                }
+//            });
+//        }
+//    }
+//}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Extensions\DialogServiceExtensions.cs
+================================================================================
+
+using Avalonia.Accelerate.Dialogs.Interfaces;
+using Avalonia.Accelerate.Dialogs.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Avalonia.Accelerate.Dialogs.Extensions
+{
+    /// <summary>
+    /// Provides extension methods for registering dialog services in an Avalonia application.
+    /// </summary>
+    public static class DialogServiceExtensions
+    {
+        public static AppBuilder UseDialogServices(this AppBuilder builder,
+            Action<IServiceCollection>? configure = null)
+        {
+            return builder.AfterSetup(_ =>
+            {
+                var services = new ServiceCollection();
+
+                // ✅ Register logging
+                services.AddLogging(); // You can customize this if needed
+
+                // Core dialog services
+                services.AddSingleton<IDialogService, DialogService>();
+
+                // Allow app-specific registration
+                configure?.Invoke(services);
+
+                DialogServiceLocator.ServiceProvider = services.BuildServiceProvider();
+            });
+        }
+
+        public static IServiceCollection AddDialogServices(this IServiceCollection services)
+        {
+            // Register logging if needed (optional — you can move this elsewhere if you want centralized logging)
+            services.AddLogging();
+
+            // Core dialog services
+            services.AddSingleton<IDialogService, DialogService>();
+
+            return services;
+        }
+
+
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Interfaces\IDialogService.cs
+================================================================================
+
+namespace Avalonia.Accelerate.Dialogs.Interfaces
+{
+    /// <summary>
+    /// Provides methods for displaying various types of dialog messages, such as errors, warnings, informational messages, 
+    /// validation errors, and confirmation prompts, to the user.
+    /// </summary>
+    public interface IDialogService
+    {
+        /// <summary>
+        /// Displays an error dialog to the user with the specified title, message, and optional exception details.
+        /// </summary>
+        /// <param name="title">The title of the error dialog.</param>
+        /// <param name="message">The message to display in the error dialog.</param>
+        /// <param name="exception">An optional exception providing additional details about the error.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        Task ShowErrorAsync(string title, string message, Exception? exception = null);
+        /// <summary>
+        /// Displays a warning dialog to the user with the specified title and message.
+        /// </summary>
+        /// <param name="title">The title of the warning dialog.</param>
+        /// <param name="message">The message to display in the warning dialog.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        Task ShowWarningAsync(string title, string message);
+        /// <summary>
+        /// Displays an informational dialog to the user with the specified title and message.
+        /// </summary>
+        /// <param name="title">The title of the informational dialog.</param>
+        /// <param name="message">The message to display in the informational dialog.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        Task ShowInfoAsync(string title, string message);
+        /// <summary>
+        /// Displays a validation error dialog to the user with the specified title, 
+        /// a list of error messages, and a list of warning messages.
+        /// </summary>
+        /// <param name="title">The title of the validation error dialog.</param>
+        /// <param name="errors">A collection of error messages to display in the dialog.</param>
+        /// <param name="warnings">A collection of warning messages to display in the dialog.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        Task ShowValidationErrorsAsync(string title, IEnumerable<string> errors, IEnumerable<string> warnings);
+        /// <summary>
+        /// Displays a confirmation dialog to the user with the specified title, message, and customizable confirmation and cancellation button texts.
+        /// </summary>
+        /// <param name="title">The title of the confirmation dialog.</param>
+        /// <param name="message">The message to display in the confirmation dialog.</param>
+        /// <param name="confirmText">The text to display on the confirmation button. Defaults to "Yes".</param>
+        /// <param name="cancelText">The text to display on the cancellation button. Defaults to "No".</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a boolean value indicating whether the user confirmed (true) or canceled (false) the action.</returns>
+        Task<bool> ShowConfirmationAsync(string title, string message, string confirmText = "Yes", string cancelText = "No");
+    }
+}
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Models\NotificationDialogType.cs
+================================================================================
+
+namespace Avalonia.Accelerate.Dialogs.Models
+{
+    /// <summary>
+    /// Enumeration for different types of notification dialogs.
+    /// </summary>
+    public enum NotificationDialogType
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        Information,
+        /// <summary>
+        /// 
+        /// </summary>
+        Warning,
+        /// <summary>
+        /// 
+        /// </summary>
+        Error
+    }
+}
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Services\DialogService.cs
+================================================================================
+
+using Avalonia.Accelerate.Dialogs.Dialogs;
+using Avalonia.Accelerate.Dialogs.Interfaces;
+using Avalonia.Accelerate.Dialogs.Models;
+using Avalonia.Accelerate.Dialogs.Utility;
+using Avalonia.Controls;
+using Microsoft.Extensions.Logging;
+
+namespace Avalonia.Accelerate.Dialogs.Services
+{
+    /// <summary>
+    /// Service for displaying error dialogs and managing user notifications.
+    /// </summary>
+    public class DialogService : IDialogService
+    {
+        private readonly ILogger<DialogService> _logger;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logger"></param>
+        public DialogService(ILogger<DialogService> logger)
+        {
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="exception"></param>
+        public async Task ShowErrorAsync(string title, string message, Exception? exception = null)
+        {
+            _logger.LogError(exception, "Error dialog shown: {Title} - {Message}", title, message);
+
+            var dialog = new ErrorDialog
+            {
+                Title = title,
+                Message = message,
+                Exception = exception
+            };
+
+            if (WindowTools.GetMainWindow() is Window mainWindow)
+            {
+                await dialog.ShowDialog(mainWindow);
+            }
+            else
+            {
+                await dialog.ShowDialog<object?>(null!);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        public async Task ShowWarningAsync(string title, string message)
+        {
+            _logger.LogWarning("Warning dialog shown: {Title} - {Message}", title, message);
+
+            var dialog = new NotificationDialog
+            {
+                Title = title,
+                Message = message,
+                DialogType = NotificationDialogType.Warning
+            };
+
+            if (WindowTools.GetMainWindow() is Window mainWindow)
+            {
+                await dialog.ShowDialog(mainWindow);
+            }
+            else
+            {
+                await dialog.ShowDialog<object?>(null!);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        public async Task ShowInfoAsync(string title, string message)
+        {
+            _logger.LogInformation("Info dialog shown: {Title} - {Message}", title, message);
+
+            var dialog = new NotificationDialog
+            {
+                Title = title,
+                Message = message,
+                DialogType = NotificationDialogType.Information
+            };
+
+            if (WindowTools.GetMainWindow() is { } mainWindow)
+            {
+                await dialog.ShowDialog(mainWindow);
+            }
+            else
+            {
+                await dialog.ShowDialog<object?>(null!);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="errors"></param>
+        /// <param name="warnings"></param>
+        public async Task ShowValidationErrorsAsync(string title, IEnumerable<string> errors, IEnumerable<string> warnings)
+        {
+            var errorList = errors.ToList();
+            var warningList = warnings.ToList();
+
+            _logger.LogWarning("Validation dialog shown: {Title} - {ErrorCount} errors, {WarningCount} warnings",
+                title, errorList.Count, warningList.Count);
+
+            var dialog = new ValidationErrorDialog
+            {
+                Title = title,
+                Errors = errorList,
+                Warnings = warningList
+            };
+
+            if (WindowTools.GetMainWindow() is { } mainWindow)
+            {
+                await dialog.ShowDialog(mainWindow);
+            }
+            else
+            {
+                await dialog.ShowDialog<object?>(null!);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="confirmText"></param>
+        /// <param name="cancelText"></param>
+        /// <returns></returns>
+        public async Task<bool> ShowConfirmationAsync(string title, string message, string confirmText = "Yes", string cancelText = "No")
+        {
+            _logger.LogDebug("Confirmation dialog shown: {Title} - {Message}", title, message);
+
+            var dialog = new ConfirmationDialog
+            {
+                Title = title,
+                Message = message,
+                ConfirmText = confirmText,
+                CancelText = cancelText
+            };
+
+            bool? result;
+            if (WindowTools.TryGetMainWindow() is { } mainWindow)
+            {
+                result = await dialog.ShowDialog<bool?>(mainWindow);
+            }
+            else
+            {
+                dialog.Show();
+                return true;
+            }
+
+            return result == true;
+        }
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Services\DialogServiceLocator.cs
+================================================================================
+
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Avalonia.Accelerate.Dialogs.Services
+{
+    public static class DialogServiceLocator
+    {
+        public static IServiceProvider? ServiceProvider { get; set; }
+
+        public static T GetService<T>() where T : notnull =>
+            (T)(ServiceProvider?.GetService(typeof(T))
+                ?? throw new InvalidOperationException($"Service {typeof(T).FullName} not registered."));
+
+        public static T GetRequiredService<T>() where T : notnull =>
+            (T)(ServiceProvider?.GetRequiredService(typeof(T))
+                ?? throw new InvalidOperationException($"Required service {typeof(T).FullName} not registered."));
+    }
+}
+
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Services\MessageBox.cs
+================================================================================
+
+using Avalonia.Accelerate.Dialogs.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+namespace Avalonia.Accelerate.Dialogs.Services
+{
+    /// <summary>
+    /// Provides static methods for displaying dialogs similar to MessageBox.Show().
+    /// </summary>
+    public static class MessageBox
+    {
+        private static IServiceProvider? _serviceProvider;
+        private static IDialogService? _fallbackService;
+
+        /// <summary>
+        /// Initializes the MessageBox with a service provider for dependency resolution.
+        /// Call this during application startup.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider containing the IDialogService registration.</param>
+        public static void Initialize(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        /// <summary>
+        /// Gets the dialog service instance, creating a fallback if necessary.
+        /// </summary>
+        private static IDialogService GetDialogService()
+        {
+            if (_serviceProvider != null)
+            {
+                try
+                {
+                    return _serviceProvider.GetRequiredService<IDialogService>();
+                }
+                catch
+                {
+                    // Fallback if service not available
+                }
+            }
+
+            // Create fallback service if DI not available
+            if (_fallbackService == null)
+            {
+                var logger = _serviceProvider?.GetService<ILogger<DialogService>>()
+                    ?? Microsoft.Extensions.Logging.Abstractions.NullLogger<DialogService>.Instance;
+                _fallbackService = new DialogService(logger);
+            }
+
+            return _fallbackService;
+        }
+
+        /// <summary>
+        /// Shows an informational dialog.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="title">The dialog title. Defaults to "Information".</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public static Task ShowInfoAsync(string message, string title = "Information")
+        {
+            return GetDialogService().ShowInfoAsync(title, message);
+        }
+
+        /// <summary>
+        /// Shows a warning dialog.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="title">The dialog title. Defaults to "Warning".</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public static Task ShowWarningAsync(string message, string title = "Warning")
+        {
+            return GetDialogService().ShowWarningAsync(title, message);
+        }
+
+        /// <summary>
+        /// Shows an error dialog.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="title">The dialog title. Defaults to "Error".</param>
+        /// <param name="exception">Optional exception details.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public static Task ShowErrorAsync(string message, string title = "Error", Exception? exception = null)
+        {
+            return GetDialogService().ShowErrorAsync(title, message, exception);
+        }
+
+        /// <summary>
+        /// Shows a confirmation dialog.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="title">The dialog title. Defaults to "Confirmation".</param>
+        /// <param name="confirmText">Text for the confirm button. Defaults to "Yes".</param>
+        /// <param name="cancelText">Text for the cancel button. Defaults to "No".</param>
+        /// <returns>A task representing the asynchronous operation with the user's choice.</returns>
+        public static Task<bool> ShowConfirmationAsync(string message, string title = "Confirmation",
+            string confirmText = "Yes", string cancelText = "No")
+        {
+            return GetDialogService().ShowConfirmationAsync(title, message, confirmText, cancelText);
+        }
+
+        /// <summary>
+        /// Shows a validation errors dialog.
+        /// </summary>
+        /// <param name="errors">Collection of error messages.</param>
+        /// <param name="warnings">Collection of warning messages.</param>
+        /// <param name="title">The dialog title. Defaults to "Validation Issues".</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public static Task ShowValidationErrorsAsync(IEnumerable<string> errors, IEnumerable<string> warnings,
+            string title = "Validation Issues")
+        {
+            return GetDialogService().ShowValidationErrorsAsync(title, errors, warnings);
+        }
+
+        // Synchronous versions for compatibility (use carefully - may block UI)
+
+        /// <summary>
+        /// Shows an informational dialog synchronously. Use async version when possible.
+        /// </summary>
+        public static void ShowInfo(string message, string title = "Information")
+        {
+            ShowInfoAsync(message, title).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Shows a warning dialog synchronously. Use async version when possible.
+        /// </summary>
+        public static void ShowWarning(string message, string title = "Warning")
+        {
+            ShowWarningAsync(message, title).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Shows an error dialog synchronously. Use async version when possible.
+        /// </summary>
+        public static void ShowError(string message, string title = "Error", Exception? exception = null)
+        {
+            ShowErrorAsync(message, title, exception).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Shows a confirmation dialog synchronously. Use async version when possible.
+        /// </summary>
+        public static bool ShowConfirmation(string message, string title = "Confirmation",
+            string confirmText = "Yes", string cancelText = "No")
+        {
+            return ShowConfirmationAsync(message, title, confirmText, cancelText).GetAwaiter().GetResult();
+        }
+    }
+}
+================================================================================
+File: C:\Users\jonms\source\repos\Avalonia.Accelerate\Avalonia.Accelerate.Dialogs\Utility\WindowTools.cs
+================================================================================
+
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+
+namespace Avalonia.Accelerate.Dialogs.Utility
+{
+    /// <summary>
+    /// Provides utility methods for working with Avalonia <see cref="Window"/> instances,
+    /// including retrieving the main application window.
+    /// </summary>
+    public static class WindowTools
+    {
+        /// <summary>
+        /// Attempts to retrieve the main application <see cref="Window"/>.
+        /// </summary>
+        /// <returns>
+        /// The main <see cref="Window"/> instance of the application if available; otherwise, <c>null</c>.
+        /// </returns>
+        public static Window? TryGetMainWindow()
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                return desktop.MainWindow;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Retrieves the main application window.
+        /// </summary>
+        /// <returns>The main <see cref="Window"/> instance of the application.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the main window is not available.
+        /// </exception>
+        public static Window GetMainWindow()
+        {
+            return TryGetMainWindow() ?? throw new InvalidOperationException("Main window is not available");
+        }
+    }
+
+}

@@ -1,0 +1,252 @@
+<Window
+    x:Class="Avalonia.Accelerate.Dialogs.Dialogs.ValidationErrorDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:Avalonia.Accelerate.Icons;assembly=Avalonia.Accelerate.Icons"
+    Title="Validation Errors"
+    MinHeight="300"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="True"
+    Icon="avares://Avalonia.Accelerate.Icons/Assets/jonBuilt.ico"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Border
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource ErrorBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path
+                    Width="24"
+                    Height="24"
+                    Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                    Fill="{DynamicResource TextPrimaryBrush}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    x:Name="TitleText"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="Validation Issues" />
+            </StackPanel>
+        </Border>
+
+        <!--  Content  -->
+        <StackPanel
+            Grid.Row="1"
+            Margin="20"
+            Spacing="20">
+
+            <!--  Summary  -->
+            <Border
+                Padding="15"
+                Background="{DynamicResource BackgroundLightBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        FontSize="14"
+                        FontWeight="Medium"
+                        Foreground="{DynamicResource TextPrimaryBrush}"
+                        Text="Validation Summary" />
+                    <StackPanel Orientation="Horizontal" Spacing="20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                                Fill="{DynamicResource ErrorBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                x:Name="ErrorCountText"
+                                FontSize="12"
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Text="0 Errors" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                                Fill="{DynamicResource WarningBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                x:Name="WarningCountText"
+                                FontSize="12"
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Text="0 Warnings" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  Errors Section  -->
+            <StackPanel x:Name="ErrorsSection" Spacing="10">
+                <StackPanel
+                    x:Name="ErrorsHeader"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <Path
+                        Width="20"
+                        Height="20"
+                        Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                        Fill="{DynamicResource ErrorBrush}"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource ErrorBrush}"
+                        Text="Errors" />
+                </StackPanel>
+
+                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="ErrorsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,2"
+                                    Padding="12,8"
+                                    Background="{DynamicResource BackgroundLightBrush}"
+                                    BorderBrush="{DynamicResource ErrorBrush}"
+                                    BorderThickness="1,0,0,0"
+                                    CornerRadius="2">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Path
+                                            Width="14"
+                                            Height="14"
+                                            VerticalAlignment="Top"
+                                            Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                                            Fill="{DynamicResource ErrorBrush}"
+                                            Stretch="Uniform" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextPrimaryBrush}"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+
+            <!--  Warnings Section  -->
+            <StackPanel x:Name="WarningsSection" Spacing="10">
+                <StackPanel
+                    x:Name="WarningsHeader"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <Path
+                        Width="20"
+                        Height="20"
+                        Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                        Fill="{DynamicResource WarningBrush}"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource WarningBrush}"
+                        Text="Warnings" />
+                </StackPanel>
+
+                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="WarningsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,2"
+                                    Padding="12,8"
+                                    Background="{DynamicResource BackgroundLightBrush}"
+                                    BorderBrush="{DynamicResource WarningBrush}"
+                                    BorderThickness="1,0,0,0"
+                                    CornerRadius="2">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Path
+                                            Width="14"
+                                            Height="14"
+                                            VerticalAlignment="Top"
+                                            Data="{x:Static icons:ApplicationIcons.WarningGeometry}"
+                                            Fill="{DynamicResource WarningBrush}"
+                                            Stretch="Uniform" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextPrimaryBrush}"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+
+            <!--  Help Text  -->
+            <Border
+                Padding="15"
+                Background="{DynamicResource BackgroundLightBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        FontSize="12"
+                        FontWeight="Medium"
+                        Foreground="{DynamicResource TextPrimaryBrush}"
+                        Text="What these mean:" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Errors must be fixed before the theme can be applied"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Warnings indicate potential issues but don't prevent theme usage"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Fix these issues to ensure optimal appearance and accessibility"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+
+        <!--  Footer  -->
+        <Border
+            Grid.Row="2"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <Button
+                    x:Name="CloseButton"
+                    Padding="20,8"
+                    Background="{DynamicResource AccentBlueBrush}"
+                    Content="Close"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

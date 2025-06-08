@@ -1,0 +1,144 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--<ControlTheme x:Key="{x:Type DataGridRow}" TargetType="DataGridRow">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Name="DGR_Border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+
+                    <SelectiveScrollingGrid>
+                        <SelectiveScrollingGrid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </SelectiveScrollingGrid.ColumnDefinitions>
+                        <SelectiveScrollingGrid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </SelectiveScrollingGrid.RowDefinitions>
+
+    -->
+    <!--  Row Header  -->
+    <!--
+                        <DataGridRowHeader
+                            Name="PART_RowHeader"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            IsVisible="{Binding HeadersVisibility}" />
+
+    -->
+    <!--  Cell Presenter  -->
+    <!--
+                        <DataGridCellsPresenter
+                            Name="PART_CellsPresenter"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            ItemsPanel="{TemplateBinding ItemsPanel}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+    -->
+    <!--  Row Details  -->
+    <!--
+                        <DataGridDetailsPresenter
+                            Name="PART_DetailsPresenter"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGridConverters.DataGridSelectiveScrollingOrientationConverter}, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            Visibility="{TemplateBinding DetailsVisibility}" />
+                    </SelectiveScrollingGrid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+    -->
+    <!--  Normal State  -->
+    <!--
+        <Style Selector="^">
+            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        </Style>
+
+    -->
+    <!--  Alternating Row  -->
+    <!--
+        <Style Selector="^:nth-child(2n)">
+            <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        </Style>
+
+    -->
+    <!--  Hover State  -->
+    <!--
+        <Style Selector="^:pointerover /template/ Border#DGR_Border">
+            <Setter Property="Background" Value="{DynamicResource GunMetalLightBrush}" />
+        </Style>
+
+    -->
+    <!--  Selected State  -->
+    <!--
+        <Style Selector="^:selected /template/ Border#DGR_Border">
+            <Setter Property="Background" Value="{DynamicResource GunMetalMediumBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="BorderThickness" Value="0,1,0,1" />
+        </Style>
+
+    -->
+    <!--  Selected + Hover State  -->
+    <!--
+        <Style Selector="^:selected:pointerover /template/ Border#DGR_Border">
+            <Setter Property="Background" Value="{DynamicResource SecondaryColorBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+        </Style>
+
+    -->
+    <!--  Focus State  -->
+    <!--
+        <Style Selector="^:focus /template/ Border#DGR_Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+
+    -->
+    <!--  Invalid State  -->
+    <!--
+        <Style Selector="^:invalid /template/ Border#DGR_Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource ErrorBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+    -->
+    <!--  Disabled State  -->
+    <!--
+        <Style Selector="^:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+
+    -->
+    <!--  Editing State  -->
+    <!--
+        <Style Selector="^:editing /template/ Border#DGR_Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        </Style>
+
+    -->
+    <!--  New Item Placeholder  -->
+    <!--
+        <Style Selector="^:new-item-placeholder /template/ Border#DGR_Border">
+            <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="Opacity" Value="0.8" />
+        </Style>
+    </ControlTheme>-->
+
+</ResourceDictionary>

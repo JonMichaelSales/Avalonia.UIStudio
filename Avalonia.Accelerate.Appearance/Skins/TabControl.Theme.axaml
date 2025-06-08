@@ -1,0 +1,118 @@
+
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  ====================== TAB CONTROL THEME ======================  -->
+    <ControlTheme x:Key="CustomTabControlTheme" TargetType="TabControl">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Padding="{TemplateBinding Padding}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{DynamicResource CornerRadius}">
+                    <DockPanel>
+                        <Border
+                            Padding="4,8,4,0"
+                            Background="{DynamicResource GunMetalDarkBrush}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="0"
+                            BoxShadow="0 1 5 0 #20000000"
+                            CornerRadius="{DynamicResource CornerRadius}"
+                            DockPanel.Dock="Top">
+                            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                        </Border>
+                        <ContentPresenter
+                            Name="PART_SelectedContentHost"
+                            Margin="0,0,0,0"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding SelectedContent}"
+                            ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                    </DockPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <!--  ====================== TAB ITEM THEME ======================  -->
+    <ControlTheme x:Key="CustomTabItemTheme" TargetType="TabItem">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        <Setter Property="Margin" Value="4,0,4,0" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border
+                        Name="PART_LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter
+                            Name="PART_ContentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Header}"
+                            ContentTemplate="{TemplateBinding HeaderTemplate}"
+                            TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                            TextBlock.FontSize="{TemplateBinding FontSize}"
+                            TextBlock.FontWeight="{TemplateBinding FontWeight}" />
+                    </Border>
+                    <Border
+                        Name="PART_SelectedIndicator"
+                        Height="3"
+                        Margin="0"
+                        VerticalAlignment="Bottom"
+                        Background="{DynamicResource AccentBlueBrush}"
+                        CornerRadius="1.5"
+                        IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  Selected state  -->
+        <Style Selector="^:selected">
+            <Setter Property="Background" Value="{DynamicResource GunMetalLightBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="^:selected /template/ Border#PART_SelectedIndicator">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <!--  Pointer over (hover) state  -->
+        <Style Selector="^:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource GunMetalMediumBrush}" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+
+        <!--  Selected + hover state  -->
+        <Style Selector="^:selected:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource SecondaryColorBrush}" />
+        </Style>
+
+        <!--  Pressed state  -->
+        <Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource GunMetalDarkBrush}" />
+        </Style>
+
+        <!--  Disabled state  -->
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+    </ControlTheme>
+
+    <!--  Add this theme to set the items panel for the tab control  -->
+    <ItemsPanelTemplate x:Key="TabItemsPanelTemplate">
+        <WrapPanel Orientation="Horizontal" />
+    </ItemsPanelTemplate>
+
+</ResourceDictionary>

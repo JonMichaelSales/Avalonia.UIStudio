@@ -1,0 +1,34 @@
+{
+  "Description": "Auto-converted theme with ControlThemes",
+  "Version": "1.0",
+  "Author": "System",
+  "CreatedDate": "2025-05-31T11:09:01.842464",
+  "FontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+  "FontSizeSmall": 11,
+  "FontSizeMedium": 12,
+  "FontSizeLarge": 14,
+  "FontWeight": "Normal",
+  "BorderRadius": 3,
+  "BorderThickness": {
+    "Left": 1,
+    "Top": 1,
+    "Right": 1,
+    "Bottom": 1
+  },
+  "PrimaryColor": "#0F2A4A",
+  "SecondaryColor": "#2C5D8A",
+  "AccentColor": "#4FB0FF",
+  "PrimaryBackground": "#0A1929",
+  "SecondaryBackground": "#1A4980",
+  "PrimaryTextColor": "#FFFFFF",
+  "SecondaryTextColor": "#B8D4FF",
+  "BorderColor": "#3A7DBA",
+  "ErrorColor": "#FF5252",
+  "WarningColor": "#FFD740",
+  "SuccessColor": "#69F0AE",
+  "Name": "Ocean Blue",
+  "ControlThemes": [
+    "ControlThemes/TextBlock.axaml",
+    "ControlThemes/Button.axaml"
+  ]
+}
