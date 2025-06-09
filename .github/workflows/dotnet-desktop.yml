@@ -84,10 +84,40 @@ jobs:
         files: ./coverage/**/coverage.cobertura.xml
         fail_ci_if_error: false
         verbose: true
+   
+    - name: Create GitHub Release
+      if: github.ref == 'refs/heads/main' && matrix.configuration == 'Release'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v1.0.${{ github.run_number }} # or use GitHub Releases tags
+        name: Release v1.0.${{ github.run_number }}
+        draft: false
+        prerelease: false
+        files: ./publish/win-x64/**
 
     - name: Publish Test Driver Application
       if: matrix.configuration == 'Release'
       run: dotnet publish Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj --configuration Release --runtime win-x64 --self-contained true --output ./publish/win-x64
+
+    - name: Pack NuGet Packages
+      if: matrix.configuration == 'Release'
+      run: |
+        dotnet pack Avalonia.Accelerate.Appearance/Avalonia.Accelerate.Appearance.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.Accelerate.Dialogs/Avalonia.Accelerate.Dialogs.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.Accelerate.Icons/Avalonia.Accelerate.Icons.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.Accelerate.Controls/Avalonia.Accelerate.Controls.csproj --configuration Release --output ./nupkgs
+
+    - name: Pack NuGet Packages
+      if: matrix.configuration == 'Release'
+      run: |
+        dotnet pack Avalonia.Accelerate.Appearance/Avalonia.Accelerate.Appearance.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.Accelerate.Dialogs/Avalonia.Accelerate.Dialogs.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.Accelerate.Icons/Avalonia.Accelerate.Icons.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.Accelerate.Controls/Avalonia.Accelerate.Controls.csproj --configuration Release --output ./nupkgs
+
+    - name: Publish NuGet Packages
+      if: github.ref == 'refs/heads/main' && matrix.configuration == 'Release'
+      run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 
     - name: Upload Build Artifacts
       if: matrix.configuration == 'Release'
