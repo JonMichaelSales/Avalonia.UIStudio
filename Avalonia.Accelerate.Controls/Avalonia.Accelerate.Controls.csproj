@@ -10,6 +10,7 @@
         <Description>UserControls and CustomControls not native to Avalonia UI.</Description>
         <PackageIcon>jonBuiltTransparentBack.png</PackageIcon>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
