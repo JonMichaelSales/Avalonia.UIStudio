@@ -4,6 +4,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Avalonia.Accelerate.Dialogs</Title>
+    <Authors>Jon M. Sales</Authors>
+    <Description>Re-usable common dialog windows and a static messagebox class that can be used dynamically. </Description>
+    <PackageIcon>jonBuiltTransparentBack.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +34,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Avalonia.Accelerate.Icons\Avalonia.Accelerate.Icons.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="jonBuiltTransparentBack.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

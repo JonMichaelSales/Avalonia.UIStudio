@@ -4,6 +4,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Avalonia.Accelerate.Appearance</Title>
+    <Authors>Jon M. Sales</Authors>
+    <Description>A skin manager library with import/export service and ADA skin validation. 20 built-in skins.</Description>
+    <PackageIcon>jonBuiltTransparentBack.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -101,6 +107,10 @@
     <None Remove="Skins\Sunset Orange\theme.json" />
     <None Remove="Skins\Windows 11 Modern\theme.json" />
     <None Remove="Skins\Zen Garden\theme.json" />
+    <None Update="jonBuiltTransparentBack.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

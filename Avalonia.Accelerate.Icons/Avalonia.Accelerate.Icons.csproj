@@ -4,10 +4,20 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Avalonia.Accelerate.Icons</Title>
+    <Authors>Jon M. Sales</Authors>
+    <Description>Common useful library resources for building Path Icons.</Description>
+    <PackageIcon>jonBuiltTransparentBack.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\jonBuilt.ico" />
+    <None Update="jonBuiltTransparentBack.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
