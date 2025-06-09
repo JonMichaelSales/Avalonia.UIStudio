@@ -2,29 +2,26 @@
 using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Accelerate.Appearance.Services;
 using Avalonia.Accelerate.Appearance.Tests.Fixtures;
+using Avalonia.Headless.XUnit;
 using Avalonia.Media;
 
 namespace Avalonia.Accelerate.Appearance.Tests.Services.Integration
 {
-    [Collection("AvaloniaTestCollection")]
     public class SkinManagerIntegrationTests
     {
 
         private readonly SkinManager? _skinManager;
 
         
-        public SkinManagerIntegrationTests(TestAppFixture _)
+        public SkinManagerIntegrationTests()
         {
             // Use real SkinLoaderService so ControlThemeUris can be tested too (if desired)
             var themeLoaderService = new SkinLoaderService();
-            if (Application.Current != null)
-            {
-                var appWrapper = new ApplicationWrapper(Application.Current);
-                _skinManager = new SkinManager(themeLoaderService, appWrapper);
-            }
+            var appWrapper = new ApplicationWrapper(Application.Current!);
+            _skinManager = new SkinManager(themeLoaderService, appWrapper);
         }
 
-        [Fact]
+        [AvaloniaFact]
         public void ApplySkin_PopulatesRequiredResourceKeys()
         {
             // Arrange
@@ -121,7 +118,7 @@ namespace Avalonia.Accelerate.Appearance.Tests.Services.Integration
             }
         }
 
-        [Fact]
+        [AvaloniaFact]
         public void ApplySkin_SetsExpectedPrimaryColorBrush()
         {
             // Arrange
@@ -179,7 +176,7 @@ namespace Avalonia.Accelerate.Appearance.Tests.Services.Integration
             Assert.Equal(Colors.Red, brush.Color);
         }
 
-        [Fact]
+        [AvaloniaFact]
         public void ApplySkin_UpdatesPrimaryColorBrush()
         {
             // Arrange

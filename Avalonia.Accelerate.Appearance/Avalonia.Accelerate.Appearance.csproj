@@ -7,18 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Skins\Arctic White\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Arctic White\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Autumn Leaves\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Autumn Leaves\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Coffee Brown\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Coffee Brown\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Coral Reef\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Coral Reef\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\Cyberpunk\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\Cyberpunk\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\Dark\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\Dark\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Electric Blue\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Electric Blue\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\Forest Green\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\Forest Green\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\High Contrast\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\High Contrast\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Lavender Dreams\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Lavender Dreams\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\Light\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\Light\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\Material Design 3\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\Material Design 3\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Midnight Purple\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Midnight Purple\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\CheckBox.axaml" />
     <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\ComboBox.axaml" />
@@ -27,6 +41,8 @@
     <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\TabControl.axaml" />
     <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\ModernIce\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Neon Green\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Neon Green\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\CheckBox.axaml" />
     <AvaloniaXaml Remove="Skins\Ocean Blue\ControlThemes\ComboBox.axaml" />
@@ -45,6 +61,14 @@
     <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\TabControl.axaml" />
     <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\RetroTerminal\ControlThemes\TextBox.axaml" />
+    <AvaloniaXaml Remove="Skins\Rose Gold\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Rose Gold\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Slate Grey\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Slate Grey\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Steel Blue\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Steel Blue\ControlThemes\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Skins\Sunset Orange\ControlThemes\Button.axaml" />
+    <AvaloniaXaml Remove="Skins\Sunset Orange\ControlThemes\TextBlock.axaml" />
     <AvaloniaXaml Remove="Skins\Windows 11 Modern\ControlThemes\Button.axaml" />
     <AvaloniaXaml Remove="Skins\Windows 11 Modern\ControlThemes\TextBox.axaml" />
     <AvaloniaXaml Remove="Skins\Zen Garden\ControlThemes\Button.axaml" />
@@ -52,22 +76,58 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Skins\Arctic White\theme.json" />
+    <None Remove="Skins\Autumn Leaves\theme.json" />
+    <None Remove="Skins\Coffee Brown\theme.json" />
+    <None Remove="Skins\Coral Reef\theme.json" />
     <None Remove="Skins\Cyberpunk\theme.json" />
     <None Remove="Skins\Dark\ControlThemes\Assets\jackrabbit.png" />
     <None Remove="Skins\Dark\theme.json" />
+    <None Remove="Skins\Electric Blue\theme.json" />
     <None Remove="Skins\Forest Green\theme.json" />
     <None Remove="Skins\High Contrast\theme.json" />
+    <None Remove="Skins\Lavender Dreams\theme.json" />
     <None Remove="Skins\Light\theme.json" />
     <None Remove="Skins\Material Design 3\theme.json" />
+    <None Remove="Skins\Midnight Purple\theme.json" />
     <None Remove="Skins\ModernIce\theme.json" />
+    <None Remove="Skins\Neon Green\theme.json" />
     <None Remove="Skins\Ocean Blue\theme.json" />
     <None Remove="Skins\Purple Haze\theme.json" />
     <None Remove="Skins\RetroTerminal\theme.json" />
+    <None Remove="Skins\Rose Gold\theme.json" />
+    <None Remove="Skins\Slate Grey\theme.json" />
+    <None Remove="Skins\Steel Blue\theme.json" />
+    <None Remove="Skins\Sunset Orange\theme.json" />
     <None Remove="Skins\Windows 11 Modern\theme.json" />
     <None Remove="Skins\Zen Garden\theme.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Skins\Arctic White\ControlThemes\Button.axaml" />
+    <AvaloniaResource Include="Skins\Arctic White\ControlThemes\TextBlock.axaml" />
+    <AvaloniaResource Include="Skins\Arctic White\theme.json" />
+    <AvaloniaResource Include="Skins\Autumn Leaves\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Autumn Leaves\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Autumn Leaves\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Coffee Brown\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Coffee Brown\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Coffee Brown\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Coral Reef\ControlThemes\Button.axaml" />
+    <AvaloniaResource Include="Skins\Coral Reef\ControlThemes\TextBlock.axaml" />
+    <AvaloniaResource Include="Skins\Coral Reef\theme.json" />
     <AvaloniaResource Include="Skins\Cyberpunk\ControlThemes\Button.axaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -89,6 +149,15 @@
     <AvaloniaResource Include="Skins\Dark\theme.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Electric Blue\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Electric Blue\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Electric Blue\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Skins\Forest Green\ControlThemes\Button.axaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -107,6 +176,9 @@
     <AvaloniaResource Include="Skins\High Contrast\theme.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Lavender Dreams\ControlThemes\Button.axaml" />
+    <AvaloniaResource Include="Skins\Lavender Dreams\ControlThemes\TextBlock.axaml" />
+    <AvaloniaResource Include="Skins\Lavender Dreams\theme.json" />
     <AvaloniaResource Include="Skins\Light\ControlThemes\Button.axaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -125,6 +197,9 @@
     <AvaloniaResource Include="Skins\Material Design 3\theme.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Midnight Purple\ControlThemes\Button.axaml" />
+    <AvaloniaResource Include="Skins\Midnight Purple\ControlThemes\TextBlock.axaml" />
+    <AvaloniaResource Include="Skins\Midnight Purple\theme.json" />
     <AvaloniaResource Include="Skins\ModernIce\ControlThemes\Button.axaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -152,6 +227,9 @@
     <AvaloniaResource Include="Skins\ModernIce\theme.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Neon Green\ControlThemes\Button.axaml" />
+    <AvaloniaResource Include="Skins\Neon Green\ControlThemes\TextBlock.axaml" />
+    <AvaloniaResource Include="Skins\Neon Green\theme.json" />
     <AvaloniaResource Include="Skins\Ocean Blue\ControlThemes\Button.axaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -215,6 +293,30 @@
     <AvaloniaResource Include="Skins\RetroTerminal\theme.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Rose Gold\ControlThemes\Button.axaml" />
+    <AvaloniaResource Include="Skins\Rose Gold\ControlThemes\TextBlock.axaml" />
+    <AvaloniaResource Include="Skins\Rose Gold\theme.json" />
+    <AvaloniaResource Include="Skins\Slate Grey\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Slate Grey\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Slate Grey\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Steel Blue\ControlThemes\Button.axaml" />
+    <AvaloniaResource Include="Skins\Steel Blue\ControlThemes\TextBlock.axaml" />
+    <AvaloniaResource Include="Skins\Steel Blue\theme.json" />
+    <AvaloniaResource Include="Skins\Sunset Orange\ControlThemes\Button.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Sunset Orange\ControlThemes\TextBlock.axaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Skins\Sunset Orange\theme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Skins\Windows 11 Modern\ControlThemes\Button.axaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -241,6 +343,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.3.1" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.5" />

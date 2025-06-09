@@ -3,25 +3,17 @@ using System.Collections.Generic;
 using Avalonia.Accelerate.Icons;
 using Avalonia.Accelerate.Icons.Tests;
 using Avalonia.Accelerate.TestUtilities.Rendering;
+using Avalonia.Headless.XUnit;
 using Avalonia.Media;
 using Xunit;
 
 namespace Avalonia.Accelerate.Icons.Tests
 {
-    [CollectionDefinition("AvaloniaTestCollection")]
-    public class AvaloniaTestCollection: ICollectionFixture<TestAppFixture>
-	{
-		// This class has no code, and is never created. Its purpose is simply
-		// to be the place to apply [CollectionDefinition] and all the
-		// ICollectionFixture<> interfaces.
-	}
-
-	[Collection("AvaloniaTestCollection")]
     public class ApplicationIconsTests
     {
         private readonly ApplicationIcons _icons = new();
 
-        [Theory]
+        [AvaloniaTheory]
         [InlineData("File", ApplicationIcons.File)]
         [InlineData("Folder", ApplicationIcons.Folder)]
         [InlineData("NonExistent", ApplicationIcons.File)] // fallback
@@ -32,7 +24,7 @@ namespace Avalonia.Accelerate.Icons.Tests
             Assert.Equal(Geometry.Parse(expectedPath).ToString(), geometry.ToString());
         }
 
-        [Theory]
+        [AvaloniaTheory]
         [InlineData("test.docx", ApplicationIcons.WordDocument)]
         [InlineData("test.xlsx", ApplicationIcons.ExcelDocument)]
         [InlineData("test.pptx", ApplicationIcons.PowerPointDocument)]
@@ -51,7 +43,7 @@ namespace Avalonia.Accelerate.Icons.Tests
             Assert.Equal(Geometry.Parse(expectedPath).ToString(), geometry.ToString());
         }
 
-        [Fact]
+        [AvaloniaFact]
         public void GetFolderIcon_Returns_Folder_When_Accessible()
         {
             var geometry = _icons.GetFolderIcon(true);
@@ -61,7 +53,7 @@ namespace Avalonia.Accelerate.Icons.Tests
         
 
 
-        [Fact]
+        [AvaloniaFact]
         public void GetFolderIcon_Returns_Lock_When_Not_Accessible()
         {
             var geometry = _icons.GetFolderIcon(false);
@@ -69,7 +61,7 @@ namespace Avalonia.Accelerate.Icons.Tests
             Assert.Equal(Geometry.Parse(ApplicationIcons.Lock).ToString(), geometry.ToString());
         }
 
-        [Fact]
+        [AvaloniaFact]
         public void GetAvailableIcons_Returns_All_Keys()
         {
             var icons = _icons.GetAvailableIcons();
@@ -80,7 +72,7 @@ namespace Avalonia.Accelerate.Icons.Tests
             Assert.Contains("Search", icons);
         }
 
-        [Theory]
+        [AvaloniaTheory]
         [InlineData("File", true)]
         [InlineData("Folder", true)]
         [InlineData("NonExistent", false)]
@@ -89,7 +81,7 @@ namespace Avalonia.Accelerate.Icons.Tests
             Assert.Equal(expected, _icons.HasIcon(iconName));
         }
 
-        [Theory]
+        [AvaloniaTheory]
         [InlineData("test.docx", ApplicationIcons.WordDocument)]
         [InlineData("test.xlsx", ApplicationIcons.ExcelDocument)]
         [InlineData("test.pptx", ApplicationIcons.PowerPointDocument)]
@@ -107,7 +99,7 @@ namespace Avalonia.Accelerate.Icons.Tests
             Assert.Equal(expectedPath, path);
         }
 
-        [Fact]
+        [AvaloniaFact]
         public void CreateIconPath_Creates_Path_With_Correct_Data()
         {
             var path = _icons.CreateIconPath("File", 24);
@@ -118,7 +110,7 @@ namespace Avalonia.Accelerate.Icons.Tests
         }
 
 
-		[Fact]
+		[AvaloniaFact]
 		public void Render_All_Icons_As_PNG_Snapshots()
         {
             var outputDir = Path.Combine("TestOutputs", "Icons");

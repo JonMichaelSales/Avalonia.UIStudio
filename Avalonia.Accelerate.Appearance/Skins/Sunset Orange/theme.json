@@ -1,0 +1,29 @@
+{
+  "name": "Sunset Orange",
+  "description": "Warm sunset-inspired theme with orange and red tones, perfect for creative applications",
+  "version": "1.0",
+  "author": "AvaloniaThemeManager",
+  "createdDate": "2025-06-08T00:00:00Z",
+  "primaryColor": "#FF6B35",
+  "secondaryColor": "#FF8E53",
+  "accentColor": "#FF4500",
+  "primaryBackground": "#2D1B1B",
+  "secondaryBackground": "#3D2829",
+  "primaryTextColor": "#FFFFFF",
+  "secondaryTextColor": "#FFD4B3",
+  "borderColor": "#FF8E53",
+  "errorColor": "#DC143C",
+  "warningColor": "#FFA500",
+  "successColor": "#32CD32",
+  "fontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+  "fontSizeSmall": 11,
+  "fontSizeMedium": 13,
+  "fontSizeLarge": 16,
+  "fontWeight": "Normal",
+  "borderRadius": 6,
+  "borderThickness": {"left": 1, "top": 1, "right": 1, "bottom": 1},
+  "ControlThemes": [
+    "ControlThemes/TextBlock.axaml",
+    "ControlThemes/Button.axaml"
+  ]
+}

@@ -48,30 +48,33 @@ namespace Avalonia.Accelerate.Appearance.Services
                 var serializableTheme = ConvertToSerializable(skin, description, author);
 
                 // Add advanced typography
-                serializableTheme.AdvancedTypography = new SerializableTypography
+                if (skin.Typography != null)
                 {
-                    DisplayLarge = skin.Typography.DisplayLarge,
-                    DisplayMedium = skin.Typography.DisplayMedium,
-                    DisplaySmall = skin.Typography.DisplaySmall,
-                    HeadlineLarge = skin.Typography.HeadlineLarge,
-                    HeadlineMedium = skin.Typography.HeadlineMedium,
-                    HeadlineSmall = skin.Typography.HeadlineSmall,
-                    TitleLarge = skin.Typography.TitleLarge,
-                    TitleMedium = skin.Typography.TitleMedium,
-                    TitleSmall = skin.Typography.TitleSmall,
-                    LabelLarge = skin.Typography.LabelLarge,
-                    LabelMedium = skin.Typography.LabelMedium,
-                    LabelSmall = skin.Typography.LabelSmall,
-                    BodyLarge = skin.Typography.BodyLarge,
-                    BodyMedium = skin.Typography.BodyMedium,
-                    BodySmall = skin.Typography.BodySmall,
-                    HeaderFontFamily = skin.HeaderFontFamily.ToString(),
-                    BodyFontFamily = skin.BodyFontFamily.ToString(),
-                    MonospaceFontFamily = skin.MonospaceFontFamily.ToString(),
-                    LineHeight = skin.LineHeight,
-                    LetterSpacing = skin.LetterSpacing,
-                    EnableLigatures = skin.EnableLigatures
-                };
+                    serializableTheme.AdvancedTypography = new SerializableTypography
+                    {
+                        DisplayLarge = skin.Typography.DisplayLarge,
+                        DisplayMedium = skin.Typography.DisplayMedium,
+                        DisplaySmall = skin.Typography.DisplaySmall,
+                        HeadlineLarge = skin.Typography.HeadlineLarge,
+                        HeadlineMedium = skin.Typography.HeadlineMedium,
+                        HeadlineSmall = skin.Typography.HeadlineSmall,
+                        TitleLarge = skin.Typography.TitleLarge,
+                        TitleMedium = skin.Typography.TitleMedium,
+                        TitleSmall = skin.Typography.TitleSmall,
+                        LabelLarge = skin.Typography.LabelLarge,
+                        LabelMedium = skin.Typography.LabelMedium,
+                        LabelSmall = skin.Typography.LabelSmall,
+                        BodyLarge = skin.Typography.BodyLarge,
+                        BodyMedium = skin.Typography.BodyMedium,
+                        BodySmall = skin.Typography.BodySmall,
+                        HeaderFontFamily = skin.HeaderFontFamily?.ToString(),
+                        BodyFontFamily = skin.BodyFontFamily?.ToString(),
+                        MonospaceFontFamily = skin.MonospaceFontFamily?.ToString(),
+                        LineHeight = skin.LineHeight,
+                        LetterSpacing = skin.LetterSpacing,
+                        EnableLigatures = skin.EnableLigatures
+                    };
+                }
 
                 var json = JsonSerializer.Serialize(serializableTheme, _jsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
@@ -288,6 +291,10 @@ namespace Avalonia.Accelerate.Appearance.Services
                 {
                     result.AddError($"Invalid theme data: {ex.Message}");
                 }
+            }
+            catch (JsonException)
+            {
+                result.AddError("Invalid JSON format");
             }
             catch (Exception ex)
             {

@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.Appeara
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.Appearance.Tests", "Avalonia.Accelerate.Appearance.Tests\Avalonia.Accelerate.Appearance.Tests.csproj", "{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.Dialogs.Tests", "Avalonia.Accelerate.Dialogs.Tests\Avalonia.Accelerate.Dialogs.Tests.csproj", "{0F39FB39-06AF-4A86-8AAB-E61A4C3299C5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.Icons.Tests", "Avalonia.Accelerate.Icon.Tests\Avalonia.Accelerate.Icons.Tests.csproj", "{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.TestUtilities", "Avalonia.Accelerate.TestUtilities\Avalonia.Accelerate.TestUtilities.csproj", "{32F6CAA0-2919-493C-A6BD-3C211FB41E94}"
@@ -22,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.Controls", "Avalonia.Accelerate.Controls\Avalonia.Accelerate.Controls.csproj", "{C2D1E507-216A-476B-A247-7BBCFE59E746}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.Controls.Tests", "Avalonia.Accelerate.Controls.Tests\Avalonia.Accelerate.Controls.Tests.csproj", "{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Accelerate.Dialogs.Tests", "Avalonia.Accelerate.Dialogs.Tests\Avalonia.Accelerate.Dialogs.Tests.csproj", "{33044973-6EF5-32AA-9D8F-C5B1DF1DBF93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +49,6 @@ Global
 		{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F39FB39-06AF-4A86-8AAB-E61A4C3299C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F39FB39-06AF-4A86-8AAB-E61A4C3299C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F39FB39-06AF-4A86-8AAB-E61A4C3299C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F39FB39-06AF-4A86-8AAB-E61A4C3299C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33044973-6EF5-32AA-9D8F-C5B1DF1DBF93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33044973-6EF5-32AA-9D8F-C5B1DF1DBF93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33044973-6EF5-32AA-9D8F-C5B1DF1DBF93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33044973-6EF5-32AA-9D8F-C5B1DF1DBF93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

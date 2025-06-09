@@ -137,9 +137,12 @@ namespace Avalonia.Accelerate.Appearance.Services.ValidationRules
             var name = theme.Name.Trim();
 
             // Check for descriptive naming
-            if (name.Length < 4 && !char.IsUpper(name[0]))
+            if (name.Length < 4)
             {
-                result.AddWarning("Very short theme names should be capitalized for better readability");
+                if (name.Length >= 1 && !char.IsUpper(name[0]))
+                {
+                    result.AddWarning("Very short theme names should be capitalized for better readability");
+                }
             }
 
             // Check for version numbers in name (might indicate poor naming)

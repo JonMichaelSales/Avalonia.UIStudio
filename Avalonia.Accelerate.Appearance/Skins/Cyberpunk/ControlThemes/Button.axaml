@@ -25,21 +25,26 @@
                 </Border>
             </ControlTemplate>
         </Setter>
-        <Style Selector="^:pointerover > Border#border">
+        <!--<Style Selector="Button:pointerover > Border#border">
             <Setter Property="Background" Value="{DynamicResource SecondaryBackground}" />
             <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         </Style>
 
+        -->
         <!--  Style for :pressed  -->
-        <Style Selector="^:pressed > Border#border">
+        <!--
+        <Style Selector="Button:pressed > Border#border">
             <Setter Property="Background" Value="{DynamicResource SecondaryBackground}" />
             <Setter Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
         </Style>
 
+        -->
         <!--  Style for :disabled  -->
-        <Style Selector="^:disabled > Border#border">
+        <!--
+        <Style Selector="Button:disabled > Border#border">
             <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-        </Style>
+        </Style>-->
     </ControlTheme>
+
 </ResourceDictionary>

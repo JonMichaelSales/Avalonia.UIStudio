@@ -34,10 +34,10 @@ namespace Avalonia.Accelerate.Dialogs.Utility
         public static Window GetMainWindow()
         {
             var mainWindow = TryGetMainWindow();
-            if(mainWindow==null)
+            if (mainWindow == null)
             {
-                var main = new Window();
-                return main;
+                mainWindow = new Window();
+                mainWindow.Show();  // <-- add this!
             }
             return mainWindow;
         }

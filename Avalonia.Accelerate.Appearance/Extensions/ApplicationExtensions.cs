@@ -14,10 +14,9 @@ namespace Avalonia.Accelerate.Appearance.Extensions
         /// <returns>The Application instance for method chaining</returns>
         public static Application IncludeThemeManagerStyles(this Application app)
         {
-            // Include the theme manager's default styles
-            app.Styles.Add(new StyleInclude(new System.Uri("avares://Avalonia.Accelerate.Appearance/"))
+            app.Resources.MergedDictionaries.Add(new ResourceInclude(new Uri("avares://Avalonia.Accelerate.Appearance/"))
             {
-                Source = new System.Uri("avares://Avalonia.Accelerate.Appearance/Skins/CustomThemes.axaml")
+                Source = new Uri("avares://Avalonia.Accelerate.Appearance/Skins/CustomThemes.axaml")
             });
 
             return app;

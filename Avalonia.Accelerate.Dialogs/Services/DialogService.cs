@@ -7,28 +7,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Avalonia.Accelerate.Dialogs.Services
 {
-    /// <summary>
-    /// Service for displaying error dialogs and managing user notifications.
-    /// </summary>
     public class DialogService : IDialogService
     {
         private readonly ILogger<DialogService> _logger;
+        private readonly bool _testAutoCloseDialogs;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="logger"></param>
         public DialogService(ILogger<DialogService> logger)
         {
             _logger = logger;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        /// <param name="exception"></param>
+        public DialogService(ILogger<DialogService> logger, bool testAutoCloseDialogs = false)
+        {
+            _logger = logger;
+            _testAutoCloseDialogs = testAutoCloseDialogs;
+        }
+
         public async Task ShowErrorAsync(string title, string message, Exception? exception = null)
         {
             _logger.LogError(exception, "Error dialog shown: {Title} - {Message}", title, message);
@@ -40,23 +34,9 @@ namespace Avalonia.Accelerate.Dialogs.Services
                 Exception = exception
             };
 
-            if (WindowTools.GetMainWindow() is Window mainWindow)
-            {
-                await dialog.ShowDialog(mainWindow);
-            }
-            else
-            {
-                var main = new Window();
-                main.Show();
-                await dialog.ShowDialog(main);
-            }
+            await ShowDialogSafeAsync(dialog);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
         public async Task ShowWarningAsync(string title, string message)
         {
             _logger.LogWarning("Warning dialog shown: {Title} - {Message}", title, message);
@@ -68,21 +48,9 @@ namespace Avalonia.Accelerate.Dialogs.Services
                 DialogType = NotificationDialogType.Warning
             };
 
-            if (WindowTools.GetMainWindow() is Window mainWindow)
-            {
-                await dialog.ShowDialog(mainWindow);
-            }
-            else
-            {
-                await dialog.ShowDialog<object?>(null!);
-            }
+            await ShowDialogSafeAsync(dialog);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
         public async Task ShowInfoAsync(string title, string message)
         {
             _logger.LogInformation("Info dialog shown: {Title} - {Message}", title, message);
@@ -94,22 +62,9 @@ namespace Avalonia.Accelerate.Dialogs.Services
                 DialogType = NotificationDialogType.Information
             };
 
-            if (WindowTools.GetMainWindow() is { } mainWindow)
-            {
-                await dialog.ShowDialog(mainWindow);
-            }
-            else
-            {
-                await dialog.ShowDialog<object?>(null!);
-            }
+            await ShowDialogSafeAsync(dialog);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="errors"></param>
-        /// <param name="warnings"></param>
         public async Task ShowValidationErrorsAsync(string title, IEnumerable<string> errors, IEnumerable<string> warnings)
         {
             var errorList = errors.ToList();
@@ -125,24 +80,9 @@ namespace Avalonia.Accelerate.Dialogs.Services
                 Warnings = warningList
             };
 
-            if (WindowTools.GetMainWindow() is { } mainWindow)
-            {
-                await dialog.ShowDialog(mainWindow);
-            }
-            else
-            {
-                await dialog.ShowDialog<object?>(null!);
-            }
+            await ShowDialogSafeAsync(dialog);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        /// <param name="confirmText"></param>
-        /// <param name="cancelText"></param>
-        /// <returns></returns>
         public async Task<bool> ShowConfirmationAsync(string title, string message, string confirmText = "Yes", string cancelText = "No")
         {
             _logger.LogDebug("Confirmation dialog shown: {Title} - {Message}", title, message);
@@ -155,18 +95,103 @@ namespace Avalonia.Accelerate.Dialogs.Services
                 CancelText = cancelText
             };
 
-            bool? result;
-            if (WindowTools.TryGetMainWindow() is { } mainWindow)
+            return await ShowDialogSafeAsync<bool>(dialog);
+        }
+
+        /// <summary>
+        /// Helper to safely show dialogs with proper window visibility handling.
+        /// </summary>
+        private async Task<TResult?> ShowDialogSafeAsync<TResult>(Window dialog)
+        {
+            if (WindowTools.TryGetMainWindow() is Window mainWindow)
             {
-                result = await dialog.ShowDialog<bool?>(mainWindow);
+                if (!mainWindow.IsVisible)
+                {
+                    mainWindow.Show();
+                }
+
+                if (_testAutoCloseDialogs)
+                {
+                    dialog.Opened += (_, __) =>
+                    {
+                        if (dialog is ConfirmationDialog confirmationDialog)
+                        {
+                            confirmationDialog.ConfirmButton.RaiseEvent(
+                                new Avalonia.Interactivity.RoutedEventArgs(Avalonia.Controls.Button.ClickEvent));
+                        }
+                        else
+                        {
+                            dialog.Close();
+                        }
+                    };
+
+                    // ✅ Use ShowDialog to correctly block and return DialogResult
+                    return await dialog.ShowDialog<TResult?>(mainWindow);
+                }
+
+                return await dialog.ShowDialog<TResult?>(mainWindow);
             }
             else
             {
-                dialog.Show();
-                return true;
-            }
+                var fallback = new Window();
+                fallback.Show();
 
-            return result == true;
+                if (_testAutoCloseDialogs)
+                {
+                    dialog.Opened += (_, __) =>
+                    {
+                        if (dialog is ConfirmationDialog confirmationDialog)
+                        {
+                            confirmationDialog.ConfirmButton.RaiseEvent(
+                                new Avalonia.Interactivity.RoutedEventArgs(Avalonia.Controls.Button.ClickEvent));
+                        }
+                        else
+                        {
+                            dialog.Close();
+                        }
+                    };
+
+                    // ✅ Use ShowDialog to correctly block and return DialogResult
+                    return await dialog.ShowDialog<TResult?>(fallback);
+                }
+
+                return await dialog.ShowDialog<TResult?>(fallback);
+            }
+        }
+
+
+        private async Task ShowDialogSafeAsync(Window dialog)
+        {
+            if (WindowTools.TryGetMainWindow() is Window mainWindow)
+            {
+                if (!mainWindow.IsVisible)
+                {
+                    mainWindow.Show();
+                }
+
+                if (_testAutoCloseDialogs)
+                {
+                    dialog.Opened += (_, __) => dialog.Close();
+                    dialog.Show(mainWindow);
+                    return;
+                }
+
+                await dialog.ShowDialog<object?>(mainWindow);
+            }
+            else
+            {
+                var fallback = new Window();
+                fallback.Show();
+
+                if (_testAutoCloseDialogs)
+                {
+                    dialog.Opened += (_, __) => dialog.Close();
+                    dialog.Show(fallback);
+                    return;
+                }
+
+                await dialog.ShowDialog<object?>(fallback);
+            }
         }
     }
 }
