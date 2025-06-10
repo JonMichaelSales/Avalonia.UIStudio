@@ -89,11 +89,13 @@ jobs:
       if: github.ref == 'refs/heads/main' && matrix.configuration == 'Release'
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v1.0.${{ github.run_number }} # or use GitHub Releases tags
+        tag_name: v1.0.${{ github.run_number }}
         name: Release v1.0.${{ github.run_number }}
         draft: false
         prerelease: false
-        files: ./publish/win-x64/**
+        files: |
+          ./publish/win-x64/**
+          ./nupkgs/*.nupkg
 
     - name: Publish Test Driver Application
       if: matrix.configuration == 'Release'
@@ -114,6 +116,13 @@ jobs:
         dotnet pack Avalonia.Accelerate.Dialogs/Avalonia.Accelerate.Dialogs.csproj --configuration Release --output ./nupkgs
         dotnet pack Avalonia.Accelerate.Icons/Avalonia.Accelerate.Icons.csproj --configuration Release --output ./nupkgs
         dotnet pack Avalonia.Accelerate.Controls/Avalonia.Accelerate.Controls.csproj --configuration Release --output ./nupkgs
+
+    - name: Upload NuGet Package Artifact
+      if: matrix.configuration == 'Release'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./nupkgs/*.nupkg
 
     - name: Publish NuGet Packages
       if: github.ref == 'refs/heads/main' && matrix.configuration == 'Release'
