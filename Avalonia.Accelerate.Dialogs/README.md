@@ -1,4 +1,4 @@
-
+<img src="docs/logo.png" alt="Avalonia.Accelerate.Dialogs" width="300" />
 # Avalonia.Accelerate.Dialogs
 
 **Beautiful, modern dialogs for Avalonia UI applications — error, warning, info, validation, confirmation, and more.**

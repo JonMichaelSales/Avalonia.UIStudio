@@ -1,3 +1,4 @@
+<img src="docs/logo.png" alt="Avalonia.Accelerate.Icons" width="300" />
 # Avalonia.Accelerate.Icons
 
 A comprehensive SVG-based icon library for Avalonia UI applications, providing a centralized repository of scalable vector icons with performance optimization and clean architecture following SOLID principles.

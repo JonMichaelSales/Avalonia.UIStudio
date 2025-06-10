@@ -19,6 +19,10 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <None Update="docs\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
