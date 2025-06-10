@@ -1,0 +1,35 @@
+{
+  "name": "Example Theme",
+  "description": "A sample theme for demonstration.",
+  "version": "1.0",
+  "PrimaryColor": "#FF123456",
+  "SecondaryColor": "#FF654321",
+  "AccentColor": "#FF00CCFF",
+  "PrimaryBackground": "#FF101010",
+  "SecondaryBackground": "#FF202020",
+  "PrimaryTextColor": "#FFFFFFFF",
+  "SecondaryTextColor": "#FFAAAAAA",
+  "BorderColor": "#FF303030",
+  "ErrorColor": "#FFFF3333",
+  "WarningColor": "#FFFFAA00",
+  "SuccessColor": "#FF33CC33",
+  "FontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
+  "FontSizeSmall": 10,
+  "FontSizeMedium": 12,
+  "FontSizeLarge": 16,
+  "FontWeight": "Normal",
+  "BorderRadius": 4,
+  "BorderThickness": {
+    "Left": 1,
+    "Top": 1,
+    "Right": 1,
+    "Bottom": 1
+  },
+  "ControlThemes": [
+    "ControlThemes/Button.axaml",
+    "ControlThemes/TextBlock.axaml"
+  ],
+  "Assets": {
+    "Logo": "Assets/logo.png"
+  }
+}
