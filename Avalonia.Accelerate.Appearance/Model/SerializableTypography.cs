@@ -72,15 +72,15 @@
         /// <summary>
         /// 
         /// </summary>
-        public string HeaderFontFamily { get; set; } = "Segoe UI, San Francisco, Helvetica, Arial, sans-serif";
+        public string? HeaderFontFamily { get; set; } = "Segoe UI, San Francisco, Helvetica, Arial, sans-serif";
         /// <summary>
         /// 
         /// </summary>
-        public string BodyFontFamily { get; set; } = "Segoe UI, San Francisco, Helvetica, Arial, sans-serif";
+        public string? BodyFontFamily { get; set; } = "Segoe UI, San Francisco, Helvetica, Arial, sans-serif";
         /// <summary>
         /// 
         /// </summary>
-        public string MonospaceFontFamily { get; set; } = "Consolas, Monaco, 'Courier New', monospace";
+        public string? MonospaceFontFamily { get; set; } = "Consolas, Monaco, 'Courier New', monospace";
         /// <summary>
         /// 
         /// </summary>

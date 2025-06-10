@@ -11,7 +11,7 @@ namespace Avalonia.Accelerate.Appearance.Services
     /// </summary>
     public static class SkinImportExport
     {
-        private static readonly JsonSerializerOptions _jsonOptions = new()
+        private static readonly JsonSerializerOptions JsonOptions = new()
         {
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -26,7 +26,7 @@ namespace Avalonia.Accelerate.Appearance.Services
             try
             {
                 var serializableTheme = ConvertToSerializable(skin, description, author);
-                var json = JsonSerializer.Serialize(serializableTheme, _jsonOptions);
+                var json = JsonSerializer.Serialize(serializableTheme, JsonOptions);
 
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
@@ -76,7 +76,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                     };
                 }
 
-                var json = JsonSerializer.Serialize(serializableTheme, _jsonOptions);
+                var json = JsonSerializer.Serialize(serializableTheme, JsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
             }
@@ -100,7 +100,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                 serializableTheme.BaseSkinName = skin.BaseSkinName;
                 serializableTheme.PropertyOverrides = skin.PropertyOverrides;
 
-                var json = JsonSerializer.Serialize(serializableTheme, _jsonOptions);
+                var json = JsonSerializer.Serialize(serializableTheme, JsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
             }
@@ -127,7 +127,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                 }
 
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, _jsonOptions);
+                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
                 if (serializableTheme == null)
                 {
@@ -167,7 +167,7 @@ namespace Avalonia.Accelerate.Appearance.Services
             try
             {
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, _jsonOptions);
+                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
                 if (serializableTheme == null) return null;
 
@@ -198,9 +198,12 @@ namespace Avalonia.Accelerate.Appearance.Services
                         BodySmall = typography.BodySmall
                     };
 
-                    baseSkin.HeaderFontFamily = new FontFamily(typography.HeaderFontFamily);
-                    baseSkin.BodyFontFamily = new FontFamily(typography.BodyFontFamily);
-                    baseSkin.MonospaceFontFamily = new FontFamily(typography.MonospaceFontFamily);
+                    if (typography.HeaderFontFamily != null)
+                        baseSkin.HeaderFontFamily = new FontFamily(typography.HeaderFontFamily);
+                    if (typography.BodyFontFamily != null)
+                        baseSkin.BodyFontFamily = new FontFamily(typography.BodyFontFamily);
+                    if (typography.MonospaceFontFamily != null)
+                        baseSkin.MonospaceFontFamily = new FontFamily(typography.MonospaceFontFamily);
                     baseSkin.LineHeight = typography.LineHeight;
                     baseSkin.LetterSpacing = typography.LetterSpacing;
                     baseSkin.EnableLigatures = typography.EnableLigatures;
@@ -223,7 +226,7 @@ namespace Avalonia.Accelerate.Appearance.Services
             try
             {
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, _jsonOptions);
+                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
                 if (serializableTheme == null) return null;
 
@@ -262,7 +265,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                 }
 
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, _jsonOptions);
+                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
                 if (serializableTheme == null)
                 {
@@ -320,7 +323,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                     Themes = themes.Select(kvp => ConvertToSerializable(kvp.Value, null, null)).ToArray()
                 };
 
-                var json = JsonSerializer.Serialize(themePack, _jsonOptions);
+                var json = JsonSerializer.Serialize(themePack, JsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
             }

@@ -79,7 +79,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateColorContrast", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { skin, validator, result });
+        method?.Invoke(rule, new object[] { skin, validator, result });
 
         Assert.Contains(result.Errors, e => e.Contains("contrast ratio"));
     }
@@ -93,11 +93,11 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateContrastRatio", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { 2.0, "Test", result, false });
+        method?.Invoke(rule, new object[] { 2.0, "Test", result, false });
         Assert.Contains(result.Errors, e => e.Contains("fails WCAG"));
 
         result = new SkinValidationResult();
-        method.Invoke(rule, new object[] { 5.0, "Test", result, false });
+        method?.Invoke(rule, new object[] { 5.0, "Test", result, false });
         Assert.Contains(result.Warnings, w => w.Contains("meets minimum but not enhanced WCAG AAA"));
     }
 
@@ -115,7 +115,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateFontSizes", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { skin, result });
+        method?.Invoke(rule, new object[] { skin, result });
 
         Assert.Contains(result.Errors, e => e.Contains("below accessibility minimum")); // For FontSizeSmall = 10, which is below minimum (error)
         Assert.Contains(result.Warnings, w => w.Contains("below recommended size"));     // For FontSizeMedium = 12 (warning)
@@ -140,7 +140,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateColorDifferentiation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { skin, validator, result });
+        method?.Invoke(rule, new object[] { skin, validator, result });
 
         Assert.Contains(result.Warnings, w => w.Contains("very similar") || w.Contains("too similar"));
     }
@@ -160,7 +160,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateFocusIndicators", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { skin, validator, result });
+        method?.Invoke(rule, new object[] { skin, validator, result });
 
         Assert.Contains(result.Errors, e => e.Contains("insufficient contrast"));
         Assert.Contains(result.Warnings, w => w.Contains("low contrast"));
@@ -182,7 +182,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateStatusColors", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { skin, validator, result });
+        method?.Invoke(rule, new object[] { skin, validator, result });
 
         Assert.Contains(result.Errors, e => e.Contains("insufficient contrast"));
         Assert.Contains(result.Warnings, w => w.Contains("low contrast"));
@@ -203,7 +203,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateStatusColorDifferentiation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { skin, validator, result });
+        method?.Invoke(rule, new object[] { skin, validator, result });
 
         Assert.Contains(result.Warnings, w => w.Contains("too similar"));
     }
@@ -223,7 +223,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("ValidateVisualStability", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        method.Invoke(rule, new object[] { skin, result });
+        method?.Invoke(rule, new object[] { skin, result });
 
         Assert.Contains(result.Warnings, w => w.Contains("very bright, saturated colors") || w.Contains("Very high contrast ratio"));
     }
@@ -239,7 +239,7 @@ public class AccessibilityValidationRuleTests
         var method = typeof(AccessibilityValidationRule)
             .GetMethod("IsHighSaturationColor", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        var result = (bool)method.Invoke(rule, new object[] { color });
+        var result = (bool)method?.Invoke(rule, new object[] { color })!;
 
         Assert.Equal(expected, result);
     }

@@ -211,21 +211,24 @@ namespace Avalonia.Accelerate.Appearance.Services
             try
             {
                 // Typography scale
-                resources["DisplayLargeFontSize"] = skin.Typography.DisplayLarge;
-                resources["DisplayMediumFontSize"] = skin.Typography.DisplayMedium;
-                resources["DisplaySmallFontSize"] = skin.Typography.DisplaySmall;
-                resources["HeadlineLargeFontSize"] = skin.Typography.HeadlineLarge;
-                resources["HeadlineMediumFontSize"] = skin.Typography.HeadlineMedium;
-                resources["HeadlineSmallFontSize"] = skin.Typography.HeadlineSmall;
-                resources["TitleLargeFontSize"] = skin.Typography.TitleLarge;
-                resources["TitleMediumFontSize"] = skin.Typography.TitleMedium;
-                resources["TitleSmallFontSize"] = skin.Typography.TitleSmall;
-                resources["LabelLargeFontSize"] = skin.Typography.LabelLarge;
-                resources["LabelMediumFontSize"] = skin.Typography.LabelMedium;
-                resources["LabelSmallFontSize"] = skin.Typography.LabelSmall;
-                resources["BodyLargeFontSize"] = skin.Typography.BodyLarge;
-                resources["BodyMediumFontSize"] = skin.Typography.BodyMedium;
-                resources["BodySmallFontSize"] = skin.Typography.BodySmall;
+                if (skin.Typography != null)
+                {
+                    resources["DisplayLargeFontSize"] = skin.Typography.DisplayLarge;
+                    resources["DisplayMediumFontSize"] = skin.Typography.DisplayMedium;
+                    resources["DisplaySmallFontSize"] = skin.Typography.DisplaySmall;
+                    resources["HeadlineLargeFontSize"] = skin.Typography.HeadlineLarge;
+                    resources["HeadlineMediumFontSize"] = skin.Typography.HeadlineMedium;
+                    resources["HeadlineSmallFontSize"] = skin.Typography.HeadlineSmall;
+                    resources["TitleLargeFontSize"] = skin.Typography.TitleLarge;
+                    resources["TitleMediumFontSize"] = skin.Typography.TitleMedium;
+                    resources["TitleSmallFontSize"] = skin.Typography.TitleSmall;
+                    resources["LabelLargeFontSize"] = skin.Typography.LabelLarge;
+                    resources["LabelMediumFontSize"] = skin.Typography.LabelMedium;
+                    resources["LabelSmallFontSize"] = skin.Typography.LabelSmall;
+                    resources["BodyLargeFontSize"] = skin.Typography.BodyLarge;
+                    resources["BodyMediumFontSize"] = skin.Typography.BodyMedium;
+                    resources["BodySmallFontSize"] = skin.Typography.BodySmall;
+                }
 
                 // Font families
                 resources["HeaderFontFamily"] = skin.HeaderFontFamily;

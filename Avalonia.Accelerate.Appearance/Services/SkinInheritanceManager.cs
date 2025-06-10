@@ -8,7 +8,7 @@ namespace Avalonia.Accelerate.Appearance.Services
     /// </summary>
     public class SkinInheritanceManager
     {
-        private readonly Dictionary<string, InheritableSkin> _inheritableSkins = new();
+        private readonly Dictionary<string, InheritableSkin?> _inheritableSkins = new();
         private readonly Dictionary<string, Skin> _resolvedCache = new();
         private readonly ISkinManager _skinManager;
 
@@ -25,7 +25,7 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Registers an inheritable theme.
         /// </summary>
-        public void RegisterInheritableSkin(string name, InheritableSkin theme)
+        public void RegisterInheritableSkin(string? name, InheritableSkin? theme)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Skin name cannot be null or empty", nameof(name));
@@ -40,7 +40,7 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Gets a resolved theme with inheritance applied.
         /// </summary>
-        public Skin? GetResolvedTheme(string name)
+        public Skin? GetResolvedTheme(string? name)
         {
             if (string.IsNullOrEmpty(name))
                 return null;
@@ -55,11 +55,18 @@ namespace Avalonia.Accelerate.Appearance.Services
                 return null;
             }
 
-            var baseTheme = GetBaseTheme(inheritableSkin);
-            var resolved = inheritableSkin.CreateResolvedSkin(baseTheme);
+            if (inheritableSkin != null)
+            {
+                var baseTheme = GetBaseTheme(inheritableSkin);
+                var resolved = inheritableSkin.CreateResolvedSkin(baseTheme);
 
-            _resolvedCache[name] = resolved;
-            return resolved;
+                _resolvedCache[name] = resolved;
+                return resolved;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private Skin? GetBaseTheme(InheritableSkin skin)
@@ -82,7 +89,7 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Creates a theme variant by overriding specific properties.
         /// </summary>
-        public InheritableSkin CreateVariant(string baseName, string variantName, Dictionary<string, object> overrides)
+        public InheritableSkin? CreateVariant(string? baseName, string? variantName, Dictionary<string, object>? overrides)
         {
             if (string.IsNullOrEmpty(baseName))
                 throw new ArgumentException("Base theme name cannot be null or empty", nameof(baseName));

@@ -10,7 +10,7 @@ namespace Avalonia.Accelerate.Appearance.Tests.Services.Unit.Validation;
 
 public class NameValidationRuleTests
 {
-    private static Skin CreateSkinWithName(string name)
+    private static Skin CreateSkinWithName(string? name)
     {
         return new Skin
         {
@@ -128,7 +128,7 @@ public class NameValidationRuleTests
     public void Validate_AddsError_WhenNameIsReserved()
     {
         var rule = new NameValidationRule();
-        var reservedNames = new[] { "Default", "System", "Auto", "None", "Null", "Empty" };
+        string?[] reservedNames = new[] { "Default", "System", "Auto", "None", "Null", "Empty" };
 
         foreach (var reserved in reservedNames)
         {
@@ -143,7 +143,7 @@ public class NameValidationRuleTests
     public void Validate_AddsWarning_WhenNameIsProblematic()
     {
         var rule = new NameValidationRule();
-        var problematicNames = new[] { "Test", "Debug", "Temp", "Sample" };
+        string?[] problematicNames = new[] { "Test", "Debug", "Temp", "Sample" };
 
         foreach (var problematic in problematicNames)
         {
@@ -158,7 +158,7 @@ public class NameValidationRuleTests
     public void Validate_AddsWarning_WhenNameHasFileSystemConflictPatterns()
     {
         var rule = new NameValidationRule();
-        var conflictNames = new[] { "con", "prn", "aux", "nul", "com1", "lpt1" };
+        string?[] conflictNames = new[] { "con", "prn", "aux", "nul", "com1", "lpt1" };
 
         foreach (var conflict in conflictNames)
         {
@@ -218,7 +218,7 @@ public class NameValidationRuleTests
     public void Validate_AddsWarning_WhenNameIsGeneric()
     {
         var rule = new NameValidationRule();
-        var genericNames = new[] { "Theme", "Skin", "Custom", "New" };
+        string?[] genericNames = new[] { "Theme", "Skin", "Custom", "New" };
 
         foreach (var generic in genericNames)
         {

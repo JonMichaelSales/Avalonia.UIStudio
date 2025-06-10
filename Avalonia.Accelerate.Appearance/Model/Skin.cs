@@ -182,20 +182,20 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// <value>
         /// A <see cref="TypographyScale"/> object used to define consistent typography sizing and scaling for various text styles.
         /// </value>
-        public TypographyScale Typography { get; set; } = new();
+        public TypographyScale? Typography { get; set; } = new();
         // Additional font families for specific text roles
         /// <summary>
         /// Gets or sets the font family used for headers.
         /// </summary>
-        public FontFamily HeaderFontFamily { get; set; }
+        public FontFamily? HeaderFontFamily { get; set; }
         /// <summary>
         /// Gets or sets the font family used for body text.
         /// </summary>
-        public FontFamily BodyFontFamily { get; set; }
+        public FontFamily? BodyFontFamily { get; set; }
         /// <summary>
         /// Gets or sets the font family used for monospace content (e.g., code blocks).
         /// </summary>
-        public FontFamily MonospaceFontFamily { get; set; }
+        public FontFamily? MonospaceFontFamily { get; set; }
         // Line height and spacing for typographic elements
         /// <summary>
         /// Gets or sets the line height multiplier used in text layout.
@@ -292,7 +292,7 @@ namespace Avalonia.Accelerate.Appearance.Model
             LetterSpacing = LetterSpacing == 0 ? baseSkin.LetterSpacing : LetterSpacing;
             // Typography scale
             Typography ??= new TypographyScale();
-            Typography.ApplyFallbacksFrom(baseSkin.Typography);
+            if (baseSkin.Typography != null) Typography.ApplyFallbacksFrom(baseSkin.Typography);
 
             // Merge control theme URIs and styles (child overrides take precedence)
             foreach (var kvp in baseSkin.ControlThemeUris)

@@ -19,7 +19,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// <summary>
         /// Gets or sets the collection of property overrides for this theme.
         /// </summary>
-        public Dictionary<string, object> PropertyOverrides { get; set; } = new();
+        public Dictionary<string, object>? PropertyOverrides { get; set; } = new();
 
         /// <summary>
         /// Initializes a new instance of the InheritableSkin class.
@@ -317,22 +317,23 @@ namespace Avalonia.Accelerate.Appearance.Model
 
         private void ApplyOverrides(Skin target)
         {
-            foreach (var kvp in PropertyOverrides)
-            {
-                var property = typeof(Skin).GetProperty(kvp.Key);
-                if (property != null && property.CanWrite)
+            if (PropertyOverrides != null)
+                foreach (var kvp in PropertyOverrides)
                 {
-                    try
+                    var property = typeof(Skin).GetProperty(kvp.Key);
+                    if (property != null && property.CanWrite)
                     {
-                        var value = ConvertValue(kvp.Value, property.PropertyType);
-                        property.SetValue(target, value);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Failed to apply override for {kvp.Key}: {ex.Message}");
+                        try
+                        {
+                            var value = ConvertValue(kvp.Value, property.PropertyType);
+                            property.SetValue(target, value);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Failed to apply override for {kvp.Key}: {ex.Message}");
+                        }
                     }
                 }
-            }
         }
 
         // Update the ConvertValue method in InheritableSkin.cs

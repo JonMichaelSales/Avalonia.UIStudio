@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:icons="clr-namespace:Avalonia.Accelerate.Icons;assembly=Avalonia.Accelerate.Icons"
     xmlns:dialogs="clr-namespace:Avalonia.Accelerate.Dialogs.Dialogs"
+    
     Title="Notification"
     Width="450"
     MinWidth="350"
@@ -12,6 +13,7 @@
     Icon="avares://Avalonia.Accelerate.Icons/Assets/jonBuilt.ico"
     ShowInTaskbar="False"
     SizeToContent="Height"
+    x:DataType="dialogs:NotificationDialog"
     WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -59,7 +61,7 @@
                 TextWrapping="Wrap" />
 
             <!--  Additional Content Area  -->
-            <ContentPresenter x:Name="AdditionalContent" Content="{Binding Path=AdditionalContent, RelativeSource={RelativeSource AncestorType=dialogs:NotificationDialog}}" />
+            <ContentPresenter x:Name="AdditionalContent" Content="{Binding AdditionalContent}" />
         </StackPanel>
 
         <!--  Footer  -->

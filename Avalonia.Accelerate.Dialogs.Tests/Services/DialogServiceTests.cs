@@ -21,7 +21,7 @@ namespace Avalonia.Accelerate.Dialogs.Tests.Services
             _dialogService = new DialogService(_loggerMock.Object, testAutoCloseDialogs: true);
 
             // Ensure MainWindow is visible for headless testing of dialogs
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 if (desktop.MainWindow == null)
                 {

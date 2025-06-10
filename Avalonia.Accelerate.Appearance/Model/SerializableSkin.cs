@@ -15,7 +15,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// This property represents the unique identifier or display name of the theme.
         /// It is a required field and must not be null, empty, or whitespace.
         /// </remarks>
-        public string Name { get; set; } = "";
+        public string? Name { get; set; } = "";
         /// <summary>
         /// Gets or sets a description of the theme, providing additional context or details about its purpose or design.
         /// </summary>
