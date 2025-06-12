@@ -3,7 +3,7 @@
 namespace Avalonia.Accelerate.Appearance.Model
 {
     /// <summary>
-    /// Defines typography scale and settings for themes.
+    /// Defines typography scale and settings for skins.
     /// </summary>
     public class TypographyScale
     {

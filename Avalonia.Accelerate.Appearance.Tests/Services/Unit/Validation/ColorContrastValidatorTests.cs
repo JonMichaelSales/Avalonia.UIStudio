@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Accelerate.Appearance.Model;
-using Avalonia.Accelerate.Appearance.Services;
 using Avalonia.Accelerate.Appearance.Services.ValidationRules;
 using Avalonia.Headless.XUnit;
 using Avalonia.Media;
 using Xunit;
+using System.Linq;
 
 namespace Avalonia.Accelerate.Appearance.Tests.Services.Unit.Validation;
 
@@ -44,10 +44,10 @@ public class ColorContrastValidationRuleTests
         skin.SecondaryBackground = Colors.WhiteSmoke;
         skin.AccentColor = Color.FromRgb(0, 200, 255); // bright cyan → excellent contrast
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Empty(result.Errors);
-        Assert.Empty(result.Warnings);
+        Assert.Empty(messages.Where(m => m.IsError));
+        Assert.Empty(messages.Where(m => !m.IsError));
     }
 
     [AvaloniaFact]
@@ -58,9 +58,10 @@ public class ColorContrastValidationRuleTests
         skin.PrimaryTextColor = Colors.Gray;
         skin.PrimaryBackground = Colors.LightGray;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Primary text contrast ratio") && e.Contains("below WCAG AA"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Primary text contrast ratio") && e.Contains("below WCAG AA"));
     }
 
     [AvaloniaFact]
@@ -70,20 +71,18 @@ public class ColorContrastValidationRuleTests
         var skin = CreateDefaultSkin();
 
         // Known stable pair for 4.5–7.0 contrast
-        skin.PrimaryTextColor = Color.FromRgb(85, 85, 85); // Medium-dark gray → ~5.5–6 contrast
-        skin.PrimaryBackground = Color.FromRgb(230, 230, 230); // Light gray
+        skin.PrimaryTextColor = Color.FromRgb(85, 85, 85); // Medium-dark gray
+        skin.PrimaryBackground = Color.FromRgb(230, 230, 230);
 
-        // Avoid unrelated findings:
         skin.SecondaryTextColor = Colors.Black;
         skin.SecondaryBackground = Colors.White;
         skin.AccentColor = Colors.Orange;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Warnings, w => w.Contains("Primary text contrast ratio") && w.Contains("below WCAG AAA"));
+        Assert.Contains(messages.Where(m => !m.IsError).Select(m => m.Message),
+            w => w.Contains("Primary text contrast ratio") && w.Contains("below WCAG AAA"));
     }
-
-
 
     [AvaloniaFact]
     public void ValidateSecondaryTextContrast_AddsError_WhenBelowMinimum()
@@ -93,9 +92,10 @@ public class ColorContrastValidationRuleTests
         skin.SecondaryTextColor = Colors.Gray;
         skin.SecondaryBackground = Colors.LightGray;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Secondary text contrast ratio") && e.Contains("below minimum"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Secondary text contrast ratio") && e.Contains("below minimum"));
     }
 
     [AvaloniaFact]
@@ -104,11 +104,11 @@ public class ColorContrastValidationRuleTests
         var rule = new ColorContrastValidationRule();
         var skin = CreateDefaultSkin();
         skin.PrimaryTextColor = Color.FromRgb(55, 55, 55);
-        skin.PrimaryBackground = Color.FromRgb(230, 230, 230);
+        skin.AccentColor = Color.FromRgb(80, 80, 80);
 
+        var messages = rule.Validate(skin);
 
-        var result = rule.Validate(skin);
-
-        Assert.Contains(result.Warnings, w => w.Contains("Accent color contrast") && w.Contains("may be difficult to read"));
+        Assert.Contains(messages.Where(m => !m.IsError).Select(m => m.Message),
+            w => w.Contains("Accent color contrast") && w.Contains("may be difficult to read"));
     }
 }

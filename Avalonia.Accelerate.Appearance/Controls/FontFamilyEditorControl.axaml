@@ -1,0 +1,75 @@
+<UserControl
+    x:Class="Avalonia.Accelerate.Appearance.Controls.FontFamilyEditorControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.Accelerate.Appearance.Controls"
+    xmlns:converters="clr-namespace:Avalonia.Accelerate.Appearance.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:Avalonia.Accelerate.Appearance.Model"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BoolToEditModeContentConverter x:Key="BoolToEditModeContentConverter" />
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Avalonia.Accelerate.Appearance/Skins/AppSkin.axaml" />
+                <ResourceInclude Source="avares://Avalonia.Accelerate.Appearance/Skins/ValidationDecorator.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <SimpleTheme />
+
+        <Style Selector="TextBlock.Label">
+            <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+        </Style>
+    </UserControl.Styles>
+
+    <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="150" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="Label"
+                Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}" />
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                IsVisible="{Binding Message, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Text="{Binding Message, FallbackValue=OK}"
+                Theme="{StaticResource CaptionTextBlockTheme}" />
+
+            <ComboBox
+                Grid.Row="0"
+                Grid.Column="2"
+                MinWidth="200"
+                IsEnabled="{Binding !IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}"
+                ItemsSource="{Binding AvailableFontFamilies, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}"
+                SelectedItem="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}" />
+
+            <!--  SuggestedValue text (if present)  -->
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="0,2,0,0"
+                FontSize="11"
+                Foreground="Orange"
+                IsVisible="{Binding SuggestedValue, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Text="{Binding SuggestedValue}" />
+        </Grid>
+    </controls:ValidationDecorator>
+</UserControl>

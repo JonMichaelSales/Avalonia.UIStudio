@@ -193,5 +193,62 @@ namespace Avalonia.Accelerate.Dialogs.Services
                 await dialog.ShowDialog<object?>(fallback);
             }
         }
+
+
+        public async Task<string[]> ShowOpenFileDialogAsync(string title, FileDialogFilter[]? filters = null, bool allowMultiple = false)
+        {
+            _logger.LogInformation("OpenFileDialog shown: {Title}", title);
+
+            var dialog = new OpenFileDialog
+            {
+                Title = title,
+                AllowMultiple = allowMultiple
+            };
+
+            if (filters != null)
+            {
+                foreach (var filter in filters)
+                {
+                    dialog.Filters.Add(filter);
+                }
+            }
+
+            var result = await dialog.ShowAsync(WindowTools.GetMainWindow());
+            return result ?? Array.Empty<string>();
+        }
+
+        public async Task<string?> ShowSaveFileDialogAsync(string title, string? defaultFileName = null, FileDialogFilter[]? filters = null)
+        {
+            _logger.LogInformation("SaveFileDialog shown: {Title}", title);
+
+            var dialog = new SaveFileDialog
+            {
+                Title = title,
+                InitialFileName = defaultFileName
+            };
+
+            if (filters != null)
+            {
+                foreach (var filter in filters)
+                {
+                    dialog.Filters.Add(filter);
+                }
+            }
+
+            return await dialog.ShowAsync(WindowTools.GetMainWindow());
+        }
+
+        public async Task<string?> ShowOpenFolderDialogAsync(string title)
+        {
+            _logger.LogInformation("OpenFolderDialog shown: {Title}", title);
+
+            var dialog = new OpenFolderDialog
+            {
+                Title = title
+            };
+
+            return await dialog.ShowAsync(WindowTools.GetMainWindow());
+        }
+
     }
 }

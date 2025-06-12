@@ -58,10 +58,7 @@
                     </StackPanel>
                 </StackPanel>
 
-                <controls:QuickSkinSwitcher
-                    Grid.Column="1"
-                    Margin="0,0,15,0"
-                    DataContext="{Binding QuickSkinSwitcherViewModel}" />
+                <controls:QuickSkinSwitcher Grid.Column="1" Margin="0,0,15,0" />
 
                 <StackPanel
                     Grid.Column="2"
@@ -270,7 +267,7 @@
                     BorderThickness="1"
                     CornerRadius="8">
                     <StackPanel Spacing="20">
-                        
+
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Path
                                 Width="24"
@@ -287,6 +284,7 @@
 
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
@@ -330,12 +328,30 @@
                                         Content="Import Skin File" />
                                 </StackPanel>
                             </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock FontWeight="Medium" Text="File and Folder Dialogs" />
+                                <StackPanel Spacing="10">
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowOpenFileDialogCommand}"
+                                        Content="Show Open File Dialog" />
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowSaveFileDialogCommand}"
+                                        Content="Show Save File Dialog" />
+                                    <Button
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding ShowOpenFolderDialogCommand}"
+                                        Content="Show Open Folder Dialog" />
+                                </StackPanel>
+
+                            </StackPanel>
                         </Grid>
                     </StackPanel>
                 </Border>
             </TabItem>
             <TabItem
-                Header="Skin Showcase" 
+                Header="Skin Showcase"
                 IsSelected="True"
                 Theme="{StaticResource CustomTabItemTheme}">
                 <!--  Appearance (Skin) Showcase  -->
@@ -702,7 +718,7 @@
 
                         <StackPanel Grid.Row="1">
                             <TextBlock Text="CONTENT GOES HERE" />
-                            
+
                         </StackPanel>
                     </Grid>
                 </Border>

@@ -20,7 +20,7 @@ public class ServiceCollectionExtensionsTests
         var provider = services.BuildServiceProvider();
 
         // Core services
-        Assert.NotNull(provider.GetService<IThemeLoaderService>());
+        Assert.NotNull(provider.GetService<ISkinLoaderService>());
         Assert.NotNull(provider.GetService<ISkinManager>());
         Assert.NotNull(provider.GetService<SkinInheritanceManager>());
 

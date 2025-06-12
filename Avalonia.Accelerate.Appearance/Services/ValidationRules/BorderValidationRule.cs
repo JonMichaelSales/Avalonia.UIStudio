@@ -1,113 +1,203 @@
 ﻿using Avalonia.Accelerate.Appearance.Interfaces;
 using Avalonia.Accelerate.Appearance.Model;
+using Avalonia.Media;
 
 namespace Avalonia.Accelerate.Appearance.Services.ValidationRules
 {
-    /// <summary>
-    /// Validates border-related properties of themes to ensure visual consistency and usability.
-    /// </summary>
     public class BorderValidationRule : ISkinValidationRule
     {
-        /// <summary>
-        /// Validates border properties including thickness, radius, and color contrast.
-        /// </summary>
-        /// <param name="skin">The skin to validate</param>
-        /// <returns>Validation result with any errors or warnings</returns>
-        public SkinValidationResult Validate(Skin skin)
+        public List<SkinValidationMessage> Validate(Skin skin)
         {
-            var result = new SkinValidationResult();
+            var messages = new List<SkinValidationMessage>();
 
-            // Validate border thickness
-            ValidateBorderThickness(skin, result);
+            ValidateBorderThickness(skin, messages);
+            ValidateBorderRadius(skin, messages);
+            ValidateBorderColorContrast(skin, messages);
 
-            // Validate border radius
-            ValidateBorderRadius(skin, result);
-
-            // Validate border color contrast
-            ValidateBorderColorContrast(skin, result);
-
-            return result;
+            return messages;
         }
 
-        private void ValidateBorderThickness(Skin theme, SkinValidationResult result)
+        private void ValidateBorderThickness(Skin skin, List<SkinValidationMessage> messages)
         {
-            var thickness = theme.BorderThickness;
+            var thickness = skin.BorderThickness;
 
-            // Check for negative values
+            // Negative values
             if (thickness.Left < 0 || thickness.Top < 0 || thickness.Right < 0 || thickness.Bottom < 0)
             {
-                result.AddError("Border thickness values cannot be negative");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = "Border thickness values cannot be negative.",
+                    InvolvedProperties = new List<string> { "BorderThickness" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderThickness", new Thickness(Math.Max(0, thickness.Left), Math.Max(0, thickness.Top), Math.Max(0, thickness.Right), Math.Max(0, thickness.Bottom)) }
+                    }
+                });
             }
 
-            // Check for excessive thickness
+            // Excessive thickness
             var maxThickness = Math.Max(Math.Max(thickness.Left, thickness.Right),
                                       Math.Max(thickness.Top, thickness.Bottom));
+
             if (maxThickness > 10)
             {
-                result.AddWarning($"Border thickness ({maxThickness}) is very large and may impact usability");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = $"Border thickness ({maxThickness}) is very large and may impact usability.",
+                    InvolvedProperties = new List<string> { "BorderThickness" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderThickness", new Thickness(
+                            Math.Min(thickness.Left, 10),
+                            Math.Min(thickness.Top, 10),
+                            Math.Min(thickness.Right, 10),
+                            Math.Min(thickness.Bottom, 10)) }
+                    }
+                });
             }
 
-            // Check for zero thickness (might be intentional)
+            // All zero thickness
             if (thickness.Left == 0 && thickness.Top == 0 && thickness.Right == 0 && thickness.Bottom == 0)
             {
-                result.AddWarning("All border thickness values are zero - borders will be invisible");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "All border thickness values are zero — borders will be invisible.",
+                    InvolvedProperties = new List<string> { "BorderThickness" },
+                    SuggestedValues = new Dictionary<string, object?>()
+                });
             }
         }
 
-        private void ValidateBorderRadius(Skin theme, SkinValidationResult result)
+        private void ValidateBorderRadius(Skin skin, List<SkinValidationMessage> messages)
         {
-            var radius = theme.BorderRadius;
+            var radius = skin.BorderRadius;
 
-            // Check for negative radius
+            // Negative radius
             if (radius < 0)
             {
-                result.AddError($"Border radius ({radius}) cannot be negative");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Border radius ({radius}) cannot be negative.",
+                    InvolvedProperties = new List<string> { "BorderRadius" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderRadius", 0.0 }
+                    }
+                });
             }
 
-            // Check for excessive radius
+            // Excessive radius
             if (radius > 50)
             {
-                result.AddWarning($"Border radius ({radius}) is very large and may cause visual issues");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = $"Border radius ({radius}) is very large and may cause visual issues.",
+                    InvolvedProperties = new List<string> { "BorderRadius" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderRadius", 50.0 }
+                    }
+                });
             }
 
-            // Check for very small radius that might not be visible
+            // Very small radius
             if (radius > 0 && radius < 1)
             {
-                result.AddWarning($"Border radius ({radius}) is very small and may not be visible");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = $"Border radius ({radius}) is very small and may not be visible.",
+                    InvolvedProperties = new List<string> { "BorderRadius" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderRadius", 1.0 }
+                    }
+                });
             }
         }
 
-        private void ValidateBorderColorContrast(Skin theme, SkinValidationResult result)
+        private void ValidateBorderColorContrast(Skin skin, List<SkinValidationMessage> messages)
         {
             var validator = new SkinValidator();
 
-            // Check border contrast against primary background
-            var primaryBorderContrast = validator.CalculateContrastRatio(theme.BorderColor, theme.PrimaryBackground);
+            // Border vs PrimaryBackground
+            var primaryBorderContrast = validator.CalculateContrastRatio(skin.BorderColor, skin.PrimaryBackground);
             if (primaryBorderContrast < 1.5)
             {
-                result.AddError($"Border color has insufficient contrast against primary background (ratio: {primaryBorderContrast:F2})");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Border color has insufficient contrast against primary background (ratio: {primaryBorderContrast:F2}).",
+                    InvolvedProperties = new List<string> { "BorderColor", "PrimaryBackground" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderColor", validator.AdjustColorForContrast(skin.BorderColor, skin.PrimaryBackground, 1.5) },
+                        { "PrimaryBackground", null }
+                    }
+                });
             }
             else if (primaryBorderContrast < 2.0)
             {
-                result.AddWarning($"Border color has low contrast against primary background (ratio: {primaryBorderContrast:F2})");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = $"Border color has low contrast against primary background (ratio: {primaryBorderContrast:F2}).",
+                    InvolvedProperties = new List<string> { "BorderColor", "PrimaryBackground" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderColor", validator.AdjustColorForContrast(skin.BorderColor, skin.PrimaryBackground, 2.0) },
+                        { "PrimaryBackground", null }
+                    }
+                });
             }
 
-            // Check border contrast against secondary background
-            var secondaryBorderContrast = validator.CalculateContrastRatio(theme.BorderColor, theme.SecondaryBackground);
+            // Border vs SecondaryBackground
+            var secondaryBorderContrast = validator.CalculateContrastRatio(skin.BorderColor, skin.SecondaryBackground);
             if (secondaryBorderContrast < 1.5)
             {
-                result.AddError($"Border color has insufficient contrast against secondary background (ratio: {secondaryBorderContrast:F2})");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Border color has insufficient contrast against secondary background (ratio: {secondaryBorderContrast:F2}).",
+                    InvolvedProperties = new List<string> { "BorderColor", "SecondaryBackground" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderColor", validator.AdjustColorForContrast(skin.BorderColor, skin.SecondaryBackground, 1.5) },
+                        { "SecondaryBackground", null }
+                    }
+                });
             }
             else if (secondaryBorderContrast < 2.0)
             {
-                result.AddWarning($"Border color has low contrast against secondary background (ratio: {secondaryBorderContrast:F2})");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = $"Border color has low contrast against secondary background (ratio: {secondaryBorderContrast:F2}).",
+                    InvolvedProperties = new List<string> { "BorderColor", "SecondaryBackground" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "BorderColor", validator.AdjustColorForContrast(skin.BorderColor, skin.SecondaryBackground, 2.0) },
+                        { "SecondaryBackground", null }
+                    }
+                });
             }
 
-            // Check if border color is too similar to text colors (might cause confusion)
-            var textSimilarity = validator.CalculateContrastRatio(theme.BorderColor, theme.PrimaryTextColor);
+            // Border vs PrimaryTextColor
+            var textSimilarity = validator.CalculateContrastRatio(skin.BorderColor, skin.PrimaryTextColor);
             if (textSimilarity < 1.2)
             {
-                result.AddWarning("Border color is very similar to primary text color, which may cause visual confusion");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Border color is very similar to primary text color, which may cause visual confusion.",
+                    InvolvedProperties = new List<string> { "BorderColor", "PrimaryTextColor" },
+                    SuggestedValues = new Dictionary<string, object?>()
+                });
             }
         }
     }

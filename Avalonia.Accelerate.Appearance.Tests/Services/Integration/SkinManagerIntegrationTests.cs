@@ -16,9 +16,9 @@ namespace Avalonia.Accelerate.Appearance.Tests.Services.Integration
         public SkinManagerIntegrationTests()
         {
             // Use real SkinLoaderService so ControlThemeUris can be tested too (if desired)
-            var themeLoaderService = new SkinLoaderService();
+            var skinLoaderService = new SkinLoaderService();
             var appWrapper = new ApplicationWrapper(Application.Current!);
-            _skinManager = new SkinManager(themeLoaderService, appWrapper);
+            _skinManager = new SkinManager(skinLoaderService, appWrapper);
         }
 
         [AvaloniaFact]

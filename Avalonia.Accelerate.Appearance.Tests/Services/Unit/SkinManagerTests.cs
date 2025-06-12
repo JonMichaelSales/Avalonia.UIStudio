@@ -14,20 +14,20 @@ namespace Avalonia.Accelerate.Appearance.Tests.Services.Unit;
 
 public class SkinManagerTests
 {
-    private readonly Mock<IThemeLoaderService> _themeLoaderServiceMock;
+    private readonly Mock<ISkinLoaderService> _skinLoaderServiceMock;
     private readonly SkinManager _skinManager;
 
     public SkinManagerTests()
     {
-        _themeLoaderServiceMock = new Mock<IThemeLoaderService>();
+        _skinLoaderServiceMock = new Mock<ISkinLoaderService>();
 
-        _themeLoaderServiceMock.Setup(s => s.LoadSkins(It.IsAny<string>()))
+        _skinLoaderServiceMock.Setup(s => s.LoadSkins(It.IsAny<string>()))
             .Returns(new List<Skin>());
 
         var appWrapper = new ApplicationWrapper(Application.Current!);
 
         _skinManager = new SkinManager(
-            _themeLoaderServiceMock.Object,
+            _skinLoaderServiceMock.Object,
             appWrapper
         );
     }
@@ -144,46 +144,46 @@ public class SkinManagerTests
     }
 
     [AvaloniaFact]
-    public void SaveSelectedSkin_SavesThemeName()
+    public void SaveSelectedSkin_SavesSkinName()
     {
         var skinName = "SavedSkin";
-        AppSettings.Instance.Theme = null;
+        AppSettings.Instance.Skin = null;
 
         _skinManager.SaveSelectedSkin(skinName);
 
-        Assert.Equal(skinName, AppSettings.Instance.Theme);
+        Assert.Equal(skinName, AppSettings.Instance.Skin);
     }
 
     [AvaloniaFact]
     public void SaveSelectedSkin_DoesNothing_WhenNameIsNull()
     {
-        AppSettings.Instance.Theme = "OldTheme";
+        AppSettings.Instance.Skin = "OldSkin";
 
         _skinManager.SaveSelectedSkin(null);
 
-        Assert.Equal("OldTheme", AppSettings.Instance.Theme);
+        Assert.Equal("OldSkin", AppSettings.Instance.Skin);
     }
 
     [AvaloniaFact]
-    public void LoadSavedTheme_AppliesSavedTheme_WhenAvailable()
+    public void LoadSavedSkin_AppliesSavedSkin_WhenAvailable()
     {
         var skin = new Skin();
-        _skinManager.RegisterSkin("SavedTheme", skin);
-        AppSettings.Instance.Theme = "SavedTheme";
+        _skinManager.RegisterSkin("SavedSkin", skin);
+        AppSettings.Instance.Skin = "SavedSkin";
 
-        _skinManager.LoadSavedTheme();
+        _skinManager.LoadSavedSkin();
 
         Assert.Equal(skin, _skinManager.CurrentSkin);
     }
 
     [AvaloniaFact]
-    public void LoadSavedTheme_DoesNothing_WhenThemeNotAvailable()
+    public void LoadSavedTheme_DoesNothing_WhenSkinNotAvailable()
     {
-        AppSettings.Instance.Theme = "NonExistent";
+        AppSettings.Instance.Skin = "NonExistent";
         _skinManager.ApplySkin(new Skin());
 
         var before = _skinManager.CurrentSkin;
-        _skinManager.LoadSavedTheme();
+        _skinManager.LoadSavedSkin();
 
         Assert.Equal(before, _skinManager.CurrentSkin);
     }

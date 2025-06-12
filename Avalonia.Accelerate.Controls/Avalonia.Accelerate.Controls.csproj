@@ -11,6 +11,7 @@
         <PackageIcon>jonBuiltTransparentBack.png</PackageIcon>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/JonMichaelSales/Avalonia.Accelerate/tree/main/Avalonia.Accelerate.Controls</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,6 +1,4 @@
-﻿// Skin/ThemeValidation.cs
-
-using Avalonia.Accelerate.Appearance.Interfaces;
+﻿using Avalonia.Accelerate.Appearance.Interfaces;
 using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Accelerate.Appearance.Services.ValidationRules;
 using Avalonia.Media;
@@ -8,7 +6,7 @@ using Avalonia.Media;
 namespace Avalonia.Accelerate.Appearance.Services
 {
     /// <summary>
-    /// Validates theme configurations and provides error recovery.
+    /// Validates skin configurations and provides error recovery.
     /// </summary>
     public class SkinValidator
     {
@@ -18,7 +16,7 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// Initializes a new instance of the <see cref="SkinValidator"/> class.
         /// </summary>
         /// <remarks>
-        /// This constructor sets up the default validation rules for theme validation, 
+        /// This constructor sets up the default validation rules for skin validation, 
         /// including checks for color contrast, font size, border consistency, naming conventions, 
         /// and accessibility compliance.
         /// </remarks>
@@ -35,23 +33,20 @@ namespace Avalonia.Accelerate.Appearance.Services
         }
 
         /// <summary>
-        /// Validates a theme and returns validation results.
+        /// Validates a skin and returns validation results.
         /// </summary>
-        // Update the ValidateTheme method in SkinValidator class
-        public SkinValidationResult ValidateTheme(Skin theme)
+        // Update the ValidateSkin method in SkinValidator class
+        public SkinValidationResult ValidateSkin(Skin skin)
         {
             var result = new SkinValidationResult();
 
             foreach (var rule in _validationRules)
             {
-                var ruleResult = rule.Validate(theme);
-
-                result.Errors.AddRange(ruleResult.Errors);
-                result.Warnings.AddRange(ruleResult.Warnings);
+                var ruleMessages = rule.Validate(skin);
+                result.ValidationMessages.AddRange(ruleMessages);
             }
 
-            // FIX: Properly set IsValid based on errors
-            result.IsValid = result.Errors.Count == 0;
+            result.IsValid = result.ValidationMessages.All(v => !v.IsError);
 
             return result;
         }
@@ -59,28 +54,28 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Attempts to fix validation errors automatically.
         /// </summary>
-        public Skin AutoFixTheme(Skin theme)
+        public Skin AutoFixSkin(Skin skin)
         {
-            var fixedTheme = CloneSkin(theme);
+            var cloneSkin = CloneSkin(skin);
 
             // Fix null or invalid name
-            if (string.IsNullOrWhiteSpace(fixedTheme.Name))
+            if (string.IsNullOrWhiteSpace(cloneSkin.Name))
             {
-                fixedTheme.Name = "Custom Skin";
+                cloneSkin.Name = "Custom Skin";
             }
 
             // Ensure font sizes are within reasonable bounds
-            fixedTheme.FontSizeSmall = Math.Max(8, Math.Min(20, fixedTheme.FontSizeSmall));
-            fixedTheme.FontSizeMedium = Math.Max(10, Math.Min(24, fixedTheme.FontSizeMedium));
-            fixedTheme.FontSizeLarge = Math.Max(12, Math.Min(32, fixedTheme.FontSizeLarge));
+            cloneSkin.FontSizeSmall = Math.Max(8, Math.Min(20, cloneSkin.FontSizeSmall));
+            cloneSkin.FontSizeMedium = Math.Max(10, Math.Min(24, cloneSkin.FontSizeMedium));
+            cloneSkin.FontSizeLarge = Math.Max(12, Math.Min(32, cloneSkin.FontSizeLarge));
 
             // Ensure border radius is positive
-            fixedTheme.BorderRadius = Math.Max(0, fixedTheme.BorderRadius);
+            cloneSkin.BorderRadius = Math.Max(0, cloneSkin.BorderRadius);
 
             // Fix color contrast issues
-            fixedTheme = FixColorContrast(fixedTheme);
+            cloneSkin = FixColorContrast(cloneSkin);
 
-            return fixedTheme;
+            return cloneSkin;
         }
 
         private Skin CloneSkin(Skin original)
@@ -109,26 +104,26 @@ namespace Avalonia.Accelerate.Appearance.Services
             };
         }
 
-        private Skin FixColorContrast(Skin theme)
+        private Skin FixColorContrast(Skin skin)
         {
             // Calculate contrast ratio and adjust if needed
-            var primaryContrastRatio = CalculateContrastRatio(theme.PrimaryTextColor, theme.PrimaryBackground);
+            var primaryContrastRatio = CalculateContrastRatio(skin.PrimaryTextColor, skin.PrimaryBackground);
 
             if (primaryContrastRatio < 4.5) // WCAG AA minimum
             {
                 // Adjust text color for better contrast
-                theme.PrimaryTextColor = AdjustColorForContrast(theme.PrimaryTextColor, theme.PrimaryBackground, 4.5);
+                skin.PrimaryTextColor = AdjustColorForContrast(skin.PrimaryTextColor, skin.PrimaryBackground, 4.5);
             }
 
-            var secondaryContrastRatio = CalculateContrastRatio(theme.SecondaryTextColor, theme.SecondaryBackground);
+            var secondaryContrastRatio = CalculateContrastRatio(skin.SecondaryTextColor, skin.SecondaryBackground);
 
             if (secondaryContrastRatio < 3.0) // More lenient for secondary text
             {
-                theme.SecondaryTextColor =
-                    AdjustColorForContrast(theme.SecondaryTextColor, theme.SecondaryBackground, 3.0);
+                skin.SecondaryTextColor =
+                    AdjustColorForContrast(skin.SecondaryTextColor, skin.SecondaryBackground, 3.0);
             }
 
-            return theme;
+            return skin;
         }
 
         /// <summary>
@@ -172,7 +167,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                 : Math.Pow((component + 0.055) / 1.055, 2.4);
         }
 
-        private Color AdjustColorForContrast(Color foreground, Color background, double targetRatio)
+        public Color AdjustColorForContrast(Color foreground, Color background, double targetRatio)
         {
             var bgLuminance = GetRelativeLuminance(background);
             var isDarkBackground = bgLuminance < 0.5;

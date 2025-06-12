@@ -3,44 +3,88 @@ using Avalonia.Accelerate.Appearance.Model;
 
 namespace Avalonia.Accelerate.Appearance.Services.ValidationRules
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class FontSizeValidationRule : ISkinValidationRule
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public SkinValidationResult Validate(Skin skin)
+        private const double SmallMin = 8.0;
+        private const double SmallMax = 20.0;
+        private const double MediumMin = 10.0;
+        private const double MediumMax = 24.0;
+        private const double LargeMin = 12.0;
+        private const double LargeMax = 32.0;
+
+        public List<SkinValidationMessage> Validate(Skin skin)
         {
-            var result = new SkinValidationResult();
+            var messages = new List<SkinValidationMessage>();
 
-            if (skin.FontSizeSmall < 8 || skin.FontSizeSmall > 20)
+            // FontSizeSmall
+            if (skin.FontSizeSmall < SmallMin || skin.FontSizeSmall > SmallMax)
             {
-                result.AddError($"Small font size ({skin.FontSizeSmall}) should be between 8 and 20");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Small font size ({skin.FontSizeSmall}px) must be between {SmallMin} and {SmallMax} px.",
+                    InvolvedProperties = new List<string> { "FontSizeSmall" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "FontSizeSmall", Math.Clamp(skin.FontSizeSmall, SmallMin, SmallMax) }
+                    }
+                });
             }
 
-            if (skin.FontSizeMedium < 10 || skin.FontSizeMedium > 24)
+            // FontSizeMedium
+            if (skin.FontSizeMedium < MediumMin || skin.FontSizeMedium > MediumMax)
             {
-                result.AddError($"Medium font size ({skin.FontSizeMedium}) should be between 10 and 24");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Medium font size ({skin.FontSizeMedium}px) must be between {MediumMin} and {MediumMax} px.",
+                    InvolvedProperties = new List<string> { "FontSizeMedium" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "FontSizeMedium", Math.Clamp(skin.FontSizeMedium, MediumMin, MediumMax) }
+                    }
+                });
             }
 
-            if (skin.FontSizeLarge < 12 || skin.FontSizeLarge > 32)
+            // FontSizeLarge
+            if (skin.FontSizeLarge < LargeMin || skin.FontSizeLarge > LargeMax)
             {
-                result.AddError($"Large font size ({skin.FontSizeLarge}) should be between 12 and 32");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Large font size ({skin.FontSizeLarge}px) must be between {LargeMin} and {LargeMax} px.",
+                    InvolvedProperties = new List<string> { "FontSizeLarge" },
+                    SuggestedValues = new Dictionary<string, object?>
+                    {
+                        { "FontSizeLarge", Math.Clamp(skin.FontSizeLarge, LargeMin, LargeMax) }
+                    }
+                });
             }
 
+            // Logical font size progression checks
             if (skin.FontSizeSmall >= skin.FontSizeMedium)
             {
-                result.AddError("Small font size should be smaller than medium font size");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = "Small font size should be smaller than medium font size.",
+                    InvolvedProperties = new List<string> { "FontSizeSmall", "FontSizeMedium" },
+                    SuggestedValues = new Dictionary<string, object?>()
+                });
             }
 
             if (skin.FontSizeMedium >= skin.FontSizeLarge)
             {
-                result.AddError("Medium font size should be smaller than large font size");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = "Medium font size should be smaller than large font size.",
+                    InvolvedProperties = new List<string> { "FontSizeMedium", "FontSizeLarge" },
+                    SuggestedValues = new Dictionary<string, object?>()
+                });
             }
 
-            return result;
+            return messages;
         }
     }
 }

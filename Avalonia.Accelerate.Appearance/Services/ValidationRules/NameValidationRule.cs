@@ -4,173 +4,226 @@ using System.Text.RegularExpressions;
 
 namespace Avalonia.Accelerate.Appearance.Services.ValidationRules
 {
-    /// <summary>
-    /// Validates theme naming conventions and ensures proper identification.
-    /// </summary>
     public class NameValidationRule : ISkinValidationRule
     {
-        private static readonly Regex ValidNamePattern = new Regex(@"^[a-zA-Z0-9\s\-_\.]+$", RegexOptions.Compiled);
         private static readonly string[] ReservedNames = { "Default", "System", "Auto", "None", "Null", "Empty" };
+        private static readonly string[] GenericNames = { "Theme", "Skin", "Custom", "New" };
         private static readonly string[] ProblematicNames = { "Test", "Debug", "Temp", "Sample" };
+        private static readonly string[] FilesystemConflictNames = { "con", "prn", "aux", "nul", "com1", "lpt1" };
 
-        /// <summary>
-        /// Validates skin name for proper format, uniqueness, and conventions.
-        /// </summary>
-        /// <param name="skin">The skin to validate</param>
-        /// <returns>Validation result with any errors or warnings</returns>
-        public SkinValidationResult Validate(Skin skin)
+        private const int MinLength = 2;
+        private const int MaxLength = 50;
+        private const int QuiteLongThreshold = 30;
+
+        public List<SkinValidationMessage> Validate(Skin skin)
         {
-            var result = new SkinValidationResult();
+            var messages = new List<SkinValidationMessage>();
 
-            // Validate name existence
-            ValidateNameExists(skin, result);
+            var name = skin.Name ?? string.Empty;
 
-            // Validate name format
-            ValidateNameFormat(skin, result);
-
-            // Validate name length
-            ValidateNameLength(skin, result);
-
-            // Validate reserved names
-            ValidateReservedNames(skin, result);
-
-            // Validate naming conventions
-            ValidateNamingConventions(skin, result);
-
-            return result;
-        }
-
-        private void ValidateNameExists(Skin theme, SkinValidationResult result)
-        {
-            if (string.IsNullOrEmpty(theme.Name))
+            // Empty or whitespace
+            if (string.IsNullOrWhiteSpace(name))
             {
-                result.AddError("Skin name is required and cannot be null or empty");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(theme.Name))
-            {
-                result.AddError("Skin name cannot be only whitespace");
-            }
-        }
-
-        private void ValidateNameFormat(Skin theme, SkinValidationResult result)
-        {
-            if (string.IsNullOrEmpty(theme.Name)) return;
-
-            // Check for valid characters
-            if (!ValidNamePattern.IsMatch(theme.Name))
-            {
-                result.AddError("Skin name contains invalid characters. Only letters, numbers, spaces, hyphens, underscores, and periods are allowed");
-            }
-
-            // Check for leading/trailing whitespace
-            if (theme.Name != theme.Name.Trim())
-            {
-                result.AddWarning("Skin name has leading or trailing whitespace");
-            }
-
-            // Check for multiple consecutive spaces
-            if (theme.Name.Contains("  "))
-            {
-                result.AddWarning("Skin name contains multiple consecutive spaces");
-            }
-
-            // Check for starting with special characters
-            if (theme.Name.StartsWith("-") || theme.Name.StartsWith("_") || theme.Name.StartsWith("."))
-            {
-                result.AddWarning("Skin name starts with a special character, which may cause sorting issues");
-            }
-        }
-
-        private void ValidateNameLength(Skin theme, SkinValidationResult result)
-        {
-            if (string.IsNullOrEmpty(theme.Name)) return;
-
-            // Check minimum length
-            if (theme.Name.Trim().Length < 2)
-            {
-                result.AddError("Skin name must be at least 2 characters long");
-            }
-
-            // Check maximum length
-            if (theme.Name.Length > 50)
-            {
-                result.AddError($"Skin name is too long ({theme.Name.Length} characters). Maximum length is 50 characters");
-            }
-            else if (theme.Name.Length > 30)
-            {
-                result.AddWarning($"Skin name is quite long ({theme.Name.Length} characters). Consider a shorter name for better UI display");
-            }
-        }
-
-        private void ValidateReservedNames(Skin theme, SkinValidationResult result)
-        {
-            if (string.IsNullOrEmpty(theme.Name)) return;
-
-            var nameLower = theme.Name.ToLowerInvariant().Trim();
-
-            // Check reserved system names
-            if (ReservedNames.Any(reserved => string.Equals(nameLower, reserved.ToLowerInvariant(), StringComparison.OrdinalIgnoreCase)))
-            {
-                result.AddError($"'{theme.Name}' is a reserved name and cannot be used for custom themes");
-            }
-
-            // Check problematic names that might cause confusion
-            if (ProblematicNames.Any(problematic => string.Equals(nameLower, problematic.ToLowerInvariant(), StringComparison.OrdinalIgnoreCase)))
-            {
-                result.AddWarning($"'{theme.Name}' might be confusing as it suggests a temporary or development theme");
-            }
-
-            // Check for names that might conflict with file system
-            if (nameLower.Contains("con") || nameLower.Contains("prn") || nameLower.Contains("aux") ||
-                nameLower.Contains("nul") || nameLower.StartsWith("com") || nameLower.StartsWith("lpt"))
-            {
-                result.AddWarning($"'{theme.Name}' contains patterns that might cause issues on some file systems");
-            }
-        }
-
-        private void ValidateNamingConventions(Skin theme, SkinValidationResult result)
-        {
-            if (string.IsNullOrEmpty(theme.Name)) return;
-
-            var name = theme.Name.Trim();
-
-            // Check for descriptive naming
-            if (name.Length < 4)
-            {
-                if (name.Length >= 1 && !char.IsUpper(name[0]))
+                messages.Add(new SkinValidationMessage
                 {
-                    result.AddWarning("Very short theme names should be capitalized for better readability");
-                }
+                    IsError = true,
+                    Message = "Skin name is empty or whitespace.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", "Custom Skin" } }
+                });
+                return messages; // No point validating further if empty
             }
 
-            // Check for version numbers in name (might indicate poor naming)
-            if (Regex.IsMatch(name, @"\bv?\d+(\.\d+)*\b", RegexOptions.IgnoreCase))
+            name = name.Trim();
+
+            // Too short
+            if (name.Length < MinLength)
             {
-                result.AddWarning("Skin name contains version numbers. Consider using metadata for versioning instead");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Skin name is too short (minimum {MinLength} characters required).",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", "Custom Skin" } }
+                });
             }
 
-            // Check for excessive capitalization
-            var upperCaseCount = name.Count(char.IsUpper);
-            var letterCount = name.Count(char.IsLetter);
-            if (letterCount > 0 && upperCaseCount / (double)letterCount > 0.6)
+            // Too long
+            if (name.Length > MaxLength)
             {
-                result.AddWarning("Skin name has excessive capitalization, which may impact readability");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Skin name is too long (max {MaxLength} characters allowed).",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name.Substring(0, MaxLength) } }
+                });
             }
 
-            // Check for common naming patterns
-            if (name.ToLowerInvariant().EndsWith("theme") || name.ToLowerInvariant().EndsWith("skin"))
+            // Leading/trailing whitespace
+            if (skin.Name != name)
             {
-                result.AddWarning("Skin name ends with 'theme' or 'skin', which is redundant in this context");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name has leading or trailing whitespace.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name } }
+                });
             }
 
-            // Suggest better naming for generic names
-            if (name.ToLowerInvariant().Equals("theme") || name.ToLowerInvariant().Equals("skin") ||
-                name.ToLowerInvariant().Equals("custom") || name.ToLowerInvariant().Equals("new"))
+            // Multiple consecutive spaces
+            if (Regex.IsMatch(name, @" {2,}"))
             {
-                result.AddWarning($"'{name}' is too generic. Consider a more descriptive name that reflects the theme's characteristics");
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name contains multiple consecutive spaces.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", Regex.Replace(name, @" {2,}", " ") } }
+                });
             }
+
+            // Starts with special character
+            if (Regex.IsMatch(name, @"^[\-\._]"))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name starts with a special character.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name.TrimStart('-', '_', '.') } }
+                });
+            }
+
+            // Invalid characters (allow letters, digits, spaces, hyphens, underscores, dots)
+            if (!Regex.IsMatch(name, @"^[a-zA-Z0-9 _\.\-]+$"))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = "Skin name contains invalid characters.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", SanitizeName(name) } }
+                });
+            }
+
+            // Reserved names
+            if (ReservedNames.Any(r => string.Equals(r, name, StringComparison.OrdinalIgnoreCase)))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Skin name '{name}' is a reserved name.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name + " Custom" } }
+                });
+            }
+
+            // Generic names
+            if (GenericNames.Any(g => string.Equals(g, name, StringComparison.OrdinalIgnoreCase)))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name is too generic.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name + " Custom" } }
+                });
+            }
+
+            // Quite long
+            if (name.Length > QuiteLongThreshold)
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name is quite long and may be hard to read.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name } }
+                });
+            }
+
+            // Problematic names
+            if (ProblematicNames.Any(p => string.Equals(p, name, StringComparison.OrdinalIgnoreCase)))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name might be confusing (common debug/test name).",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name + " Custom" } }
+                });
+            }
+
+            // Filesystem conflict patterns
+            if (FilesystemConflictNames.Any(f => string.Equals(f, name, StringComparison.OrdinalIgnoreCase)))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name matches common reserved names in file systems.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", name + " Skin" } }
+                });
+            }
+
+            // Short name not capitalized
+            if (name.Length <= 3 && !char.IsUpper(name[0]))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Short skin name should be capitalized.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", char.ToUpper(name[0]) + name.Substring(1) } }
+                });
+            }
+
+            // Contains version numbers (simple pattern vX.X or vX)
+            if (Regex.IsMatch(name, @"\bv\d+(\.\d+)?\b", RegexOptions.IgnoreCase))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name contains version numbers.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", Regex.Replace(name, @"\bv\d+(\.\d+)?\b", "").Trim() } }
+                });
+            }
+
+            // Excessive capitalization
+            if (name.Length >= 3 && name.All(char.IsUpper))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name has excessive capitalization.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()) } }
+                });
+            }
+
+            // Ends with "Theme" or "Skin"
+            if (Regex.IsMatch(name, @"(Theme|Skin)$", RegexOptions.IgnoreCase))
+            {
+                messages.Add(new SkinValidationMessage
+                {
+                    IsError = false,
+                    Message = "Skin name ends with 'theme' or 'skin'.",
+                    InvolvedProperties = new List<string> { "Name" },
+                    SuggestedValues = new Dictionary<string, object?> { { "Name", Regex.Replace(name, @"\b(Theme|Skin)$", "").Trim() } }
+                });
+            }
+
+            return messages;
+        }
+
+        private string SanitizeName(string name)
+        {
+            // Allow letters, digits, spaces, hyphens, underscores, dots
+            var sanitized = new string(name.Where(c => char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c == '_' || c == '.').ToArray()).Trim();
+            return sanitized.Length >= 3 ? sanitized : "Custom Skin";
         }
     }
 }

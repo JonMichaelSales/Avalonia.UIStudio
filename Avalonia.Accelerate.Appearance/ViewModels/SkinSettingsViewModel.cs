@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
+using Avalonia.Accelerate.Appearance.Interfaces;
+using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Accelerate.Appearance.Services;
 using Avalonia.Media;
 using Microsoft.Extensions.Logging;
@@ -7,240 +9,380 @@ using ReactiveUI;
 
 namespace Avalonia.Accelerate.Appearance.ViewModels
 {
-    /// <summary>
-    /// ViewModel responsible for managing theme settings within the application.
-    /// </summary>
-    /// <remarks>
-    /// This class provides functionality to load available themes, apply a selected theme, 
-    /// and reset to a default theme. It interacts with the UI to allow users to preview and 
-    /// change themes dynamically. Logging is utilized to track theme changes and operations.
-    /// </remarks>
     public class SkinSettingsViewModel : ViewModelBase
     {
         private readonly ILogger _logger;
-        private ThemeInfo? _selectedTheme;
+        private readonly ISkinManager _skinManager;
+        private readonly ISkinImportExportService _skinImportExportService;
+        private readonly SkinValidator _skinValidator = new();
+        private SkinSummaryInfo? _selectedSkin;
+        private EditableSkinViewModel? _editableSkin;
+        private SkinValidationResult? _validationResult;
+        private bool _isSubscribedToSkinChanged;
+        private bool _isApplyingSkin = false;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SkinSettingsViewModel"/> class.
-        /// </summary>
-        /// <remarks>
-        /// This constructor sets up the ViewModel with a default logger instance. It initializes
-        /// the collection of available themes, the command for applying themes, and loads the
-        /// current theme and available themes.
-        /// </remarks>
-        public SkinSettingsViewModel() : this(
-            Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance)
-        {
-        }
+        private readonly Dictionary<string, ValidatedProperty> _validatedProperties = new();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SkinSettingsViewModel"/> class with the specified logger.
-        /// </summary>
-        /// <param name="logger">
-        /// An instance of <see cref="ILogger"/> used for logging theme-related operations and errors.
-        /// </param>
-        /// <remarks>
-        /// This constructor allows dependency injection of a logger instance, enabling detailed logging
-        /// of theme management operations. It initializes the collection of available themes, sets up
-        /// the command for applying themes, and loads the current theme and available themes.
-        /// </remarks>
-        public SkinSettingsViewModel(ILogger logger)
+        private bool _isEditMode;
+        private Color _validatedPrimaryColor;
+
+        //public SkinSettingsViewModel() : this(
+        //    Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance, SkinManager.Instance)
+        //{
+        //}
+
+        public SkinSettingsViewModel(ILogger<SkinSettingsViewModel> logger, ISkinManager skinManager, ISkinImportExportService skinImportExportService)
         {
             _logger = logger;
-
-            AvailableThemes = new ObservableCollection<ThemeInfo>();
-            ApplyThemeCommand = ReactiveCommand.Create(ApplyTheme);
-
-            LoadAvailableThemes();
-            LoadCurrentTheme();
+            _skinManager = skinManager;
+            _skinImportExportService = skinImportExportService;
+            AvailableSkins = new ObservableCollection<SkinSummaryInfo>();
+            ApplySkinCommand = ReactiveCommand.Create(ApplySkin);
+            ApplyChangesCommand = ReactiveCommand.Create(SaveChanges);
+            _skinManager.SkinChanged += _skinManager_SkinChanged;
+            _isSubscribedToSkinChanged = true;
+            LoadAvailableSkins();
+            LoadCurrentSkin();
         }
 
-        /// <summary>
-        /// Gets the collection of available themes that can be applied within the application.
-        /// </summary>
-        /// <remarks>
-        /// This property provides a list of <see cref="ThemeInfo"/> objects, each representing a theme 
-        /// with its name, description, and preview color. The collection is populated by the 
-        /// <c>LoadAvailableThemes</c> method and is used to display theme options in the UI.
-        /// </remarks>
-        public ObservableCollection<ThemeInfo> AvailableThemes { get; }
-        /// <summary>
-        /// Gets the command used to apply the currently selected theme.
-        /// </summary>
-        /// <remarks>
-        /// This command executes the logic to apply the theme selected by the user in the UI.
-        /// It ensures that the application's appearance is updated dynamically to reflect the chosen theme.
-        /// </remarks>
-        public ReactiveCommand<Unit, Unit> ApplyThemeCommand { get; }
-
-        /// <summary>
-        /// Gets or sets the currently selected theme.
-        /// </summary>
-        /// <remarks>
-        /// When a new theme is selected, it is immediately applied to the application for preview purposes.
-        /// The selected theme is logged for tracking purposes. If the theme is set to <c>null</c>, no changes are applied.
-        /// </remarks>
-        public ThemeInfo? SelectedTheme
+        private void _skinManager_SkinChanged(object? sender, EventArgs e)
         {
-            get => _selectedTheme;
+            if (_isApplyingSkin)
+            {
+                // Skip handling SkinChanged caused by our own ApplySkin
+                return;
+            }
+
+            _logger.LogInformation("SkinChanged detected. Reloading EditableSkin.");
+            LoadEditableSkin();
+            ValidateSkin();
+        }
+
+        public ObservableCollection<SkinSummaryInfo> AvailableSkins { get; }
+
+        public ReactiveCommand<Unit, Unit> ApplySkinCommand { get; }
+        public ReactiveCommand<Unit, Unit> ApplyChangesCommand { get; }
+
+        public SkinSummaryInfo? SelectedSkin
+        {
+            get => _selectedSkin;
             set
             {
-                if (this.RaiseAndSetIfChanged(ref _selectedTheme, value) != null)
+                if (this.RaiseAndSetIfChanged(ref _selectedSkin, value) != null)
                 {
-                    // Apply theme immediately for preview
-                    if (value != null)
+                    if (value != null && !_isApplyingSkin)
                     {
-                        SkinManager.Instance?.ApplySkin(value.Name);
+                        _isApplyingSkin = true;
+
+                        _skinManager.ApplySkin(value.Name);
                         _logger.LogInformation("Skin changed to: {ThemeName}", value.Name);
+
+                        LoadEditableSkin();
+
+                        _isApplyingSkin = false;
                     }
+                }
+
+            }
+        }
+
+        public EditableSkinViewModel? EditableSkin
+        {
+            get => _editableSkin;
+            private set
+            {
+                if (this.RaiseAndSetIfChanged(ref _editableSkin, value) != null)
+                {
+                    AttachPropertyChangedHandler();
+                    ValidateSkin();
                 }
             }
         }
 
-        private void LoadAvailableThemes()
+        // Renamed and fixed: ValidatedProperties is a stable dictionary
+        public Dictionary<string, ValidatedProperty> ValidatedProperties => _validatedProperties;
+
+        // Added: indexer so you can use {Binding [FontSizeLarge]} in XAML
+        public ValidatedProperty? this[string propertyName]
         {
-            try
+            get
             {
-                var skinManager = SkinManager.Instance;
-                var themeNames = skinManager?.GetAvailableSkinNames();
+                _validatedProperties.TryGetValue(propertyName, out var vp);
+                return vp;
+            }
+        }
 
-                AvailableThemes.Clear();
+        public SkinValidationResult? ValidationResult
+        {
+            get => _validationResult;
+            private set
+            {
+                this.RaiseAndSetIfChanged(ref _validationResult, value);
 
-                if (themeNames != null)
-                    foreach (var themeName in themeNames)
+                // Clear and repopulate ValidatedProperties dictionary
+                _validatedProperties.Clear();
+
+                if (ValidationResult != null)
+                {
+                    foreach (var result in ValidationResult.ValidationMessages)
                     {
-                        var skin = skinManager?.GetSkin(themeName);
-                        if (skin != null)
+                        foreach (var prop in result.InvolvedProperties)
                         {
-                            var themeInfo = new ThemeInfo
+                            ValidatedProperty add = new ValidatedProperty
                             {
-                                Name = themeName,
-                                Description = GetThemeDescription(themeName),
-                                PreviewColor = new SolidColorBrush(skin.AccentColor)
+                                OriginalMessage = result,
+                                Message = result.Message,
+                                IsValid = !result.IsError,
+                                Name = prop
                             };
-                            AvailableThemes.Add(themeInfo);
+
+                            if (result.SuggestedValues.TryGetValue(prop, out var suggestedValue))
+                            {
+                                add.SuggestedValue = suggestedValue;
+                            }
+
+                            _validatedProperties[prop] = add;
                         }
                     }
-
-                _logger.LogInformation("Loaded {ThemeCount} available themes", AvailableThemes.Count);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to load available themes");
-            }
-        }
-
-        private void LoadCurrentTheme()
-        {
-            try
-            {
-                var currentSkin = SkinManager.Instance?.CurrentSkin;
-                if (currentSkin?.Name != null)
-                {
-                    SelectedTheme = AvailableThemes.FirstOrDefault(t => t.Name == currentSkin.Name);
                 }
 
-                // Fallback to Dark theme if current theme not found
-                SelectedTheme ??= AvailableThemes.FirstOrDefault(t => t.Name == "Dark");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to load current theme");
+                // Notify UI that dictionary contents changed
+                this.RaisePropertyChanged(nameof(ValidatedProperties));
+                this.RaisePropertyChanged(nameof(Errors));
+                this.RaisePropertyChanged(nameof(Warnings));
             }
         }
 
-        private void ApplyTheme()
+        public List<string> Errors => ValidationResult?.Errors ?? new List<string>();
+        public List<string> Warnings => ValidationResult?.Warnings ?? new List<string>();
+
+        public bool IsEditMode
         {
-            try
-            {
-                if (SelectedTheme != null)
-                {
-                    SkinManager.Instance?.ApplySkin(SelectedTheme.Name);
-                    _logger.LogInformation("Applied theme: {ThemeName}", SelectedTheme.Name);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to apply theme: {ThemeName}", SelectedTheme?.Name);
-            }
+            get => _isEditMode;
+            set => this.RaiseAndSetIfChanged(ref _isEditMode, value);
         }
 
-        /// <summary>
-        /// Resets the theme settings to the default theme.
-        /// </summary>
-        /// <remarks>
-        /// This method attempts to reset the currently selected theme to the default theme, 
-        /// which is identified by the name "Dark". If the default theme is found in the 
-        /// <see cref="AvailableThemes"/> collection, it is applied as the selected theme. 
-        /// Logs information about the operation or errors if the reset fails.
-        /// </remarks>
-        /// <exception cref="Exception">
-        /// Logs any exceptions that occur during the reset operation.
-        /// </exception>
         public void ResetToDefault()
         {
             try
             {
-                var defaultTheme = AvailableThemes.FirstOrDefault(t => t.Name == "Dark");
-                if (defaultTheme != null)
+                var defaultSkin = AvailableSkins.FirstOrDefault(t => t.Name == "Dark");
+                if (defaultSkin != null)
                 {
-                    SelectedTheme = defaultTheme;
-                    _logger.LogInformation("Reset to default theme: Dark");
+                    SelectedSkin = defaultSkin;
+                    _logger.LogInformation("Reset to default skin: Dark");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to reset to default theme");
+                _logger.LogError(ex, "Failed to reset to default skin");
             }
         }
 
-        private static string GetThemeDescription(string themeName)
+        private void LoadAvailableSkins()
         {
-            return themeName switch
+            try
             {
-                "Dark" => "Professional dark theme with blue accents. Easy on the eyes for extended use.",
-                "Light" => "Clean light theme with dark text. Perfect for bright environments.",
-                "Ocean Blue" => "Deep blue theme inspired by ocean depths. Calming and focused.",
-                "Forest Green" => "Nature-inspired green theme. Relaxing and earthy.",
-                "Purple Haze" => "Rich purple theme with mystical vibes. Creative and bold.",
+                
+                var skinNames = _skinManager?.GetAvailableSkinNames();
+
+                AvailableSkins.Clear();
+
+                if (skinNames != null)
+                {
+                    foreach (var skinName in skinNames)
+                    {
+                        var skin = _skinManager?.GetSkin(skinName);
+                        if (skin != null)
+                        {
+                            var skinInfo = new SkinSummaryInfo
+                            {
+                                Name = skinName,
+                                Description = GetSkinDescription(skinName),
+                                PreviewColor = new SolidColorBrush(skin.AccentColor)
+                            };
+                            AvailableSkins.Add(skinInfo);
+                        }
+                    }
+                }
+
+                _logger.LogInformation("Loaded {ThemeCount} available skins", AvailableSkins.Count);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load available skins");
+            }
+        }
+
+        private void LoadCurrentSkin()
+        {
+            try
+            {
+                var currentSkin = _skinManager.CurrentSkin;
+                if (currentSkin?.Name != null)
+                {
+                    SelectedSkin = AvailableSkins.FirstOrDefault(t => t.Name == currentSkin.Name);
+                }
+
+                SelectedSkin ??= AvailableSkins.FirstOrDefault(t => t.Name == "Dark");
+
+                LoadEditableSkin();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load current skin");
+            }
+        }
+
+        private void LoadEditableSkin()
+        {
+            var currentSkin = _skinManager.CurrentSkin;
+            if (currentSkin != null)
+            {
+                EditableSkin = new EditableSkinViewModel(CloneSkin(currentSkin));
+            }
+        }
+
+        private void ApplySkin()
+        {
+            try
+            {
+                if (SelectedSkin != null && !_isApplyingSkin)
+                {
+                    _isApplyingSkin = true;
+
+                    _skinManager.ApplySkin(SelectedSkin.Name);
+                    SkinManager.Instance.ApplySkin(SelectedSkin.Name);
+                    _logger.LogInformation("Applied skin: {ThemeName}", SelectedSkin.Name);
+
+                    LoadEditableSkin();
+
+                    _isApplyingSkin = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to apply skin: {ThemeName}", SelectedSkin?.Name);
+                _isApplyingSkin = false;  // Ensure flag is reset even on exception
+            }
+        }
+
+        private async void SaveChanges()
+        {
+            try
+            {
+                if (EditableSkin?.Skin != null)
+                {
+                    // 1️⃣ First: push ValidatableProperty values back to Skin
+                    EditableSkin.MapBackToSkin();
+                    string userOverridePath = $"./Skins/UserOverrides/{EditableSkin.Skin.Name}/skin.json";
+                    Directory.CreateDirectory(Path.GetDirectoryName(userOverridePath)!);
+
+                    await _skinImportExportService.ExportSkinAsync(EditableSkin.Skin, userOverridePath);
+
+                    _logger.LogInformation("Saved edited skin to: {FilePath}", userOverridePath);
+
+                    // 3️⃣ Reload available skins so SkinManager knows the updated version
+                    _skinManager.ReloadSkins();
+
+                    // 4️⃣ Re-apply the saved skin from SkinManager
+                    _skinManager.ApplySkin(EditableSkin.Skin.Name);
+
+                    _logger.LogInformation("Reloaded and re-applied saved skin: {SkinName}", EditableSkin.Skin.Name);
+
+                    // 5️⃣ Reload EditableSkin with the fresh saved version
+                    LoadEditableSkin();
+                    var currentSkin = _skinManager.CurrentSkin;
+                    if (currentSkin?.Name != null)
+                    {
+                        SelectedSkin = AvailableSkins.FirstOrDefault(t => t.Name == currentSkin.Name);
+                    }
+                    ValidateSkin();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to save and apply edited skin");
+            }
+        }
+
+
+        private void ValidateSkin()
+        {
+            if (EditableSkin?.Skin == null) return;
+
+            var result = _skinValidator.ValidateSkin(EditableSkin.Skin);
+            ValidationResult = result;
+
+            _logger.LogInformation("Validated EditableSkin: {ErrorCount} errors, {WarningCount} warnings",
+                result.Errors.Count, result.Warnings.Count);
+        }
+
+        private void AttachPropertyChangedHandler()
+        {
+            if (EditableSkin != null)
+            {
+                EditableSkin.PropertyChanged -= EditableSkin_PropertyChanged;
+                EditableSkin.PropertyChanged += EditableSkin_PropertyChanged;
+            }
+        }
+
+        private void EditableSkin_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            ValidateSkin();
+        }
+
+        private Skin CloneSkin(Skin original)
+        {
+            return new Skin
+            {
+                Name = original.Name,
+                Description = original.Description,
+                PrimaryColor = original.PrimaryColor,
+                SecondaryColor = original.SecondaryColor,
+                AccentColor = original.AccentColor,
+                PrimaryBackground = original.PrimaryBackground,
+                SecondaryBackground = original.SecondaryBackground,
+                PrimaryTextColor = original.PrimaryTextColor,
+                SecondaryTextColor = original.SecondaryTextColor,
+                FontFamily = original.FontFamily,
+                FontSizeSmall = original.FontSizeSmall,
+                FontSizeMedium = original.FontSizeMedium,
+                FontSizeLarge = original.FontSizeLarge,
+                FontWeight = original.FontWeight,
+                BorderColor = original.BorderColor,
+                BorderThickness = original.BorderThickness,
+                BorderRadius = original.BorderRadius,
+                ErrorColor = original.ErrorColor,
+                WarningColor = original.WarningColor,
+                SuccessColor = original.SuccessColor,
+                Typography = original.Typography?.Clone(),
+                ControlThemeUris = new Dictionary<string, string>(original.ControlThemeUris),
+                StyleUris = new Dictionary<string, string?>(original.StyleUris),
+                AssetUris = new Dictionary<string, string>(original.AssetUris),
+                HeaderFontFamily = original.HeaderFontFamily,
+                BodyFontFamily = original.BodyFontFamily,
+                MonospaceFontFamily = original.MonospaceFontFamily,
+                LineHeight = original.LineHeight,
+                LetterSpacing = original.LetterSpacing,
+                EnableLigatures = original.EnableLigatures
+            };
+        }
+
+        private static string GetSkinDescription(string skinName)
+        {
+            return skinName switch
+            {
+                "Dark" => "Professional dark skin with blue accents. Easy on the eyes for extended use.",
+                "Light" => "Clean light skin with dark text. Perfect for bright environments.",
+                "Ocean Blue" => "Deep blue skin inspired by ocean depths. Calming and focused.",
+                "Forest Green" => "Nature-inspired green skin. Relaxing and earthy.",
+                "Purple Haze" => "Rich purple skin with mystical vibes. Creative and bold.",
                 "High Contrast" => "Maximum contrast for accessibility. Clear and distinct colors.",
-                "Cyberpunk" => "Futuristic neon theme with hot pink accents. Edgy and modern.",
-                _ => "Custom theme with unique color combinations."
+                "Cyberpunk" => "Futuristic neon skin with hot pink accents. Edgy and modern.",
+                _ => "Custom skin with unique color combinations."
             };
         }
     }
-
-    /// <summary>
-    /// Represents information about a theme, including its name, description, and a preview color.
-    /// </summary>
-    /// <remarks>
-    /// This class is used to encapsulate the details of a theme, which can be displayed in the UI
-    /// or used for theme management purposes within the application.
-    /// </remarks>
-    public class ThemeInfo
-    {
-        /// <summary>
-        /// Gets or sets the name of the theme.
-        /// </summary>
-        /// <remarks>
-        /// The name uniquely identifies the theme and is used for selection and application purposes.
-        /// </remarks>
-        public string Name { get; set; } = "";
-        /// <summary>
-        /// Gets or sets the description of the theme.
-        /// </summary>
-        /// <remarks>
-        /// This property provides a textual description of the theme, which can be displayed in the user interface
-        /// to give users more context about the theme's purpose or appearance.
-        /// </remarks>
-        public string Description { get; set; } = "";
-        /// <summary>
-        /// Gets or sets the brush used to represent the preview color of the theme.
-        /// </summary>
-        /// <remarks>
-        /// This property is typically used to display a visual representation of the theme's accent color
-        /// in the user interface, such as in theme selection controls.
-        /// </remarks>
-        public IBrush PreviewColor { get; set; } = Brushes.Transparent;
-    }
 }
+

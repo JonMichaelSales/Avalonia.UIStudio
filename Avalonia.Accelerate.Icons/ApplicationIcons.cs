@@ -389,7 +389,7 @@ namespace Avalonia.Accelerate.Icons
         /// </summary>
         /// <param name="iconName">Name of the icon</param>
         /// <param name="size">Size of the icon (default: 16)</param>
-        /// <param name="brush">Brush for the icon (default: null - uses theme brush)</param>
+        /// <param name="brush">Brush for the icon (default: null - uses skin brush)</param>
         /// <returns>Configured Path control</returns>
         public Avalonia.Controls.Shapes.Path CreateIconPath(string iconName, double size = 16, IBrush? brush = null)
         {

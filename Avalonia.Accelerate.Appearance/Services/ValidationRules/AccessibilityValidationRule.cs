@@ -2,245 +2,231 @@
 using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Media;
 
-namespace Avalonia.Accelerate.Appearance.Services.ValidationRules
+public class AccessibilityValidationRule : ISkinValidationRule
 {
-    /// <summary>
-    /// Validates themes for accessibility compliance including WCAG guidelines.
-    /// </summary>
-    public class AccessibilityValidationRule : ISkinValidationRule
+    public List<SkinValidationMessage> Validate(Skin skin)
     {
-        private const double WcagAaContrastRatio = 4.5;
-        private const double WcagAaaContrastRatio = 7.0;
-        private const double MinimumFontSize = 12.0;
-        private const double RecommendedMinimumFontSize = 14.0;
-        private const double MaximumRecommendedFontSize = 32.0;
+        var result = new SkinValidationResult();
 
-        /// <summary>
-        /// Validates skin for accessibility compliance across multiple criteria.
-        /// </summary>
-        /// <param name="skin">The skin to validate</param>
-        /// <returns>Validation result with accessibility errors or warnings</returns>
-        public SkinValidationResult Validate(Skin skin)
+        // Text & background contrast
+        ValidateContrast(result, "PrimaryTextColor", skin.PrimaryTextColor, skin.PrimaryBackground);
+        ValidateContrast(result, "SecondaryTextColor", skin.SecondaryTextColor, skin.PrimaryBackground);
+        ValidateContrast(result, "BorderColor", skin.BorderColor, skin.PrimaryBackground);
+
+        // Font sizes
+        ValidateFontSize(result, "FontSizeSmall", skin.FontSizeSmall, 12.0, 20.0);
+        ValidateFontSize(result, "FontSizeMedium", skin.FontSizeMedium, 14.0, 24.0);
+        ValidateFontSize(result, "FontSizeLarge", skin.FontSizeLarge, 18.0, 32.0);
+
+
+        // Feedback colors
+        ValidateContrast(result, "WarningColor", skin.WarningColor, skin.PrimaryBackground);
+        ValidateContrast(result, "SuccessColor", skin.SuccessColor, skin.PrimaryBackground);
+        ValidateContrast(result, "ErrorColor", skin.ErrorColor, skin.PrimaryBackground);
+
+        ValidateVisualStability(result,skin);
+        
+        
+        // Optional info-level UX guidance: warning vs success similarity
+        if (AreStatusColorsTooSimilar(skin.WarningColor, skin.SuccessColor))
         {
-            var result = new SkinValidationResult();
-            var validator = new SkinValidator();
+            result.ValidationMessages.Add(new SkinValidationMessage
+            {
+                IsError = false,
+                Message = "WarningColor and SuccessColor are perceptually too similar.",
+                InvolvedProperties = new List<string> { "WarningColor", "SuccessColor" }
+            });
+        }
+        // Update IsValid
+        result.IsValid = !result.ValidationMessages.Any(vm => vm.IsError);
 
-            // WCAG 2.1 Color Contrast Validation
-            ValidateColorContrast(skin, validator, result);
+        return result.ValidationMessages;
+    }
 
-            // Font Size Accessibility
-            ValidateFontSizes(skin, result);
+    public void ValidateStatusColorDifferentiation(SkinValidationResult result, Skin skin)
+    {
+        ValidateColorSimilarity(result, "WarningColor", skin.WarningColor, "SuccessColor", skin.SuccessColor);
+        ValidateColorSimilarity(result, "WarningColor", skin.WarningColor, "ErrorColor", skin.ErrorColor);
+        ValidateColorSimilarity(result, "SuccessColor", skin.SuccessColor, "ErrorColor", skin.ErrorColor);
+    }
 
-            // Color-Only Information (check for sufficient differentiation)
-            ValidateColorDifferentiation(skin, validator, result);
+    public void ValidateColorSimilarity(SkinValidationResult result, string nameA, Color a, string nameB, Color b)
+    {
+        if (AreStatusColorsTooSimilar(a, b))
+        {
+            result.ValidationMessages.Add(new SkinValidationMessage
+            {
+                IsError = false,
+                Message = $"{nameA} and {nameB} are perceptually too similar.",
+                InvolvedProperties = new List<string> { nameA, nameB }
+            });
+        }
+    }
 
-            // Focus Indicators
-            ValidateFocusIndicators(skin, validator, result);
 
-            // Status Colors Accessibility
-            ValidateStatusColors(skin, validator, result);
+    public bool AreColorsHueSimilar(Color c1, Color c2, double hueThreshold = 30)
+    {
+        var h1 = RgbToHue(c1);
+        var h2 = RgbToHue(c2);
+        double diff = Math.Abs(h1 - h2);
+        return diff < hueThreshold || diff > 360 - hueThreshold;
+    }
 
-            // Motion and Animation Considerations
-            ValidateVisualStability(skin, result);
+    public bool AreStatusColorsTooSimilar(Color a, Color b)
+    {
+        double hueDiff = Math.Abs(RgbToHue(a) - RgbToHue(b));
+        double lumDiff = Math.Abs(RelativeLuminance(a) - RelativeLuminance(b));
+        return hueDiff < 30 && lumDiff < 0.2;
+    }
+    private double RgbToHue(Color color)
+    {
+        double r = color.R / 255.0;
+        double g = color.G / 255.0;
+        double b = color.B / 255.0;
 
-            return result;
+        double max = Math.Max(r, Math.Max(g, b));
+        double min = Math.Min(r, Math.Min(g, b));
+        double delta = max - min;
+
+        if (delta == 0) return 0;
+
+        if (max == r)
+            return 60 * (((g - b) / delta) % 6);
+        else if (max == g)
+            return 60 * (((b - r) / delta) + 2);
+        else // max == b
+            return 60 * (((r - g) / delta) + 4);
+    }
+
+    private void ValidateVisualStability(SkinValidationResult result, Skin skin)
+    {
+        ValidateColorSaturation(result, "AccentColor", skin.AccentColor);
+        ValidateColorSaturation(result, "ErrorColor", skin.ErrorColor);
+    }
+
+    private void ValidateColorSaturation(SkinValidationResult result, string propertyName, Color color)
+    {
+        if (IsHighSaturationColor(color))
+        {
+            result.ValidationMessages.Add(new SkinValidationMessage
+            {
+                IsError = false,
+                Message = $"{propertyName} uses very bright, saturated colors.",
+                InvolvedProperties = new List<string> { propertyName }
+            });
+        }
+    }
+
+    private bool IsHighSaturationColor(Color color)
+    {
+        double r = color.R / 255.0;
+        double g = color.G / 255.0;
+        double b = color.B / 255.0;
+
+        double max = Math.Max(r, Math.Max(g, b));
+        double min = Math.Min(r, Math.Min(g, b));
+        double saturation = max == 0 ? 0 : (max - min) / max;
+
+        return saturation > 0.8;
+    }
+
+    private void ValidateContrast(SkinValidationResult result, string propertyName, Color fg, Color bg)
+    {
+        var contrast = ContrastRatio(fg, bg);
+        if (contrast < 4.5)
+        {
+            result.ValidationMessages.Add(new SkinValidationMessage
+            {
+                IsError = true,
+                Message = $"{propertyName} contrast vs background is too low ({contrast:F2}:1).",
+                InvolvedProperties = new List<string> { propertyName, "PrimaryBackground" },
+                SuggestedValues = new Dictionary<string, object?>
+                {
+                    { propertyName, SuggestBetterColor(fg, bg) }
+                }
+            });
+        }
+    }
+
+    private void ValidateFontSize(SkinValidationResult result, string propertyName, double px, double min, double max)
+    {
+        if (px < min)
+        {
+            result.ValidationMessages.Add(new SkinValidationMessage
+            {
+                IsError = true,
+                Message = $"{propertyName} ({px}px) is below minimum of {min}px.",
+                InvolvedProperties = new List<string> { propertyName },
+                SuggestedValues = new Dictionary<string, object?>
+                {
+                    { propertyName, min }
+                }
+            });
+        }
+        else if (px > max)
+        {
+            result.ValidationMessages.Add(new SkinValidationMessage
+            {
+                IsError = false,
+                Message = $"{propertyName} ({px}px) is unusually large — consider reducing (max recommended {max}px).",
+                InvolvedProperties = new List<string> { propertyName },
+                SuggestedValues = new Dictionary<string, object?>
+                {
+                    { propertyName, max }
+                }
+            });
+        }
+    }
+
+    public void ValidateFontSize(SkinValidationResult result, Skin skin)
+    {
+        ValidateFontSize(result, "FontSizeSmall", skin.FontSizeSmall, 12.0, 20.0);
+        ValidateFontSize(result, "FontSizeMedium", skin.FontSizeMedium, 14.0, 24.0);
+        ValidateFontSize(result, "FontSizeLarge", skin.FontSizeLarge, 18.0, 32.0);
+    }
+    
+    
+    public void ValidateStatusColors(SkinValidationResult result, Skin skin)
+    {
+        ValidateContrast(result, "WarningColor", skin.WarningColor, skin.PrimaryBackground);
+        ValidateContrast(result, "SuccessColor", skin.SuccessColor, skin.PrimaryBackground);
+        ValidateContrast(result, "ErrorColor", skin.ErrorColor, skin.PrimaryBackground);
+    }
+
+
+    private double ContrastRatio(Color c1, Color c2)
+    {
+        double L1 = RelativeLuminance(c1);
+        double L2 = RelativeLuminance(c2);
+        return (Math.Max(L1, L2) + 0.05) / (Math.Min(L1, L2) + 0.05);
+    }
+
+    private double RelativeLuminance(Color color)
+    {
+        double R = ToLinear(color.R / 255.0);
+        double G = ToLinear(color.G / 255.0);
+        double B = ToLinear(color.B / 255.0);
+        return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    }
+
+    private double ToLinear(double channel) =>
+        channel <= 0.03928 ? channel / 12.92 : Math.Pow((channel + 0.055) / 1.055, 2.4);
+
+    // Optionally: suggest a slightly darker/lighter color for better contrast
+    private Color SuggestBetterColor(Color original, Color background)
+    {
+        double contrast = ContrastRatio(original, background);
+
+        // If contrast too low, suggest darkening
+        if (contrast < 4.5)
+        {
+            double factor = 0.8; // Darken by 20%
+            return Color.FromRgb(
+                (byte)(original.R * factor),
+                (byte)(original.G * factor),
+                (byte)(original.B * factor));
         }
 
-        private void ValidateColorContrast(Skin theme, SkinValidator validator, SkinValidationResult result)
-        {
-            // Primary text on primary background
-            var primaryContrast = validator.CalculateContrastRatio(theme.PrimaryTextColor, theme.PrimaryBackground);
-            ValidateContrastRatio(primaryContrast, "Primary text on primary background", result);
-
-            // Primary text on secondary background
-            var primaryOnSecondaryContrast = validator.CalculateContrastRatio(theme.PrimaryTextColor, theme.SecondaryBackground);
-            ValidateContrastRatio(primaryOnSecondaryContrast, "Primary text on secondary background", result);
-
-            // Secondary text on primary background
-            var secondaryContrast = validator.CalculateContrastRatio(theme.SecondaryTextColor, theme.PrimaryBackground);
-            ValidateContrastRatio(secondaryContrast, "Secondary text on primary background", result, isSecondaryText: true);
-
-            // Secondary text on secondary background
-            var secondaryOnSecondaryContrast = validator.CalculateContrastRatio(theme.SecondaryTextColor, theme.SecondaryBackground);
-            ValidateContrastRatio(secondaryOnSecondaryContrast, "Secondary text on secondary background", result, isSecondaryText: true);
-
-            // Accent color accessibility
-            var accentOnPrimaryContrast = validator.CalculateContrastRatio(theme.AccentColor, theme.PrimaryBackground);
-            if (accentOnPrimaryContrast < 3.0)
-            {
-                result.AddWarning($"Accent color on primary background has low contrast ({accentOnPrimaryContrast:F2}:1). May not be distinguishable for users with visual impairments");
-            }
-        }
-
-        private void ValidateContrastRatio(double ratio, string context, SkinValidationResult result, bool isSecondaryText = false)
-        {
-            var minRatio = isSecondaryText ? 3.0 : WcagAaContrastRatio;
-            var recommendedRatio = isSecondaryText ? WcagAaContrastRatio : WcagAaaContrastRatio;
-
-            if (ratio < minRatio)
-            {
-                result.AddError($"{context} contrast ratio ({ratio:F2}:1) fails WCAG {(isSecondaryText ? "AA" : "AA")} minimum ({minRatio}:1)");
-            }
-            else if (ratio < recommendedRatio)
-            {
-                result.AddWarning($"{context} contrast ratio ({ratio:F2}:1) meets minimum but not enhanced WCAG AAA standard ({recommendedRatio}:1)");
-            }
-        }
-
-        private void ValidateFontSizes(Skin theme, SkinValidationResult result)
-        {
-            // Check minimum font sizes for accessibility
-            if (theme.FontSizeSmall < MinimumFontSize)
-            {
-                result.AddError($"Small font size ({theme.FontSizeSmall}px) is below accessibility minimum ({MinimumFontSize}px)");
-            }
-            else if (theme.FontSizeSmall < RecommendedMinimumFontSize)
-            {
-                result.AddWarning($"Small font size ({theme.FontSizeSmall}px) is below recommended minimum ({RecommendedMinimumFontSize}px) for good accessibility");
-            }
-
-            if (theme.FontSizeMedium < RecommendedMinimumFontSize)
-            {
-                result.AddWarning($"Medium font size ({theme.FontSizeMedium}px) is below recommended size ({RecommendedMinimumFontSize}px) for primary content");
-            }
-
-            // Check for excessively large fonts that might cause layout issues
-            if (theme.FontSizeLarge > MaximumRecommendedFontSize)
-            {
-                result.AddWarning($"Large font size ({theme.FontSizeLarge}px) exceeds recommended maximum ({MaximumRecommendedFontSize}px) and may cause layout issues");
-            }
-
-            // Check font size progression for logical hierarchy
-            var smallToMediumRatio = theme.FontSizeMedium / theme.FontSizeSmall;
-            var mediumToLargeRatio = theme.FontSizeLarge / theme.FontSizeMedium;
-
-            if (smallToMediumRatio < 1.1)
-            {
-                result.AddWarning("Small and medium font sizes are too similar. Consider larger difference for better visual hierarchy");
-            }
-
-            if (mediumToLargeRatio < 1.2)
-            {
-                result.AddWarning("Medium and large font sizes are too similar. Consider larger difference for better visual hierarchy");
-            }
-        }
-
-        private void ValidateColorDifferentiation(Skin theme, SkinValidator validator, SkinValidationResult result)
-        {
-            // Check if primary and secondary colors are sufficiently different
-            var primarySecondaryDiff = validator.CalculateContrastRatio(theme.PrimaryColor, theme.SecondaryColor);
-            if (primarySecondaryDiff < 1.5)
-            {
-                result.AddWarning($"Primary and secondary colors are very similar ({primarySecondaryDiff:F2}:1). Users may have difficulty distinguishing them");
-            }
-
-            // Check background color differentiation
-            var backgroundDiff = validator.CalculateContrastRatio(theme.PrimaryBackground, theme.SecondaryBackground);
-            if (backgroundDiff < 1.3)
-            {
-                result.AddWarning($"Primary and secondary backgrounds are very similar ({backgroundDiff:F2}:1). May reduce visual hierarchy");
-            }
-
-            // Ensure accent color is sufficiently different from primary colors
-            var accentPrimaryDiff = validator.CalculateContrastRatio(theme.AccentColor, theme.PrimaryColor);
-            if (accentPrimaryDiff < 2.0)
-            {
-                result.AddWarning($"Accent color is too similar to primary color ({accentPrimaryDiff:F2}:1). May not provide sufficient emphasis");
-            }
-        }
-
-        private void ValidateFocusIndicators(Skin theme, SkinValidator validator, SkinValidationResult result)
-        {
-            // Check if accent color (typically used for focus) is visible against backgrounds
-            var accentFocusVisibility = validator.CalculateContrastRatio(theme.AccentColor, theme.PrimaryBackground);
-            if (accentFocusVisibility < 3.0)
-            {
-                result.AddError($"Accent color (focus indicator) has insufficient contrast against primary background ({accentFocusVisibility:F2}:1). Focus may not be visible to all users");
-            }
-
-            // Check border visibility for focus indicators
-            var borderFocusVisibility = validator.CalculateContrastRatio(theme.BorderColor, theme.PrimaryBackground);
-            if (borderFocusVisibility < 2.0)
-            {
-                result.AddWarning($"Border color has low contrast against primary background ({borderFocusVisibility:F2}:1). May impact focus indicator visibility");
-            }
-        }
-
-        private void ValidateStatusColors(Skin theme, SkinValidator validator, SkinValidationResult result)
-        {
-            // Validate error color visibility
-            var errorVisibility = validator.CalculateContrastRatio(theme.ErrorColor, theme.PrimaryBackground);
-            if (errorVisibility < 3.0)
-            {
-                result.AddError($"Error color has insufficient contrast ({errorVisibility:F2}:1). Critical error messages may not be visible");
-            }
-
-            // Validate warning color visibility
-            var warningVisibility = validator.CalculateContrastRatio(theme.WarningColor, theme.PrimaryBackground);
-            if (warningVisibility < 3.0)
-            {
-                result.AddWarning($"Warning color has low contrast ({warningVisibility:F2}:1). Warning messages may not be clearly visible");
-            }
-
-            // Validate success color visibility
-            var successVisibility = validator.CalculateContrastRatio(theme.SuccessColor, theme.PrimaryBackground);
-            if (successVisibility < 3.0)
-            {
-                result.AddWarning($"Success color has low contrast ({successVisibility:F2}:1). Success messages may not be clearly visible");
-            }
-
-            // Check that status colors are sufficiently different from each other
-            ValidateStatusColorDifferentiation(theme, validator, result);
-        }
-
-        private void ValidateStatusColorDifferentiation(Skin theme, SkinValidator validator, SkinValidationResult result)
-        {
-            var errorWarningDiff = validator.CalculateContrastRatio(theme.ErrorColor, theme.WarningColor);
-            if (errorWarningDiff < 2.0)
-            {
-                result.AddWarning($"Error and warning colors are too similar ({errorWarningDiff:F2}:1). Users may confuse error and warning states");
-            }
-
-            var errorSuccessDiff = validator.CalculateContrastRatio(theme.ErrorColor, theme.SuccessColor);
-            if (errorSuccessDiff < 2.0)
-            {
-                result.AddWarning($"Error and success colors are too similar ({errorSuccessDiff:F2}:1). Users may confuse error and success states");
-            }
-
-            var warningSuccessDiff = validator.CalculateContrastRatio(theme.WarningColor, theme.SuccessColor);
-            if (warningSuccessDiff < 2.0)
-            {
-                result.AddWarning($"Warning and success colors are too similar ({warningSuccessDiff:F2}:1). Users may confuse warning and success states");
-            }
-        }
-
-        private void ValidateVisualStability(Skin theme, SkinValidationResult result)
-        {
-            // Check for colors that might trigger photosensitive epilepsy
-            if (IsHighSaturationColor(theme.AccentColor) || IsHighSaturationColor(theme.ErrorColor))
-            {
-                result.AddWarning("Skin contains very bright, saturated colors that could be problematic for users with photosensitive conditions");
-            }
-
-            // Check for extreme contrast that might cause eye strain
-            var textBackgroundContrast = new SkinValidator().CalculateContrastRatio(theme.PrimaryTextColor, theme.PrimaryBackground);
-            if (textBackgroundContrast > 15.0)
-            {
-                result.AddWarning($"Very high contrast ratio ({textBackgroundContrast:F2}:1) may cause eye strain for some users during extended use");
-            }
-        }
-
-        private bool IsHighSaturationColor(Color color)
-        {
-            // Convert to HSV to check saturation
-            var max = Math.Max(color.R, Math.Max(color.G, color.B)) / 255.0;
-            var min = Math.Min(color.R, Math.Min(color.G, color.B)) / 255.0;
-
-            var saturation = max == 0 ? 0 : (max - min) / max;
-            var value = max;
-
-            // High saturation (>0.8) and high value (>0.8) might be problematic
-            return saturation > 0.8 && value > 0.8;
-        }
+        return original; // Already acceptable
     }
 }

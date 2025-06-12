@@ -17,7 +17,7 @@ public class SkinLoaderServiceTests
     }
 
     [AvaloniaFact]
-    public void LoadSkins_ReturnsSkins_WhenThemesAreValid()
+    public void LoadSkins_ReturnsSkins_WhenSkinsAreValid()
     {
         // Arrange
         var service = new SkinLoaderService();
@@ -33,7 +33,7 @@ public class SkinLoaderServiceTests
     }
 
     [AvaloniaFact]
-    public void LoadSkins_SkipsInvalidThemes_AndContinues()
+    public void LoadSkins_SkipsInvalidSkins_AndContinues()
     {
         // Arrange
         var service = new SkinLoaderService();
@@ -58,12 +58,12 @@ public class SkinLoaderServiceTests
             .Setup(x => x.GetAssets(It.IsAny<Uri>(), It.IsAny<Uri?>()))
             .Returns(new[]
             {
-                new Uri("avares://Avalonia.Accelerate.Appearance/Skins/Base/theme.json"),
-                new Uri("avares://Avalonia.Accelerate.Appearance/Skins/Derived/theme.json")
+                new Uri("avares://Avalonia.Accelerate.Appearance/Skins/Base/skin.json"),
+                new Uri("avares://Avalonia.Accelerate.Appearance/Skins/Derived/skin.json")
             });
 
         assetLoaderMock
-            .Setup(x => x.Open(It.Is<Uri>(uri => uri.ToString().Contains("/Base/theme.json")), It.IsAny<Uri?>()))
+            .Setup(x => x.Open(It.Is<Uri>(uri => uri.ToString().Contains("/Base/skin.json")), It.IsAny<Uri?>()))
             .Returns(() =>
             {
                 var json = JsonSerializer.Serialize(new SerializableSkin { Name = "Base" });
@@ -71,7 +71,7 @@ public class SkinLoaderServiceTests
             });
 
         assetLoaderMock
-            .Setup(x => x.Open(It.Is<Uri>(uri => uri.ToString().Contains("/Derived/theme.json")), It.IsAny<Uri?>()))
+            .Setup(x => x.Open(It.Is<Uri>(uri => uri.ToString().Contains("/Derived/skin.json")), It.IsAny<Uri?>()))
             .Returns(() =>
             {
                 var json = JsonSerializer.Serialize(new SerializableSkin

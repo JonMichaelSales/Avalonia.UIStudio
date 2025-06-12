@@ -4,7 +4,7 @@ using Avalonia.Accelerate.Appearance.Model;
 namespace Avalonia.Accelerate.Appearance.Services
 {
     /// <summary>
-    /// Manages theme inheritance and variant creation with dependency injection support.
+    /// Manages skin inheritance and variant creation with dependency injection support.
     /// </summary>
     public class SkinInheritanceManager
     {
@@ -15,7 +15,7 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Initializes a new instance of the SkinInheritanceManager class.
         /// </summary>
-        /// <param name="skinManager">The skin manager to use for resolving base themes.</param>
+        /// <param name="skinManager">The skin manager to use for resolving base skins.</param>
         /// <exception cref="ArgumentNullException">Thrown when skinManager is null.</exception>
         public SkinInheritanceManager(ISkinManager skinManager)
         {
@@ -23,24 +23,24 @@ namespace Avalonia.Accelerate.Appearance.Services
         }
 
         /// <summary>
-        /// Registers an inheritable theme.
+        /// Registers an inheritable skin.
         /// </summary>
-        public void RegisterInheritableSkin(string? name, InheritableSkin? theme)
+        public void RegisterInheritableSkin(string? name, InheritableSkin? skin)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Skin name cannot be null or empty", nameof(name));
-            if (theme == null)
-                throw new ArgumentNullException(nameof(theme));
+            if (skin == null)
+                throw new ArgumentNullException(nameof(skin));
 
-            theme.Name = name;
-            _inheritableSkins[name] = theme;
+            skin.Name = name;
+            _inheritableSkins[name] = skin;
             _resolvedCache.Remove(name); // Clear cache
         }
 
         /// <summary>
-        /// Gets a resolved theme with inheritance applied.
+        /// Gets a resolved skin with inheritance applied.
         /// </summary>
-        public Skin? GetResolvedTheme(string? name)
+        public Skin? GetResolvedSkin(string? name)
         {
             if (string.IsNullOrEmpty(name))
                 return null;
@@ -57,8 +57,8 @@ namespace Avalonia.Accelerate.Appearance.Services
 
             if (inheritableSkin != null)
             {
-                var baseTheme = GetBaseTheme(inheritableSkin);
-                var resolved = inheritableSkin.CreateResolvedSkin(baseTheme);
+                var baseSkin = GetBaseSkin(inheritableSkin);
+                var resolved = inheritableSkin.CreateResolvedSkin(baseSkin);
 
                 _resolvedCache[name] = resolved;
                 return resolved;
@@ -69,7 +69,7 @@ namespace Avalonia.Accelerate.Appearance.Services
             }
         }
 
-        private Skin? GetBaseTheme(InheritableSkin skin)
+        private Skin? GetBaseSkin(InheritableSkin skin)
         {
             if (string.IsNullOrEmpty(skin.BaseSkinName))
             {
@@ -79,7 +79,7 @@ namespace Avalonia.Accelerate.Appearance.Services
             // Handle recursive inheritance
             if (_inheritableSkins.TryGetValue(skin.BaseSkinName, out var baseInheritable))
             {
-                return GetResolvedTheme(skin.BaseSkinName);
+                return GetResolvedSkin(skin.BaseSkinName);
             }
 
             // Fall back to skin manager (now uses injected dependency)
@@ -87,14 +87,14 @@ namespace Avalonia.Accelerate.Appearance.Services
         }
 
         /// <summary>
-        /// Creates a theme variant by overriding specific properties.
+        /// Creates a skin variant by overriding specific properties.
         /// </summary>
         public InheritableSkin? CreateVariant(string? baseName, string? variantName, Dictionary<string, object>? overrides)
         {
             if (string.IsNullOrEmpty(baseName))
-                throw new ArgumentException("Base theme name cannot be null or empty", nameof(baseName));
+                throw new ArgumentException("Base skin name cannot be null or empty", nameof(baseName));
             if (string.IsNullOrEmpty(variantName))
-                throw new ArgumentException("Variant theme name cannot be null or empty", nameof(variantName));
+                throw new ArgumentException("Variant skin name cannot be null or empty", nameof(variantName));
             if (overrides == null)
                 throw new ArgumentNullException(nameof(overrides));
 
@@ -110,7 +110,7 @@ namespace Avalonia.Accelerate.Appearance.Services
         }
 
         /// <summary>
-        /// Clears the resolved theme cache.
+        /// Clears the resolved skin cache.
         /// </summary>
         public void ClearCache()
         {

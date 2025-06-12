@@ -1,11 +1,13 @@
+using Avalonia.Accelerate.Appearance.Extensions;
 using Avalonia.Accelerate.Appearance.Interfaces;
 using Avalonia.Accelerate.Appearance.ViewModels;
 using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Avalonia.Accelerate.Appearance.Controls;
 
 /// <summary>
-/// Represents a user control that provides a quick theme switching functionality
+/// Represents a user control that provides a quick skin switching functionality
 /// for Avalonia applications. This control is designed to integrate seamlessly
 /// with the Avalonia UI framework and is backed by the <see cref="QuickSkinSwitcherViewModel"/>.
 /// </summary>
@@ -16,19 +18,20 @@ public partial class QuickSkinSwitcher : UserControl
     /// This constructor sets up the control by initializing its components and
     /// assigning a new instance of <see cref="QuickSkinSwitcherViewModel"/> as its data context.
     /// </summary>
+    ///
     public QuickSkinSwitcher()
     {
         InitializeComponent();
-        
+        DataContext = AppBuilderExtensions.GetRequiredService<IQuickSkinSwitcherViewModel>();
     }
-    /// 
+    
     public QuickSkinSwitcher(ISkinManager skinManager)
     {
         InitializeComponent();
         DataContext = new QuickSkinSwitcherViewModel(skinManager);
     }
 
-    public QuickSkinSwitcher(QuickSkinSwitcherViewModel viewModel)
+    public QuickSkinSwitcher(IQuickSkinSwitcherViewModel viewModel)
     {
         InitializeComponent();
         DataContext = viewModel;

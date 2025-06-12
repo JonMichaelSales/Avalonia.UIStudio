@@ -28,7 +28,7 @@ public class SkinInheritanceManagerTests
     }
 
     [AvaloniaFact]
-    public void RegisterInheritableSkin_Throws_OnNullTheme()
+    public void RegisterInheritableSkin_Throws_OnNullSkin()
     {
         Assert.Throws<ArgumentNullException>(() => _manager.RegisterInheritableSkin("Test", null));
     }
@@ -38,35 +38,35 @@ public class SkinInheritanceManagerTests
     {
         var skin = new InheritableSkin();
         _manager.RegisterInheritableSkin("Test", skin);
-        var resolved = _manager.GetResolvedTheme("Test");
+        var resolved = _manager.GetResolvedSkin("Test");
         Assert.NotNull(resolved);
     }
 
     [AvaloniaFact]
-    public void GetResolvedTheme_ReturnsNull_OnNullOrEmptyName()
+    public void GetResolvedSkin_ReturnsNull_OnNullOrEmptyName()
     {
-        Assert.Null(_manager.GetResolvedTheme(null));
-        Assert.Null(_manager.GetResolvedTheme(""));
+        Assert.Null(_manager.GetResolvedSkin(null));
+        Assert.Null(_manager.GetResolvedSkin(""));
     }
 
     [AvaloniaFact]
-    public void GetResolvedTheme_ReturnsNull_IfNotRegistered()
+    public void GetResolvedSkin_ReturnsNull_IfNotRegistered()
     {
-        Assert.Null(_manager.GetResolvedTheme("Unknown"));
+        Assert.Null(_manager.GetResolvedSkin("Unknown"));
     }
 
     [AvaloniaFact]
-    public void GetResolvedTheme_ReturnsCachedInstance()
+    public void GetResolvedSkin_ReturnsCachedInstance()
     {
         var skin = new InheritableSkin();
         _manager.RegisterInheritableSkin("Test", skin);
-        var first = _manager.GetResolvedTheme("Test");
-        var second = _manager.GetResolvedTheme("Test");
+        var first = _manager.GetResolvedSkin("Test");
+        var second = _manager.GetResolvedSkin("Test");
         Assert.Same(first, second);
     }
 
     [AvaloniaFact]
-    public void GetResolvedTheme_ResolvesBaseTheme_FromSkinManager()
+    public void GetResolvedSkin_ResolvesBaseSkin_FromSkinManager()
     {
         var baseSkin = new Skin { Name = "Base" };
         _skinManagerMock.Setup(m => m.GetSkin("Base")).Returns(baseSkin);
@@ -74,7 +74,7 @@ public class SkinInheritanceManagerTests
         var skin = new InheritableSkin { BaseSkinName = "Base" };
         _manager.RegisterInheritableSkin("Child", skin);
 
-        var resolved = _manager.GetResolvedTheme("Child");
+        var resolved = _manager.GetResolvedSkin("Child");
         Assert.NotNull(resolved);
         Assert.Equal("Child", resolved.Name);
     }
@@ -115,9 +115,9 @@ public class SkinInheritanceManagerTests
     {
         var skin = new InheritableSkin();
         _manager.RegisterInheritableSkin("Test", skin);
-        var resolved1 = _manager.GetResolvedTheme("Test");
+        var resolved1 = _manager.GetResolvedSkin("Test");
         _manager.ClearCache();
-        var resolved2 = _manager.GetResolvedTheme("Test");
+        var resolved2 = _manager.GetResolvedSkin("Test");
         Assert.NotSame(resolved1, resolved2);
     }
 }

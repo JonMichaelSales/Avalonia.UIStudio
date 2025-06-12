@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Accelerate.Appearance.Interfaces;
+using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Accelerate.Appearance.Services;
 using Avalonia.Media;
 using Microsoft.Extensions.Logging;
@@ -10,11 +11,11 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class QuickSkinSwitcherViewModel : ViewModelBase
+    public class QuickSkinSwitcherViewModel : ViewModelBase, IQuickSkinSwitcherViewModel
     {
         private readonly ILogger _logger;
         private readonly ISkinManager _skinManager;
-        private ThemeInfo? _selectedTheme;
+        private SkinSummaryInfo? _selectedSkin;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuickSkinSwitcherViewModel"/> class
@@ -37,121 +38,121 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
         {
             _logger = logger;
             _skinManager = skinManager;
-            AvailableThemes = new ObservableCollection<ThemeInfo>();
+            AvailableSkins = new ObservableCollection<SkinSummaryInfo>();
 
-            LoadAvailableThemes();
-            LoadCurrentTheme();
+            LoadAvailableSkins();
+            LoadCurrentSkin();
 
             // Subscribe to skin manager changes to keep in sync
             skinManager.SkinChanged += OnSkinChanged;
         }
 
         /// <summary>
-        /// Gets the collection of available themes that can be selected and applied
+        /// Gets the collection of available skins that can be selected and applied
         /// within the application.
         /// </summary>
         /// <remarks>
-        /// This property is populated by the <see cref="LoadAvailableThemes"/> method,
-        /// which retrieves the themes from the <see cref="SkinManager"/>. The collection
-        /// is updated dynamically to reflect the available themes.
+        /// This property is populated by the <see cref="LoadAvailableSkins"/> method,
+        /// which retrieves the skins from the <see cref="SkinManager"/>. The collection
+        /// is updated dynamically to reflect the available skins.
         /// </remarks>
-        public ObservableCollection<ThemeInfo> AvailableThemes { get; }
+        public ObservableCollection<SkinSummaryInfo> AvailableSkins { get; }
 
         /// <summary>
-        /// Gets or sets the currently selected theme.
+        /// Gets or sets the currently selected skin.
         /// </summary>
         /// <remarks>
-        /// When a new theme is selected, the corresponding theme is applied automatically.
-        /// The selected theme is synchronized with the <see cref="AvailableThemes"/> collection.
+        /// When a new skin is selected, the corresponding skin is applied automatically.
+        /// The selected skin is synchronized with the <see cref="AvailableSkins"/> collection.
         /// </remarks>
-        public ThemeInfo? SelectedTheme
+        public SkinSummaryInfo? SelectedSkin
         {
-            get => _selectedTheme;
+            get => _selectedSkin;
             set
             {
-                if (this.RaiseAndSetIfChanged(ref _selectedTheme, value) != null)
+                if (this.RaiseAndSetIfChanged(ref _selectedSkin, value) != null)
                 {
-                    ApplyTheme(value);
+                    ApplySkin(value);
                 }
             }
         }
 
-        private void LoadAvailableThemes()
+        private void LoadAvailableSkins()
         {
             try
             {
                 
-                var themeNames = _skinManager.GetAvailableSkinNames();
+                var skinNames = _skinManager.GetAvailableSkinNames();
 
-                AvailableThemes.Clear();
+                AvailableSkins.Clear();
 
-                foreach (var themeName in themeNames)
+                foreach (var skinName in skinNames)
                 {
-                    var skin = _skinManager.GetSkin(themeName);
+                    var skin = _skinManager.GetSkin(skinName);
                     if (skin != null)
                     {
-                        var themeInfo = new ThemeInfo
+                        var skinSummaryInfo = new SkinSummaryInfo
                         {
-                            Name = themeName,
-                            Description = GetThemeDescription(themeName),
+                            Name = skinName,
+                            Description = GetSkinDescription(skinName),
                             PreviewColor = new SolidColorBrush(skin.AccentColor)
                         };
-                        AvailableThemes.Add(themeInfo);
+                        AvailableSkins.Add(skinSummaryInfo);
                     }
                 }
 
-                _logger.LogDebug("Loaded {ThemeCount} themes for quick switcher", AvailableThemes.Count);
+                _logger.LogDebug("Loaded {ThemeCount} themes for quick switcher", AvailableSkins.Count);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load themes for quick switcher");
+                _logger.LogError(ex, "Failed to load skins for quick switcher");
             }
         }
 
-        private void LoadCurrentTheme()
+        private void LoadCurrentSkin()
         {
             try
             {
                 var currentSkin = _skinManager.CurrentSkin;
                 if (currentSkin?.Name != null)
                 {
-                    var currentTheme = AvailableThemes.FirstOrDefault(t => t.Name == currentSkin.Name);
-                    if (currentTheme != null)
+                    var currentSkinItem = AvailableSkins.FirstOrDefault(t => t.Name == currentSkin.Name);
+                    if (currentSkinItem != null)
                     {
                         // Set without triggering the setter to avoid recursive application
-                        _selectedTheme = currentTheme;
-                        this.RaisePropertyChanged(nameof(SelectedTheme));
+                        _selectedSkin = currentSkinItem;
+                        this.RaisePropertyChanged(nameof(SelectedSkin));
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load current theme for quick switcher");
+                _logger.LogError(ex, "Failed to load current skin for quick switcher");
             }
         }
 
-        private void ApplyTheme(ThemeInfo? themeInfo)
+        private void ApplySkin(SkinSummaryInfo? skinInfo)
         {
             try
             {
-                if (themeInfo != null)
+                if (skinInfo != null)
                 {
-                    _skinManager.ApplySkin(themeInfo.Name);
-                    _logger.LogInformation("Quick theme switch to: {ThemeName}", themeInfo.Name);
+                    _skinManager.ApplySkin(skinInfo.Name);
+                    _logger.LogInformation("Quick skin switch to: {ThemeName}", skinInfo.Name);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to apply theme via quick switcher: {ThemeName}", themeInfo?.Name);
+                _logger.LogError(ex, "Failed to apply skin via quick switcher: {ThemeName}", skinInfo?.Name);
             }
         }
 
         private void OnSkinChanged(object? sender, EventArgs e)
         {
-            // Update selected theme when skin changes externally
+            // Update selected skin when skin changes externally
             try
             {
-                LoadCurrentTheme();
+                LoadCurrentSkin();
             }
             catch (Exception ex)
             {
@@ -159,18 +160,18 @@ namespace Avalonia.Accelerate.Appearance.ViewModels
             }
         }
 
-        private static string GetThemeDescription(string themeName)
+        private static string GetSkinDescription(string skinName)
         {
-            return themeName switch
+            return skinName switch
             {
-                "Dark" => "Professional dark theme",
-                "Light" => "Clean light theme",
-                "Ocean Blue" => "Deep blue ocean theme",
+                "Dark" => "Professional dark skin",
+                "Light" => "Clean light skin",
+                "Ocean Blue" => "Deep blue ocean skin",
                 "Forest Green" => "Nature-inspired green",
-                "Purple Haze" => "Rich purple theme",
+                "Purple Haze" => "Rich purple skin",
                 "High Contrast" => "Maximum contrast",
-                "Cyberpunk" => "Futuristic neon theme",
-                _ => "Custom theme"
+                "Cyberpunk" => "Futuristic neon skin",
+                _ => "Custom skin"
             };
         }
 

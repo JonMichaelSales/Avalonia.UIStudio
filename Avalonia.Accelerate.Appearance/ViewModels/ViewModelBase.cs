@@ -3,7 +3,7 @@
 namespace Avalonia.Accelerate.Appearance.ViewModels
 {
     /// <summary>
-    /// Serves as the base class for all ViewModel classes in the AvaloniaThemeManager application.
+    /// Serves as the base class for all ViewModel classes in the AvaloniaSkinManager application.
     /// </summary>
     /// <remarks>
     /// This class provides common functionality for ViewModel classes, including support for 

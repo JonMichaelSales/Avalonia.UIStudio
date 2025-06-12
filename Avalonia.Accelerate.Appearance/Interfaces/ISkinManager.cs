@@ -50,5 +50,9 @@ public interface ISkinManager
     /// <summary>
     /// 
     /// </summary>
-    void LoadSavedTheme();
+    void LoadSavedSkin();
+
+    string GetSkinFilePath(Skin skin);
+
+    void ReloadSkins();
 }

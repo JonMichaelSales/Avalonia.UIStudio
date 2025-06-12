@@ -29,9 +29,9 @@ namespace Avalonia.Accelerate.Appearance.Extensions
 
             // Application abstraction
             services.AddSingleton<IApplication, ApplicationWrapper>();
-
+            services.AddSingleton<ISkinImportExportService,SkinImportExportService>();
             // Core services
-            services.AddSingleton<IThemeLoaderService, SkinLoaderService>();
+            services.AddSingleton<ISkinLoaderService, SkinLoaderService>();
             services.AddSingleton<ISkinManager, SkinManager>();
 
             // Skin inheritance manager

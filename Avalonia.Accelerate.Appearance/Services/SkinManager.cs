@@ -10,16 +10,16 @@ using Avalonia.Accelerate.Appearance.Model;
 namespace Avalonia.Accelerate.Appearance.Services
 {
     /// <summary>
-    /// Manages the skins (themes) for an Avalonia application, providing functionality to register, retrieve, and apply skins.
+    /// Manages the skins for an Avalonia application, providing functionality to register, retrieve, and apply skins.
     /// </summary>
     /// <remarks>
     /// This class serves as a singleton instance to manage the available skins and the currently applied skin. 
     /// It provides methods to register new skins, retrieve existing skins by name, and apply a specific skin.
-    /// Additionally, it raises events when the skin is changed, allowing other components to react to theme updates.
+    /// Additionally, it raises events when the skin is changed, allowing other components to react to skin updates.
     /// </remarks>
     public class SkinManager : ISkinManager
     {
-        private readonly IThemeLoaderService _themeLoaderService;
+        private readonly ISkinLoaderService _skinLoaderService;
         private readonly IApplication _application;
         private readonly Dictionary<string, Skin?> _availableSkins = new();
         private Skin? _currentSkin;
@@ -29,7 +29,7 @@ namespace Avalonia.Accelerate.Appearance.Services
 
         /// <summary>
         /// Gets the singleton instance of the <see cref="SkinManager"/> class, 
-        /// which is responsible for managing skins (themes) in an Avalonia application.
+        /// which is responsible for managing skins in an Avalonia application.
         /// </summary>
         /// <value>
         /// The singleton instance of <see cref="SkinManager"/>.
@@ -44,10 +44,10 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// Gets the currently applied <see cref="Skin"/> in the application.
         /// </summary>
         /// <value>
-        /// The <see cref="Skin"/> instance representing the current theme, or <c>null</c> if no theme is applied.
+        /// The <see cref="Skin"/> instance representing the current skin, or <c>null</c> if no skin is applied.
         /// </value>
         /// <remarks>
-        /// Use this property to retrieve or monitor the active theme in the application. 
+        /// Use this property to retrieve or monitor the active skin in the application. 
         /// Changes to the current skin can be handled through the <see cref="SkinChanged"/> event.
         /// </remarks>
         public Skin? CurrentSkin
@@ -65,11 +65,11 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="SkinManager"/> class with dependency injection.
         /// </summary>
-        /// <param name="themeLoaderService">The theme loader service for loading available themes.</param>
+        /// <param name="skinLoaderService">The skin loader service for loading available skins.</param>
         /// <param name="application">The application abstraction for accessing resources and styles.</param>
-        public SkinManager(IThemeLoaderService themeLoaderService, IApplication application)
+        public SkinManager(ISkinLoaderService skinLoaderService, IApplication application)
         {
-            _themeLoaderService = themeLoaderService ?? throw new ArgumentNullException(nameof(themeLoaderService));
+            _skinLoaderService = skinLoaderService ?? throw new ArgumentNullException(nameof(skinLoaderService));
             _application = application ?? throw new ArgumentNullException(nameof(application));
             _styles = application.AppStyles ?? throw new InvalidOperationException("Application.AppStyles is null.");
 
@@ -77,30 +77,15 @@ namespace Avalonia.Accelerate.Appearance.Services
         }
 
 
-
-        /// <summary>
-        /// Parameterless constructor for singleton pattern (fallback when DI is not used).
-        /// </summary>
-        //public SkinManager()
-        //{
-        //    // Fallback for singleton pattern - create dependencies manually
-        //    var serviceProvider = new ServiceCollection()
-        //        .AddSingleton<IThemeLoaderService, SkinLoaderService>()
-        //        .AddSingleton<IApplication, ApplicationWrapper>()
-        //        .BuildServiceProvider();
-
-        //    _themeLoaderService = serviceProvider.GetRequiredService<IThemeLoaderService>();
-        //    _application = serviceProvider.GetRequiredService<IApplication>();
-        //    _styles = _application.AppStyles; // Add this line
-        //    RegisterDefaultSkins();
-        //}
-
         private void RegisterDefaultSkins()
         {
-            string themePath = "avares://Avalonia.Accelerate.Appearance/Skins/";
-            var skins = _themeLoaderService.LoadSkins(themePath);
+            string skinsPath = "avares://Avalonia.Accelerate.Appearance/Skins/";
+            var skins = _skinLoaderService.LoadSkins(skinsPath);
             foreach (var skin in skins)
+            {
                 RegisterSkin(skin.Name, skin);
+            }
+                
         }
 
         /// <summary>
@@ -149,7 +134,7 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// an error message will be logged.
         /// </param>
         /// <remarks>
-        /// If the specified skin exists, it will be applied, and the selected theme will be saved.
+        /// If the specified skin exists, it will be applied, and the selected skin will be saved.
         /// If the skin does not exist or an error occurs during the application, an appropriate 
         /// message will be logged.
         /// </remarks>
@@ -378,45 +363,58 @@ namespace Avalonia.Accelerate.Appearance.Services
         }
 
         /// <summary>
-        /// Saves the name of the currently selected theme to the application settings.
+        /// Saves the name of the currently selected skin to the application settings.
         /// </summary>
         /// <param name="skinName">
-        /// The name of the theme to save. If <c>null</c>, no action is performed.
+        /// The name of the skin to save. If <c>null</c>, no action is performed.
         /// </param>
         /// <remarks>
-        /// This method updates the theme name in the application settings and persists the changes.
-        /// It is typically called after applying a new theme to ensure the selected theme is remembered
+        /// This method updates the skin name in the application settings and persists the changes.
+        /// It is typically called after applying a new skin to ensure the selected skin is remembered
         /// across application sessions.
         /// </remarks>
         public void SaveSelectedSkin(string? skinName)
         {
             if (skinName != null)
             {
-                AppSettings.Instance.Theme = skinName;
+                AppSettings.Instance.Skin = skinName;
                 AppSettings.Instance.Save();
             }
         }
 
+        public string GetSkinFilePath(Skin skin)
+        {
+            // You may want to make this more configurable
+            return $"./Skins/{skin.Name}/skin.json";
+        }
+
+        public void ReloadSkins()
+        {
+            _availableSkins.Clear();
+            RegisterDefaultSkins();
+            LoadSavedSkin();
+        }
+
         /// <summary>
-        /// Loads the previously saved theme and applies it to the application.
+        /// Loads the previously saved skin and applies it to the application.
         /// </summary>
         /// <remarks>
-        /// This method retrieves the saved theme name from the application settings and applies it if it exists
-        /// in the list of available skins. If no saved theme is found or the saved theme is not available,
-        /// no changes are made to the current theme.
+        /// This method retrieves the saved skin name from the application settings and applies it if it exists
+        /// in the list of available skins. If no saved skin is found or the saved skin is not available,
+        /// no changes are made to the current skin.
         /// </remarks>
         /// <example>
         /// Example usage:
         /// <code>
-        /// var themeManager = SkinManager.Instance;
-        /// themeManager.LoadSavedTheme();
+        /// var skinManager = SkinManager.Instance;
+        /// skinManager.LoadSavedSkin();
         /// </code>
         /// </example>
-        public void LoadSavedTheme()
+        public void LoadSavedSkin()
         {
-            var themeName = AppSettings.Instance.Theme;
-            if (!string.IsNullOrEmpty(themeName) && _availableSkins.ContainsKey(themeName))
-                ApplySkin(themeName);
+            var skinName = AppSettings.Instance.Skin;
+            if (!string.IsNullOrEmpty(skinName) && _availableSkins.ContainsKey(skinName))
+                ApplySkin(skinName);
         }
     }
 }

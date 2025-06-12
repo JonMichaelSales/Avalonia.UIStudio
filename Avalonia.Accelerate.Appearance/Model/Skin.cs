@@ -3,34 +3,35 @@
 namespace Avalonia.Accelerate.Appearance.Model
 {
     /// <summary>
-    /// Represents a customizable theme skin for an Avalonia application, defining colors, fonts, and other visual properties.
+    /// Represents a customizable skin for an Avalonia application, defining colors, fonts, and other visual properties.
     /// </summary>
     /// <remarks>
     /// The <see cref="Skin"/> class provides a set of properties to define the appearance of an application, 
     /// including primary and secondary colors, background colors, text colors, font settings, and additional UI properties.
-    /// It also includes functionality to convert colors to brushes and a default constructor for initializing a dark theme.
+    /// It also includes functionality to convert colors to brushes and a default constructor for initializing a dark skin.
     /// </remarks>
     public class Skin
     {
+        public string Description { get; set; }
         // Basic colors
         /// <summary>
-        /// Gets or sets the primary color of the theme skin.
+        /// Gets or sets the primary color of the skin.
         /// </summary>
         /// <remarks>
         /// This color is typically used as the main color for UI elements and serves as a foundation
-        /// for the overall theme design. The default value for the dark theme is GunMetal Dark (#343B48).
+        /// for the overall skin design. The default value for the dark skin is GunMetal Dark (#343B48).
         /// </remarks>
         public Color PrimaryColor { get; set; }
         /// <summary>
-        /// Gets or sets the secondary color used in the theme skin.
+        /// Gets or sets the secondary color used in the skin.
         /// </summary>
         /// <remarks>
-        /// This color is typically used for medium-tone elements within the theme.
-        /// The default value for the dark theme is <c>#3D4654</c> (GunMetal Medium).
+        /// This color is typically used for medium-tone elements within the skin.
+        /// The default value for the dark skin is <c>#3D4654</c> (GunMetal Medium).
         /// </remarks>
         public Color SecondaryColor { get; set; }
         /// <summary>
-        /// Gets or sets the accent color of the theme.
+        /// Gets or sets the accent color of the skin.
         /// </summary>
         /// <remarks>
         /// The accent color is used to highlight key elements in the user interface,
@@ -39,7 +40,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         public Color AccentColor { get; set; }
         // Backgrounds
         /// <summary>
-        /// Gets or sets the primary background color of the theme.
+        /// Gets or sets the primary background color of the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Color"/> representing the primary background color.
@@ -49,12 +50,12 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// Gets or sets the secondary background color of the skin.
         /// </summary>
         /// <remarks>
-        /// This property defines the secondary background color used in the theme. 
+        /// This property defines the secondary background color used in the skin. 
         /// It is typically a lighter shade of the primary background color to provide contrast and visual hierarchy.
         /// </remarks>
         public Color SecondaryBackground { get; set; }
         /// <summary>
-        /// Gets or sets the primary text color used in the theme.
+        /// Gets or sets the primary text color used in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Color"/> representing the primary text color. 
@@ -62,7 +63,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// </value>
         public Color PrimaryTextColor { get; set; }
         /// <summary>
-        /// Gets or sets the color used for secondary text elements in the theme.
+        /// Gets or sets the color used for secondary text elements in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Color"/> representing the secondary text color. The default value is a light gray color (#CCCCCC).
@@ -70,28 +71,28 @@ namespace Avalonia.Accelerate.Appearance.Model
         public Color SecondaryTextColor { get; set; }
         // Font properties
         /// <summary>
-        /// Gets or sets the font family used for text rendering in the theme.
+        /// Gets or sets the font family used for text rendering in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="FontFamily"/> representing the font family. The default value is "Segoe UI, San Francisco, Helvetica, Arial, sans-serif".
         /// </value>
         public FontFamily FontFamily { get; set; }
         /// <summary>
-        /// Gets or sets the font size for small text elements in the theme.
+        /// Gets or sets the font size for small text elements in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="double"/> representing the font size for small text elements. The default value is 10.
         /// </value>
         public double FontSizeSmall { get; set; }
         /// <summary>
-        /// Gets or sets the medium font size used in the theme.
+        /// Gets or sets the medium font size used in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="double"/> representing the medium font size.
         /// </value>
         public double FontSizeMedium { get; set; }
         /// <summary>
-        /// Gets or sets the font size for large text elements in the theme.
+        /// Gets or sets the font size for large text elements in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="double"/> representing the font size for large text elements. 
@@ -99,7 +100,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// </value>
         public double FontSizeLarge { get; set; }
         /// <summary>
-        /// Gets or sets the font weight used in the theme.
+        /// Gets or sets the font weight used in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="FontWeight"/> value that specifies the weight of the font.
@@ -107,21 +108,21 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// </value>
         public FontWeight FontWeight { get; set; }
         /// <summary>
-        /// Gets or sets the color of the border in the theme.
+        /// Gets or sets the color of the border in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Color"/> representing the border color.
         /// </value>
         public Color BorderColor { get; set; }
         /// <summary>
-        /// Gets or sets the thickness of the border for the theme skin.
+        /// Gets or sets the thickness of the border for the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Thickness"/> structure that specifies the thickness of the border.
         /// </value>
         public Thickness BorderThickness { get; set; }
         /// <summary>
-        /// Gets or sets the border radius applied to UI elements in the theme.
+        /// Gets or sets the border radius applied to UI elements in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="double"/> representing the radius of the border corners, in device-independent units (DIPs).
@@ -129,21 +130,21 @@ namespace Avalonia.Accelerate.Appearance.Model
         public double BorderRadius { get; set; }
         // Additional UI properties
         /// <summary>
-        /// Gets or sets the color used to represent error states in the theme.
+        /// Gets or sets the color used to represent error states in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Color"/> representing the error color. The default value is typically a shade of red.
         /// </value>
         public Color ErrorColor { get; set; }
         /// <summary>
-        /// Gets or sets the color used to represent warnings in the theme.
+        /// Gets or sets the color used to represent warnings in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Color"/> representing the warning color. The default value is "#F39C12".
         /// </value>
         public Color WarningColor { get; set; }
         /// <summary>
-        /// Gets or sets the color used to represent success states in the theme.
+        /// Gets or sets the color used to represent success states in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="Color"/> representing the success color.
@@ -206,7 +207,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         public double LineHeight { get; set; } = 1.5;
 
         /// <summary>
-        /// Gets or sets the letter spacing used in the theme.
+        /// Gets or sets the letter spacing used in the skin.
         /// </summary>
         /// <value>
         /// A <see cref="double"/> representing additional space between letters in DIPs. Default is 0.
@@ -232,7 +233,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// </summary>
         public Skin()
         {
-            // Set default values for Dark theme
+            // Set default values for Dark skin
             PrimaryColor = Color.Parse("#343B48");        // GunMetal Dark
             SecondaryColor = Color.Parse("#3D4654");      // GunMetal Medium
             AccentColor = Color.Parse("#3498DB");         // Accent Blue

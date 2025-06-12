@@ -34,24 +34,24 @@ public class SkinValidatorTests
     }
 
     [AvaloniaFact]
-    public void ValidateTheme_ReturnsExpectedResult()
+    public void ValidateSkin_ReturnsExpectedResult()
     {
         var skin = CreateTestSkinWithBadContrast();
         var validator = new SkinValidator();
 
-        var result = validator.ValidateTheme(skin);
+        var result = validator.ValidateSkin(skin);
 
         Assert.NotNull(result);
         Assert.False(result.IsValid); // Should have errors
     }
 
     [AvaloniaFact]
-    public void AutoFixTheme_FixesIssues()
+    public void AutoFixSkin_FixesIssues()
     {
         var skin = CreateTestSkinWithBadContrast();
         var validator = new SkinValidator();
 
-        var fixedSkin = validator.AutoFixTheme(skin);
+        var fixedSkin = validator.AutoFixSkin(skin);
 
         Assert.NotNull(fixedSkin);
         Assert.NotSame(skin, fixedSkin); // CloneSkin used
@@ -98,7 +98,7 @@ public class SkinValidatorTests
         var badColor = Colors.Black;
         var background = Colors.Black;
 
-        var adjusted = validator.AutoFixTheme(new Skin
+        var adjusted = validator.AutoFixSkin(new Skin
         {
             Name = "FixContrastTest",
             PrimaryBackground = background,

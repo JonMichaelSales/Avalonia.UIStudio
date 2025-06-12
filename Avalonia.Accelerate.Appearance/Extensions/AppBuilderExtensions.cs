@@ -3,16 +3,18 @@ using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Accelerate.Appearance.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Avalonia.Accelerate.Appearance.ViewModels;
+using Avalonia.Accelerate.Appearance.Views;
 
 namespace Avalonia.Accelerate.Appearance.Extensions
 {
     /// <summary>
-    /// Provides extension methods for configuring and integrating the AvaloniaThemeManager 
+    /// Provides extension methods for configuring and integrating the AvaloniaSkinManager 
     /// into an Avalonia application using the <see cref="AppBuilder"/>.
     /// </summary>
     /// <remarks>
-    /// This class contains methods to enable the AvaloniaThemeManager with default or custom configurations.
-    /// It simplifies the setup process by allowing developers to chain theme manager configuration
+    /// This class contains methods to enable the AvaloniaSkinManager with default or custom configurations.
+    /// It simplifies the setup process by allowing developers to chain skin manager configuration
     /// into the application initialization pipeline.
     /// </remarks>
     public static class AppBuilderExtensions
@@ -37,7 +39,7 @@ namespace Avalonia.Accelerate.Appearance.Extensions
         }
 
         /// <summary>
-        /// Adds AvaloniaThemeManager to the application with dependency injection support
+        /// Adds AvaloniaSkinManager to the application with dependency injection support
         /// </summary>
         /// <param name="builder">The AppBuilder instance</param>
         /// <param name="configureServices">Optional service configuration action</param>
@@ -49,11 +51,15 @@ namespace Avalonia.Accelerate.Appearance.Extensions
                 // Set up dependency injection
                 var services = new ServiceCollection();
 
-                // Add theme manager services
+                // Add skin manager services
                 services.AddSkinManagerServices();
                 services.AddSingleton<IApplication>(_ => (IApplication)(Avalonia.Application.Current ?? throw new InvalidOperationException("Application.Current is not available.")));
                 services.AddTransient<IStylesCollection, AvaloniaStylesWrapper>();
-                services.AddSingleton<IThemeLoaderService, SkinLoaderService>();
+                services.AddSingleton<ISkinLoaderService, SkinLoaderService>();
+                services.AddTransient<ISkinImportExportService, SkinImportExportService>();
+                services.AddSingleton<IQuickSkinSwitcherViewModel,QuickSkinSwitcherViewModel>();
+                services.AddTransient<SkinSettingsViewModel>();
+                services.AddTransient<SkinSettingsDialog>();
                 services.AddSingleton<ISkinManager, SkinManager>();
                 // Allow additional service configuration
                 configureServices?.Invoke(services);
@@ -70,18 +76,18 @@ namespace Avalonia.Accelerate.Appearance.Extensions
                     {
                         var skinManager = (SkinManager)ServiceProvider.GetRequiredService<ISkinManager>();
                         SkinManager.Instance = skinManager;
-                        skinManager.LoadSavedTheme();
+                        skinManager.LoadSavedSkin();
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error initializing theme manager: {ex.Message}");
+                        Console.WriteLine($"Error initializing skin manager: {ex.Message}");
                     }
                 };
             });
         }
 
         /// <summary>
-        /// Adds AvaloniaThemeManager with custom configuration (legacy method for backward compatibility)
+        /// Adds AvaloniaSkinManager with custom configuration (legacy method for backward compatibility)
         /// </summary>
         /// <param name="builder">The AppBuilder instance</param>
         /// <param name="configure">Configuration action</param>
@@ -104,19 +110,19 @@ namespace Avalonia.Accelerate.Appearance.Extensions
                         if (skinManager != null)
                         {
                             configure(skinManager);
-                            skinManager.LoadSavedTheme();
+                            skinManager.LoadSavedSkin();
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error configuring theme manager: {ex.Message}");
+                        Console.WriteLine($"Error configuring skin manager: {ex.Message}");
                     }
                 };
             });
         }
 
         /// <summary>
-        /// Internal method to be called by the Application when it's ready to initialize the theme manager
+        /// Internal method to be called by the Application when it's ready to initialize the skin manager
         /// This should be called from Application.OnFrameworkInitializationCompleted()
         /// </summary>
         public static void InitializeSkinManager()

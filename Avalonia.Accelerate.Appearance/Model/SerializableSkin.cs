@@ -9,37 +9,37 @@ namespace Avalonia.Accelerate.Appearance.Model
     public class SerializableSkin
     {
         /// <summary>
-        /// Gets or sets the name of the theme.
+        /// Gets or sets the name of the skin.
         /// </summary>
         /// <remarks>
-        /// This property represents the unique identifier or display name of the theme.
+        /// This property represents the unique identifier or display name of the skin.
         /// It is a required field and must not be null, empty, or whitespace.
         /// </remarks>
         public string? Name { get; set; } = "";
         /// <summary>
-        /// Gets or sets a description of the theme, providing additional context or details about its purpose or design.
+        /// Gets or sets a description of the skin, providing additional context or details about its purpose or design.
         /// </summary>
         public string Description { get; set; } = "";
         /// <summary>
-        /// Gets or sets the version of the theme.
+        /// Gets or sets the version of the skin.
         /// </summary>
         /// <remarks>
-        /// This property indicates the version of the theme, which can be useful for compatibility checks
-        /// or identifying updates to the theme.
+        /// This property indicates the version of the skin, which can be useful for compatibility checks
+        /// or identifying updates to the skin.
         /// </remarks>
         public string Version { get; set; } = "1.0";
         /// <summary>
-        /// Gets or sets the author of the theme.
+        /// Gets or sets the author of the skin.
         /// </summary>
         /// <value>
-        /// A <see cref="string"/> representing the name of the theme's author.
+        /// A <see cref="string"/> representing the name of the skin's author.
         /// </value>
         public string Author { get; set; } = "";
         /// <summary>
-        /// Gets or sets the date and time when the theme was created.
+        /// Gets or sets the date and time when the skin was created.
         /// </summary>
         /// <value>
-        /// A <see cref="DateTime"/> representing the creation date and time of the theme.
+        /// A <see cref="DateTime"/> representing the creation date and time of the skin.
         /// </value>
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
@@ -140,7 +140,7 @@ namespace Avalonia.Accelerate.Appearance.Model
         public Dictionary<string, object>? PropertyOverrides { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of control theme file paths relative to the skin base directory.
+        /// Gets or sets the list of control skin file paths relative to the skin base directory.
         /// </summary>
         public List<string>? ControlThemes { get; set; }
         /// <summary>
@@ -157,7 +157,7 @@ namespace Avalonia.Accelerate.Appearance.Model
     /// <summary>
     /// 
     /// </summary>
-    public static class ThemeConverterExtensions
+    public static class SkinConverterExtensions
     {
         /// <summary>
         /// 

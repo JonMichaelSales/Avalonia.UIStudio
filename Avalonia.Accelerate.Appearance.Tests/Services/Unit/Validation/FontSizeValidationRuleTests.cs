@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Accelerate.Appearance.Model;
-using Avalonia.Accelerate.Appearance.Services;
 using Avalonia.Accelerate.Appearance.Services.ValidationRules;
 using Avalonia.Headless.XUnit;
 using Avalonia.Media;
 using Xunit;
+using System.Linq;
 
 namespace Avalonia.Accelerate.Appearance.Tests.Services.Unit.Validation;
 
@@ -39,9 +39,9 @@ public class FontSizeValidationRuleTests
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Empty(result.Errors);
+        Assert.Empty(messages.Where(m => m.IsError));
     }
 
     [AvaloniaFact]
@@ -49,11 +49,12 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeSmall = 6; // Below 8
+        skin.FontSizeSmall = 6;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Small font size") && e.Contains("between 8 and 20"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Small font size") && e.Contains("between 8 and 20"));
     }
 
     [AvaloniaFact]
@@ -61,11 +62,12 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeSmall = 22; // Above 20
+        skin.FontSizeSmall = 22;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Small font size") && e.Contains("between 8 and 20"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Small font size") && e.Contains("between 8 and 20"));
     }
 
     [AvaloniaFact]
@@ -73,11 +75,12 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeMedium = 8; // Below 10
+        skin.FontSizeMedium = 8;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Medium font size") && e.Contains("between 10 and 24"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Medium font size") && e.Contains("between 10 and 24"));
     }
 
     [AvaloniaFact]
@@ -85,11 +88,12 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeMedium = 26; // Above 24
+        skin.FontSizeMedium = 26;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Medium font size") && e.Contains("between 10 and 24"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Medium font size") && e.Contains("between 10 and 24"));
     }
 
     [AvaloniaFact]
@@ -97,11 +101,12 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeLarge = 10; // Below 12
+        skin.FontSizeLarge = 10;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Large font size") && e.Contains("between 12 and 32"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Large font size") && e.Contains("between 12 and 32"));
     }
 
     [AvaloniaFact]
@@ -109,11 +114,12 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeLarge = 40; // Above 32
+        skin.FontSizeLarge = 40;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Large font size") && e.Contains("between 12 and 32"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Large font size") && e.Contains("between 12 and 32"));
     }
 
     [AvaloniaFact]
@@ -121,11 +127,12 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeSmall = 16; // Equal to medium
+        skin.FontSizeSmall = 16;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Small font size should be smaller than medium font size"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Small font size should be smaller than medium font size"));
     }
 
     [AvaloniaFact]
@@ -133,10 +140,11 @@ public class FontSizeValidationRuleTests
     {
         var rule = new FontSizeValidationRule();
         var skin = CreateDefaultSkin();
-        skin.FontSizeMedium = 24; // Equal to large
+        skin.FontSizeMedium = 24;
 
-        var result = rule.Validate(skin);
+        var messages = rule.Validate(skin);
 
-        Assert.Contains(result.Errors, e => e.Contains("Medium font size should be smaller than large font size"));
+        Assert.Contains(messages.Where(m => m.IsError).Select(m => m.Message),
+            e => e.Contains("Medium font size should be smaller than large font size"));
     }
 }

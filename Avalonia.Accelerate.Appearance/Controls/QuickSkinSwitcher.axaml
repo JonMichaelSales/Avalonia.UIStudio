@@ -31,8 +31,8 @@
                 Background="{DynamicResource BackgroundBrush}"
                 BorderBrush="{DynamicResource BorderBrush}"
                 Foreground="{DynamicResource TextPrimaryBrush}"
-                ItemsSource="{Binding AvailableThemes}"
-                SelectedItem="{Binding SelectedTheme}"
+                ItemsSource="{Binding AvailableSkins}"
+                SelectedItem="{Binding SelectedSkin}"
                 ToolTip.Tip="Quick theme switcher">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>

@@ -1,4 +1,6 @@
-﻿namespace Avalonia.Accelerate.Dialogs.Interfaces
+﻿using Avalonia.Controls;
+
+namespace Avalonia.Accelerate.Dialogs.Interfaces
 {
     /// <summary>
     /// Provides methods for displaying various types of dialog messages, such as errors, warnings, informational messages, 
@@ -46,5 +48,31 @@
         /// <param name="cancelText">The text to display on the cancellation button. Defaults to "No".</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a boolean value indicating whether the user confirmed (true) or canceled (false) the action.</returns>
         Task<bool> ShowConfirmationAsync(string title, string message, string confirmText = "Yes", string cancelText = "No");
+
+        /// <summary>
+        /// Opens a file open dialog.
+        /// </summary>
+        /// <param name="title">Dialog title</param>
+        /// <param name="filters">Optional filters</param>
+        /// <param name="allowMultiple">Allow selecting multiple files</param>
+        /// <returns>Array of selected file paths or empty array if cancelled</returns>
+        Task<string[]> ShowOpenFileDialogAsync(string title, FileDialogFilter[]? filters = null, bool allowMultiple = false);
+
+        /// <summary>
+        /// Opens a file save dialog.
+        /// </summary>
+        /// <param name="title">Dialog title</param>
+        /// <param name="defaultFileName">Default file name</param>
+        /// <param name="filters">Optional filters</param>
+        /// <returns>Selected file path or null if cancelled</returns>
+        Task<string?> ShowSaveFileDialogAsync(string title, string? defaultFileName = null, FileDialogFilter[]? filters = null);
+
+        /// <summary>
+        /// Opens a folder picker dialog.
+        /// </summary>
+        /// <param name="title">Dialog title</param>
+        /// <returns>Selected folder path or null if cancelled</returns>
+        Task<string?> ShowOpenFolderDialogAsync(string title);
+
     }
 }

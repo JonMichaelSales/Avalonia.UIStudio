@@ -1,15 +1,21 @@
-﻿using System.Text.Json;
-using Avalonia;
+﻿using Avalonia;
+using Avalonia.Accelerate.Appearance.Interfaces;
 using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Accelerate.Appearance.Services;
 using Avalonia.Headless.XUnit;
 using Avalonia.Media;
+using System.Text.Json;
 using Xunit;
 
 namespace Avalonia.Accelerate.Appearance.Tests.Services.Unit;
 
-public class SkinImportExportTests
+public class SkinImportExportServiceTests
 {
+    private readonly ISkinImportExportService _skinImportExportService;
+    public SkinImportExportServiceTests()
+    {
+        _skinImportExportService = new SkinImportExportService();
+    }
     private Skin CreateTestSkin()
     {
         return new Skin
@@ -42,7 +48,7 @@ public class SkinImportExportTests
         var skin = CreateTestSkin();
         var filePath = Path.GetTempFileName();
 
-        var result = await SkinImportExport.ExportSkinAsync(skin, filePath, "desc", "author");
+        var result = await _skinImportExportService.ExportSkinAsync(skin, filePath, "desc", "author");
 
         Assert.True(result);
         var json = await File.ReadAllTextAsync(filePath);
@@ -56,7 +62,7 @@ public class SkinImportExportTests
         var skin = CreateTestSkin();
         var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "file.json");
 
-        var result = await SkinImportExport.ExportSkinAsync(skin, filePath);
+        var result = await _skinImportExportService.ExportSkinAsync(skin, filePath);
 
         Assert.False(result);
     }
@@ -75,7 +81,7 @@ public class SkinImportExportTests
 
         var filePath = Path.GetTempFileName();
 
-        var result = await SkinImportExport.ExportAdvancedSkinAsync(skin, filePath, "desc", "author");
+        var result = await _skinImportExportService.ExportAdvancedSkinAsync(skin, filePath, "desc", "author");
 
         Assert.True(result);
         var json = await File.ReadAllTextAsync(filePath);
@@ -95,7 +101,7 @@ public class SkinImportExportTests
         };
         var filePath = Path.GetTempFileName();
 
-        var result = await SkinImportExport.ExportInheritableSkinAsync(skin, filePath, "desc", "author");
+        var result = await _skinImportExportService.ExportInheritableSkinAsync(skin, filePath, "desc", "author");
 
         Assert.True(result);
         var json = await File.ReadAllTextAsync(filePath);
@@ -109,9 +115,9 @@ public class SkinImportExportTests
     {
         var skin = CreateTestSkin();
         var filePath = Path.GetTempFileName();
-        await SkinImportExport.ExportSkinAsync(skin, filePath);
+        await _skinImportExportService.ExportSkinAsync(skin, filePath);
 
-        var result = await SkinImportExport.ImportSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportSkinAsync(filePath);
         if (!result.Success)
         {
             Console.WriteLine($"Error Message: {result.ErrorMessage}");
@@ -128,7 +134,7 @@ public class SkinImportExportTests
     {
         var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nofile.json");
 
-        var result = await SkinImportExport.ImportSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportSkinAsync(filePath);
         if (!result.Success)
         {
             Console.WriteLine($"Error Message: {result.ErrorMessage}");
@@ -151,9 +157,9 @@ public class SkinImportExportTests
         skin.EnableLigatures = true;
 
         var filePath = Path.GetTempFileName();
-        await SkinImportExport.ExportAdvancedSkinAsync(skin, filePath);
+        await _skinImportExportService.ExportAdvancedSkinAsync(skin, filePath);
 
-        var result = await SkinImportExport.ImportAdvancedSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportAdvancedSkinAsync(filePath);
 
         Assert.NotNull(result);
         Assert.Equal("TestSkin", result.Name);
@@ -170,9 +176,9 @@ public class SkinImportExportTests
             PropertyOverrides = new Dictionary<string, object> { { "PrimaryColor", "#FF0000" } }
         };
         var filePath = Path.GetTempFileName();
-        await SkinImportExport.ExportInheritableSkinAsync(skin, filePath);
+        await _skinImportExportService.ExportInheritableSkinAsync(skin, filePath);
 
-        var result = await SkinImportExport.ImportInheritableSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportInheritableSkinAsync(filePath);
 
         Assert.NotNull(result);
         Assert.Equal("InheritSkin", result.Name);
@@ -185,9 +191,9 @@ public class SkinImportExportTests
     {
         var skin = CreateTestSkin();
         var filePath = Path.GetTempFileName();
-        await SkinImportExport.ExportSkinAsync(skin, filePath);
+        await _skinImportExportService.ExportSkinAsync(skin, filePath);
 
-        var result = await SkinImportExport.ValidateSkinFileAsync(filePath);
+        var result = await _skinImportExportService.ValidateSkinFileAsync(filePath);
 
         Assert.True(result.IsValid);
         File.Delete(filePath);
@@ -198,7 +204,7 @@ public class SkinImportExportTests
     {
         var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nofile.json");
 
-        var result = await SkinImportExport.ValidateSkinFileAsync(filePath);
+        var result = await _skinImportExportService.ValidateSkinFileAsync(filePath);
 
         Assert.False(result.IsValid);
         Assert.Contains("does not exist", result.Errors[0]);
@@ -219,7 +225,7 @@ public class SkinImportExportTests
             };
             var filePath = Path.GetTempFileName();
 
-            var result = await SkinImportExport.ExportSkinPackAsync(themes, filePath, "PackName", "desc");
+            var result = await _skinImportExportService.ExportSkinPackAsync(themes, filePath, "PackName", "desc");
 
             Assert.True(result);
             var json = await File.ReadAllTextAsync(filePath);
@@ -228,14 +234,14 @@ public class SkinImportExportTests
             File.Delete(filePath);
         }
     }
-    
+
     [AvaloniaFact]
     public async Task ImportAdvancedSkinAsync_ReturnsNull_OnInvalidJson()
     {
         var filePath = Path.GetTempFileName();
         await File.WriteAllTextAsync(filePath, "Not a JSON!");
 
-        var result = await SkinImportExport.ImportAdvancedSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportAdvancedSkinAsync(filePath);
 
         Assert.Null(result);
         File.Delete(filePath);
@@ -246,7 +252,7 @@ public class SkinImportExportTests
     {
         var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nofile.json");
 
-        var result = await SkinImportExport.ImportInheritableSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportInheritableSkinAsync(filePath);
 
         Assert.Null(result);
     }
@@ -259,7 +265,7 @@ public class SkinImportExportTests
 
         var filePath = Path.GetTempFileName();
 
-        var result = await SkinImportExport.ExportAdvancedSkinAsync(skin, filePath);
+        var result = await _skinImportExportService.ExportAdvancedSkinAsync(skin, filePath);
 
         Assert.True(result);
         var json = await File.ReadAllTextAsync(filePath);
@@ -278,7 +284,7 @@ public class SkinImportExportTests
         };
         var filePath = Path.GetTempFileName();
 
-        var result = await SkinImportExport.ExportInheritableSkinAsync(skin, filePath);
+        var result = await _skinImportExportService.ExportInheritableSkinAsync(skin, filePath);
 
         Assert.True(result);
         var json = await File.ReadAllTextAsync(filePath);
@@ -286,34 +292,34 @@ public class SkinImportExportTests
         File.Delete(filePath);
     }
 
-    
+
     [AvaloniaFact]
     public async Task ValidateSkinFileAsync_ReturnsError_OnInvalidJson()
     {
         var filePath = Path.GetTempFileName();
         await File.WriteAllTextAsync(filePath, "Invalid JSON content");
 
-        var result = await SkinImportExport.ValidateSkinFileAsync(filePath);
+        var result = await _skinImportExportService.ValidateSkinFileAsync(filePath);
 
         Assert.False(result.IsValid);
         Assert.Contains("Invalid JSON format", result.Errors.FirstOrDefault());
         File.Delete(filePath);
     }
 
-    
+
     [AvaloniaFact]
     public async Task ImportSkinAsync_ReturnsError_OnInvalidJson()
     {
         var filePath = Path.GetTempFileName();
         await File.WriteAllTextAsync(filePath, "Invalid JSON content");
 
-        var result = await SkinImportExport.ImportSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportSkinAsync(filePath);
 
         Assert.False(result.Success);
         Assert.Contains("JSON parsing error", result.ErrorMessage);
         File.Delete(filePath);
     }
-    
+
     [AvaloniaFact]
     public async Task ImportSkinAsync_ReturnsValidationError_WhenNameMissing()
     {
@@ -344,7 +350,7 @@ public class SkinImportExportTests
         var json = JsonSerializer.Serialize(badSkin);
         await File.WriteAllTextAsync(filePath, json);
 
-        var result = await SkinImportExport.ImportSkinAsync(filePath);
+        var result = await _skinImportExportService.ImportSkinAsync(filePath);
 
         Assert.False(result.Success);
         Assert.Contains("Skin validation failed", result.ErrorMessage);

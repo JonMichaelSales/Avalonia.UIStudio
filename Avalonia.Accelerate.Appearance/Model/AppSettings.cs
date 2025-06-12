@@ -4,7 +4,7 @@ namespace Avalonia.Accelerate.Appearance.Model
 {
     /// <summary>
     /// Represents the application settings for the Avalonia Skin Manager.
-    /// Provides functionality to load, save, and manage theme-related settings.
+    /// Provides functionality to load, save, and manage skin-related settings.
     /// </summary>
     public class AppSettings
     {
@@ -13,25 +13,25 @@ namespace Avalonia.Accelerate.Appearance.Model
         private static AppSettings? _instance;
 
         /// <summary>
-        /// Gets or sets the name of the currently selected theme.
+        /// Gets or sets the name of the currently selected skin.
         /// </summary>
         /// <value>
-        /// A <see cref="string"/> representing the theme name. The default value is "Dark".
+        /// A <see cref="string"/> representing the skin name. The default value is "Dark".
         /// </value>
         /// <remarks>
-        /// This property is used to store the name of the theme selected by the user.
+        /// This property is used to store the name of the skin selected by the user.
         /// It can be updated dynamically and is persisted using the <see cref="AppSettings.Save"/> method.
         /// </remarks>
-        public string? Theme { get; set; } = "Dark";
+        public string? Skin { get; set; } = "Dark";
 
         // Add other settings as needed
         /// <summary>
-        /// Gets or sets a value indicating whether the application should use the system's default theme.
+        /// Gets or sets a value indicating whether the application should use the system's default skin.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the application should use the system's theme; otherwise, <c>false</c>.
+        /// <c>true</c> if the application should use the system's skin; otherwise, <c>false</c>.
         /// </value>
-        public bool UseSystemTheme { get; set; } = false;
+        public bool UseSystemskin { get; set; } = false;
 
         // Update the static constructor in AppSettings.cs
         static AppSettings()

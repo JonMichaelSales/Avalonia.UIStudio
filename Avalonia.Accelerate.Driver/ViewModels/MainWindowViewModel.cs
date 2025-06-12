@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Avalonia.Accelerate.Appearance.Interfaces;
+using Avalonia.Accelerate.Appearance.Services;
+using Avalonia.Accelerate.Appearance.ViewModels;
+using Avalonia.Accelerate.Appearance.Views;
+using Avalonia.Accelerate.Dialogs.Interfaces;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using ReactiveUI;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia.Platform.Storage;
-using Avalonia.Controls.ApplicationLifetimes;
-
-using ReactiveUI;
-using Microsoft.Extensions.Logging;
-using Avalonia.Accelerate.Appearance.Interfaces;
-using Avalonia.Accelerate.Dialogs.Interfaces;
-
-using Avalonia.Accelerate.Appearance.Services;
-using Avalonia.Accelerate.Appearance.Views;
-
-using System.Linq;
-using Avalonia.Accelerate.Appearance.ViewModels;
+using Avalonia.Accelerate.Appearance.Extensions;
 
 namespace Avalonia.Accelerate.Driver.ViewModels
 {
@@ -27,6 +27,8 @@ namespace Avalonia.Accelerate.Driver.ViewModels
         private readonly ISkinManager _skinManager;
         private readonly IDialogService _dialogService;
         private readonly ILogger<MainWindowViewModel> _logger;
+        private readonly ISkinImportExportService _importExportService;
+        private readonly SkinSettingsDialog _skinSettingsDialog;
         private string _currentSkinName = "Unknown";
         private int _availableSkinCount = 0;
         public QuickSkinSwitcherViewModel? QuickSkinSwitcherViewModel { get; }
@@ -37,11 +39,14 @@ namespace Avalonia.Accelerate.Driver.ViewModels
         public MainWindowViewModel(
             IDialogService dialogService,
             ISkinManager skinManager,
-            ILogger<MainWindowViewModel> logger)
+            ILogger<MainWindowViewModel> logger,
+            ISkinImportExportService _importExportService,SkinSettingsDialog skinSettingsDialog)
         {
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _skinManager = skinManager ?? throw new ArgumentNullException(nameof(skinManager));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this._importExportService = _importExportService;
+            _skinSettingsDialog = skinSettingsDialog;
 
             InitializeCommands();
             InitializeSkinData();
@@ -53,17 +58,17 @@ namespace Avalonia.Accelerate.Driver.ViewModels
         // <summary>
         // Parameterless constructor for design-time support
         // </summary>
-        public MainWindowViewModel()
-        {
-            // Design-time fallbacks
-            _skinManager = null!;
-            _dialogService = null!;
-            _logger = Microsoft.Extensions.Logging.Abstractions.NullLogger<MainWindowViewModel>.Instance;
+        //public MainWindowViewModel()
+        //{
+        //    // Design-time fallbacks
+        //    _skinManager = null!;
+        //    _dialogService = null!;
+        //    _logger = Microsoft.Extensions.Logging.Abstractions.NullLogger<MainWindowViewModel>.Instance;
 
-            InitializeCommands();
-            CurrentSkinName = "Design-Time Skin";
-            AvailableSkinCount = 7;
-        }
+        //    InitializeCommands();
+        //    CurrentSkinName = "Design-Time Skin";
+        //    AvailableSkinCount = 7;
+        //}
 
         #region Properties
 
@@ -133,6 +138,9 @@ namespace Avalonia.Accelerate.Driver.ViewModels
         /// Command to run an integration demo showing all libraries working together
         /// </summary>
         public ReactiveCommand<Unit, Unit> RunIntegrationDemoCommand { get; private set; } = null!;
+        public ReactiveCommand<Unit, Unit> ShowOpenFileDialogCommand { get; private set; } = null!;
+        public ReactiveCommand<Unit, Unit> ShowSaveFileDialogCommand { get; private set; } = null!;
+        public ReactiveCommand<Unit, Unit> ShowOpenFolderDialogCommand { get; private set; } = null!;
 
         #endregion
 
@@ -149,6 +157,9 @@ namespace Avalonia.Accelerate.Driver.ViewModels
             ExportSkinCommand = ReactiveCommand.CreateFromTask(ExportSkinAsync);
             ImportSkinCommand = ReactiveCommand.CreateFromTask(ImportSkinAsync);
             RunIntegrationDemoCommand = ReactiveCommand.CreateFromTask(RunIntegrationDemoAsync);
+            ShowOpenFileDialogCommand = ReactiveCommand.CreateFromTask(ShowOpenFileDialogAsync);
+            ShowSaveFileDialogCommand = ReactiveCommand.CreateFromTask(ShowSaveFileDialogAsync);
+            ShowOpenFolderDialogCommand = ReactiveCommand.CreateFromTask(ShowOpenFolderDialogAsync);
         }
 
         private void InitializeSkinData()
@@ -197,15 +208,14 @@ namespace Avalonia.Accelerate.Driver.ViewModels
             {
                 _logger.LogDebug("Opening skin settings dialog");
 
-                var settingsDialog = new SkinSettingsDialog();
-
+                var skinSettingsDialog = Application.Current.GetRequiredService<SkinSettingsDialog>();
                 if (GetMainWindow() is { } mainWindow)
                 {
-                    await settingsDialog.ShowDialog(mainWindow);
+                    await skinSettingsDialog.ShowDialog(mainWindow);
                 }
                 else
                 {
-                    settingsDialog.Show();
+                    skinSettingsDialog.Show();
                 }
 
                 _logger.LogInformation("Skin settings dialog closed");
@@ -342,6 +352,115 @@ namespace Avalonia.Accelerate.Driver.ViewModels
             }
         }
 
+        private async Task ShowOpenFileDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing open file dialog");
+
+                // Using IDialogService
+                var serviceResults = await _dialogService.ShowOpenFileDialogAsync("Open File (Service)", allowMultiple: true);
+
+                if (serviceResults.Length > 0)
+                {
+                    await _dialogService.ShowInfoAsync("Files Selected (Service)", string.Join("\n", serviceResults));
+                }
+                else
+                {
+                    await _dialogService.ShowInfoAsync("No Files Selected (Service)", "Operation was cancelled.");
+                }
+
+                // Using MessageBox (same result)
+                var messageBoxResults = await Avalonia.Accelerate.Dialogs.Services.MessageBox.ShowOpenFileDialogAsync("Open File (MessageBox)", allowMultiple: true);
+
+                if (messageBoxResults.Length > 0)
+                {
+                    await _dialogService.ShowInfoAsync("Files Selected (MessageBox)", string.Join("\n", messageBoxResults));
+                }
+                else
+                {
+                    await _dialogService.ShowInfoAsync("No Files Selected (MessageBox)", "Operation was cancelled.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show open file dialog");
+            }
+        }
+
+        private async Task ShowSaveFileDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing save file dialog");
+
+                // Using IDialogService
+                var serviceResult = await _dialogService.ShowSaveFileDialogAsync("Save File (Service)", "MyDocument.txt");
+
+                if (!string.IsNullOrEmpty(serviceResult))
+                {
+                    await _dialogService.ShowInfoAsync("File Selected (Service)", serviceResult);
+                }
+                else
+                {
+                    await _dialogService.ShowInfoAsync("No File Selected (Service)", "Operation was cancelled.");
+                }
+
+                // Using MessageBox (same result)
+                var messageBoxResult = await Avalonia.Accelerate.Dialogs.Services.MessageBox.ShowSaveFileDialogAsync("Save File (MessageBox)", "MyDocument.txt");
+
+                if (!string.IsNullOrEmpty(messageBoxResult))
+                {
+                    await _dialogService.ShowInfoAsync("File Selected (MessageBox)", messageBoxResult);
+                }
+                else
+                {
+                    await _dialogService.ShowInfoAsync("No File Selected (MessageBox)", "Operation was cancelled.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show save file dialog");
+            }
+        }
+
+        private async Task ShowOpenFolderDialogAsync()
+        {
+            try
+            {
+                _logger.LogDebug("Showing open folder dialog");
+
+                // Using IDialogService
+                var serviceResult = await _dialogService.ShowOpenFolderDialogAsync("Open Folder (Service)");
+
+                if (!string.IsNullOrEmpty(serviceResult))
+                {
+                    await _dialogService.ShowInfoAsync("Folder Selected (Service)", serviceResult);
+                }
+                else
+                {
+                    await _dialogService.ShowInfoAsync("No Folder Selected (Service)", "Operation was cancelled.");
+                }
+
+                // Using MessageBox (same result)
+                var messageBoxResult = await Avalonia.Accelerate.Dialogs.Services.MessageBox.ShowOpenFolderDialogAsync("Open Folder (MessageBox)");
+
+                if (!string.IsNullOrEmpty(messageBoxResult))
+                {
+                    await _dialogService.ShowInfoAsync("Folder Selected (MessageBox)", messageBoxResult);
+                }
+                else
+                {
+                    await _dialogService.ShowInfoAsync("No Folder Selected (MessageBox)", "Operation was cancelled.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to show open folder dialog");
+            }
+        }
+
+
         private async Task ExportSkinAsync()
         {
             try
@@ -382,7 +501,7 @@ namespace Avalonia.Accelerate.Driver.ViewModels
                 if (result != null)
                 {
                     var filePath = result.Path.LocalPath;
-                    var success = await SkinImportExport.ExportSkinAsync(
+                    var success = await _importExportService.ExportSkinAsync(
                         currentSkin,
                         filePath,
                         $"Exported from Avalonia.Accelerate Demo on {DateTime.Now:yyyy-MM-dd}",
@@ -440,7 +559,7 @@ namespace Avalonia.Accelerate.Driver.ViewModels
                 if (result.Count > 0)
                 {
                     var filePath = result[0].Path.LocalPath;
-                    var importResult = await SkinImportExport.ImportSkinAsync(filePath);
+                    var importResult = await _importExportService.ImportSkinAsync(filePath);
 
                     if (importResult.Success && importResult.Skin != null)
                     {

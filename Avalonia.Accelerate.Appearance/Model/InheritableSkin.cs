@@ -1,23 +1,22 @@
-﻿// Skin/ThemeInheritance.cs
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using System.Text.Json;
 
 namespace Avalonia.Accelerate.Appearance.Model
 {
     /// <summary>
-    /// Represents a theme that can inherit from a base theme and override specific properties.
+    /// Represents a skin that can inherit from a base skin and override specific properties.
     /// </summary>
     public class InheritableSkin : Skin
     {
         private readonly HashSet<string> _setProperties = new();
 
         /// <summary>
-        /// Gets or sets the name of the base theme this theme inherits from.
+        /// Gets or sets the name of the base skin this skin inherits from.
         /// </summary>
         public string? BaseSkinName { get; set; }
 
         /// <summary>
-        /// Gets or sets the collection of property overrides for this theme.
+        /// Gets or sets the collection of property overrides for this skin.
         /// </summary>
         public Dictionary<string, object>? PropertyOverrides { get; set; } = new();
 
@@ -228,19 +227,19 @@ namespace Avalonia.Accelerate.Appearance.Model
         /// <summary>
         /// Creates a resolved skin by applying inheritance and overrides.
         /// </summary>
-        /// <param name="baseTheme">The base theme to inherit from.</param>
+        /// <param name="baseSkin">The base skin to inherit from.</param>
         /// <returns>A fully resolved Skin with all properties applied.</returns>
-        public Skin CreateResolvedSkin(Skin? baseTheme = null)
+        public Skin CreateResolvedSkin(Skin? baseSkin = null)
         {
             var resolved = new Skin();
 
-            // Start with base theme if provided
-            if (baseTheme != null)
+            // Start with base skin if provided
+            if (baseSkin != null)
             {
-                CopyPropertiesFrom(resolved, baseTheme);
+                CopyPropertiesFrom(resolved, baseSkin);
             }
 
-            // Apply current theme's explicitly set properties only
+            // Apply current skin's explicitly set properties only
             CopySetPropertiesFrom(resolved, this);
 
             // Apply property overrides

@@ -7,9 +7,7 @@ namespace Avalonia.Accelerate.Appearance.Interfaces
     /// </summary>
     public interface ISkinValidationRule
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        SkinValidationResult Validate(Skin skin);
+        List<SkinValidationMessage> Validate(Skin skin);
     }
+
 }

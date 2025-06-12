@@ -1,4 +1,5 @@
 ﻿using Avalonia.Accelerate.Dialogs.Interfaces;
+using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -145,5 +146,41 @@ namespace Avalonia.Accelerate.Dialogs.Services
         {
             return ShowConfirmationAsync(message, title, confirmText, cancelText).GetAwaiter().GetResult();
         }
+
+
+        /// <summary>
+        /// Shows an open file dialog.
+        /// </summary>
+        /// <param name="title">Dialog title</param>
+        /// <param name="filters">Optional filters</param>
+        /// <param name="allowMultiple">Allow selecting multiple files</param>
+        /// <returns>Array of selected file paths or empty array if cancelled</returns>
+        public static Task<string[]> ShowOpenFileDialogAsync(string title, FileDialogFilter[]? filters = null, bool allowMultiple = false)
+        {
+            return GetDialogService().ShowOpenFileDialogAsync(title, filters, allowMultiple);
+        }
+
+        /// <summary>
+        /// Shows a save file dialog.
+        /// </summary>
+        /// <param name="title">Dialog title</param>
+        /// <param name="defaultFileName">Default file name</param>
+        /// <param name="filters">Optional filters</param>
+        /// <returns>Selected file path or null if cancelled</returns>
+        public static Task<string?> ShowSaveFileDialogAsync(string title, string? defaultFileName = null, FileDialogFilter[]? filters = null)
+        {
+            return GetDialogService().ShowSaveFileDialogAsync(title, defaultFileName, filters);
+        }
+
+        /// <summary>
+        /// Shows an open folder dialog.
+        /// </summary>
+        /// <param name="title">Dialog title</param>
+        /// <returns>Selected folder path or null if cancelled</returns>
+        public static Task<string?> ShowOpenFolderDialogAsync(string title)
+        {
+            return GetDialogService().ShowOpenFolderDialogAsync(title);
+        }
+
     }
 }
