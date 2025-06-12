@@ -1,15 +1,16 @@
-﻿// Skin/SkinImportExport.cs
+﻿// Skin/SkinImportExportService.cs
 using Avalonia.Accelerate.Appearance.Model;
 using Avalonia.Media;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Avalonia.Accelerate.Appearance.Interfaces;
 
 namespace Avalonia.Accelerate.Appearance.Services
 {
     /// <summary>
-    /// Handles theme import and export operations.
+    /// Handles skin import and export operations.
     /// </summary>
-    public static class SkinImportExport
+    public class SkinImportExportService : ISkinImportExportService
     {
         private static readonly JsonSerializerOptions JsonOptions = new()
         {
@@ -21,12 +22,12 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Exports a skin to a JSON file.
         /// </summary>
-        public static async Task<bool> ExportSkinAsync(Skin skin, string filePath, string? description = null, string? author = null)
+        public async Task<bool> ExportSkinAsync(Skin skin, string filePath, string? description = null, string? author = null)
         {
             try
             {
-                var serializableTheme = ConvertToSerializable(skin, description, author);
-                var json = JsonSerializer.Serialize(serializableTheme, JsonOptions);
+                var serializableSkin = ConvertToSerializable(skin, description, author);
+                var json = JsonSerializer.Serialize(serializableSkin, JsonOptions);
 
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
@@ -41,16 +42,16 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Exports an advanced skin with typography to a JSON file.
         /// </summary>
-        public static async Task<bool> ExportAdvancedSkinAsync(Skin skin, string filePath, string? description = null, string? author = null)
+        public async Task<bool> ExportAdvancedSkinAsync(Skin skin, string filePath, string? description = null, string? author = null)
         {
             try
             {
-                var serializableTheme = ConvertToSerializable(skin, description, author);
+                var serializableSkin = ConvertToSerializable(skin, description, author);
 
                 // Add advanced typography
                 if (skin.Typography != null)
                 {
-                    serializableTheme.AdvancedTypography = new SerializableTypography
+                    serializableSkin.AdvancedTypography = new SerializableTypography
                     {
                         DisplayLarge = skin.Typography.DisplayLarge,
                         DisplayMedium = skin.Typography.DisplayMedium,
@@ -76,7 +77,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                     };
                 }
 
-                var json = JsonSerializer.Serialize(serializableTheme, JsonOptions);
+                var json = JsonSerializer.Serialize(serializableSkin, JsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
             }
@@ -90,17 +91,17 @@ namespace Avalonia.Accelerate.Appearance.Services
         /// <summary>
         /// Exports an inheritable skin to a JSON file.
         /// </summary>
-        public static async Task<bool> ExportInheritableSkinAsync(InheritableSkin skin, string filePath, string? description = null, string? author = null)
+        public async Task<bool> ExportInheritableSkinAsync(InheritableSkin skin, string filePath, string? description = null, string? author = null)
         {
             try
             {
-                var serializableTheme = ConvertToSerializable(skin, description, author);
+                var serializableSkin = ConvertToSerializable(skin, description, author);
 
                 // Add inheritance information
-                serializableTheme.BaseSkinName = skin.BaseSkinName;
-                serializableTheme.PropertyOverrides = skin.PropertyOverrides;
+                serializableSkin.BaseSkinName = skin.BaseSkinName;
+                serializableSkin.PropertyOverrides = skin.PropertyOverrides;
 
-                var json = JsonSerializer.Serialize(serializableTheme, JsonOptions);
+                var json = JsonSerializer.Serialize(serializableSkin, JsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
             }
@@ -112,9 +113,9 @@ namespace Avalonia.Accelerate.Appearance.Services
         }
 
         /// <summary>
-        /// Imports a theme from a JSON file.
+        /// Imports a skin from a JSON file.
         /// </summary>
-        public static async Task<SkinImportResult> ImportSkinAsync(string filePath)
+        public async Task<SkinImportResult> ImportSkinAsync(string filePath)
         {
             var result = new SkinImportResult();
 
@@ -127,11 +128,11 @@ namespace Avalonia.Accelerate.Appearance.Services
                 }
 
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
+                var serializableSkin = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
-                if (serializableTheme == null)
+                if (serializableSkin == null)
                 {
-                    result.ErrorMessage = "Invalid theme file format";
+                    result.ErrorMessage = "Invalid skin file format";
                     return result;
                 }
 
@@ -144,7 +145,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                     return result;
                 }
 
-                result.Skin = ConvertFromSerializable(serializableTheme);
+                result.Skin = ConvertFromSerializable(serializableSkin);
                 result.Success = true;
             }
             catch (JsonException ex)
@@ -153,31 +154,31 @@ namespace Avalonia.Accelerate.Appearance.Services
             }
             catch (Exception ex)
             {
-                result.ErrorMessage = $"Unexpected error importing theme: {ex.Message}";
+                result.ErrorMessage = $"Unexpected error importing skin: {ex.Message}";
             }
 
             return result;
         }
 
         /// <summary>
-        /// Imports an advanced theme from a JSON file.
+        /// Imports an advanced skin from a JSON file.
         /// </summary>
-        public static async Task<Skin?> ImportAdvancedSkinAsync(string filePath)
+        public async Task<Skin?> ImportAdvancedSkinAsync(string filePath)
         {
             try
             {
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
+                var serializableSkin = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
-                if (serializableTheme == null) return null;
+                if (serializableSkin == null) return null;
 
-                var baseSkin = ConvertFromSerializable(serializableTheme);
+                var baseSkin = ConvertFromSerializable(serializableSkin);
                 
 
                 // Apply advanced typography if present
-                if (serializableTheme.AdvancedTypography != null)
+                if (serializableSkin.AdvancedTypography != null)
                 {
-                    var typography = serializableTheme.AdvancedTypography;
+                    var typography = serializableSkin.AdvancedTypography;
 
                     baseSkin.Typography = new TypographyScale
                     {
@@ -213,46 +214,46 @@ namespace Avalonia.Accelerate.Appearance.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error importing advanced theme: {ex.Message}");
+                Console.WriteLine($"Error importing advanced skin: {ex.Message}");
                 return null;
             }
         }
 
         /// <summary>
-        /// Imports an inheritable theme from a JSON file.
+        /// Imports an inheritable skin from a JSON file.
         /// </summary>
-        public static async Task<InheritableSkin?> ImportInheritableSkinAsync(string filePath)
+        public async Task<InheritableSkin?> ImportInheritableSkinAsync(string filePath)
         {
             try
             {
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
+                var serializableSkin = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
-                if (serializableTheme == null) return null;
+                if (serializableSkin == null) return null;
 
-                var baseSkin = ConvertFromSerializable(serializableTheme);
+                var baseSkin = ConvertFromSerializable(serializableSkin);
                 var inheritableSkin = new InheritableSkin();
 
                 // Copy all properties from base skin
                 CopyPropertiesToInheritable(inheritableSkin, baseSkin);
 
                 // Set inheritance properties
-                inheritableSkin.BaseSkinName = serializableTheme.BaseSkinName;
-                inheritableSkin.PropertyOverrides = serializableTheme.PropertyOverrides ?? new Dictionary<string, object>();
+                inheritableSkin.BaseSkinName = serializableSkin.BaseSkinName;
+                inheritableSkin.PropertyOverrides = serializableSkin.PropertyOverrides ?? new Dictionary<string, object>();
 
                 return inheritableSkin;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error importing inheritable theme: {ex.Message}");
+                Console.WriteLine($"Error importing inheritable skin: {ex.Message}");
                 return null;
             }
         }
 
         /// <summary>
-        /// Validates a theme file before importing.
+        /// Validates a skin file before importing.
         /// </summary>
-        public static async Task<SkinValidationResult> ValidateSkinFileAsync(string filePath)
+        public async Task<SkinValidationResult> ValidateSkinFileAsync(string filePath)
         {
             var result = new SkinValidationResult();
 
@@ -260,31 +261,50 @@ namespace Avalonia.Accelerate.Appearance.Services
             {
                 if (!File.Exists(filePath))
                 {
-                    result.AddError("Skin file does not exist");
+                    result.ValidationMessages.Add(new SkinValidationMessage
+                    {
+                        IsError = true,
+                        Message = "Skin file does not exist",
+                        InvolvedProperties = new List<string>(),
+                        SuggestedValues = new Dictionary<string, object?>()
+                    });
+                    result.IsValid = false;
                     return result;
                 }
 
                 var json = await File.ReadAllTextAsync(filePath);
-                var serializableTheme = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
+                var serializableSkin = JsonSerializer.Deserialize<SerializableSkin>(json, JsonOptions);
 
-                if (serializableTheme == null)
+                if (serializableSkin == null)
                 {
-                    result.AddError("Invalid JSON format");
+                    result.ValidationMessages.Add(new SkinValidationMessage
+                    {
+                        IsError = true,
+                        Message = "Invalid JSON format",
+                        InvolvedProperties = new List<string>(),
+                        SuggestedValues = new Dictionary<string, object?>()
+                    });
                     return result;
                 }
 
                 // Validate required fields
-                if (string.IsNullOrWhiteSpace(serializableTheme.Name))
+                if (string.IsNullOrWhiteSpace(serializableSkin.Name))
                 {
-                    result.AddError("Skin name is required");
+                    result.ValidationMessages.Add(new SkinValidationMessage
+                    {
+                        IsError = true,
+                        Message = "Skin name is required",
+                        InvolvedProperties = new List<string>(),
+                        SuggestedValues = new Dictionary<string, object?>()
+                    });
                 }
 
                 // Try to convert to validate color formats
                 try
                 {
-                    var skin = ConvertFromSerializable(serializableTheme);
+                    var skin = ConvertFromSerializable(serializableSkin);
                     var validator = new SkinValidator();
-                    var validationResult = validator.ValidateTheme(skin);
+                    var validationResult = validator.ValidateSkin(skin);
 
                     result.Errors.AddRange(validationResult.Errors);
                     result.Warnings.AddRange(validationResult.Warnings);
@@ -292,81 +312,126 @@ namespace Avalonia.Accelerate.Appearance.Services
                 }
                 catch (Exception ex)
                 {
-                    result.AddError($"Invalid theme data: {ex.Message}");
+                    result.ValidationMessages.Add(new SkinValidationMessage
+                    {
+                        IsError = true,
+                        Message = $"Invalid skin data: {ex.Message}",
+                        InvolvedProperties = new List<string>(),
+                        SuggestedValues = new Dictionary<string, object?>()
+                    });
                 }
             }
             catch (JsonException)
             {
-                result.AddError("Invalid JSON format");
+                result.IsValid = false;
+                result.ValidationMessages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = "Invalid JSON format",
+                    InvolvedProperties = new List<string>(),
+                    SuggestedValues = new Dictionary<string, object?>()
+                });
             }
             catch (Exception ex)
             {
-                result.AddError($"Error reading theme file: {ex.Message}");
+                result.IsValid = false;
+                result.ValidationMessages.Add(new SkinValidationMessage
+                {
+                    IsError = true,
+                    Message = $"Error reading skin file: {ex.Message}",
+                    InvolvedProperties = new List<string>(),
+                    SuggestedValues = new Dictionary<string, object?>()
+                });
             }
 
             return result;
         }
 
         /// <summary>
-        /// Exports multiple themes to a theme pack file.
+        /// Exports multiple skins to a skin pack file.
         /// </summary>
-        public static async Task<bool> ExportSkinPackAsync(Dictionary<string, Skin> themes, string filePath, string packName, string? description = null)
+        public async Task<bool> ExportSkinPackAsync(Dictionary<string, Skin> skins, string filePath, string packName, string? description = null)
         {
             try
             {
-                var themePack = new
+                var skinPack = new
                 {
                     Name = packName,
                     Description = description,
                     Version = "1.0",
                     CreatedDate = DateTime.Now,
-                    Themes = themes.Select(kvp => ConvertToSerializable(kvp.Value, null, null)).ToArray()
+                    Skins = skins.Select(kvp => ConvertToSerializable(kvp.Value, null, null)).ToArray()
                 };
 
-                var json = JsonSerializer.Serialize(themePack, JsonOptions);
+                var json = JsonSerializer.Serialize(skinPack, JsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error exporting theme pack: {ex.Message}");
+                Console.WriteLine($"Error exporting skin pack: {ex.Message}");
                 return false;
             }
         }
 
-        private static SerializableSkin ConvertToSerializable(Skin theme, string? description, string? author)
+        private static SerializableSkin ConvertToSerializable(Skin skin, string? description, string? author)
         {
             return new SerializableSkin
             {
-                Name = theme.Name ?? "Unnamed Skin",
+                Name = skin.Name ?? "Unnamed Skin",
                 Description = description ?? "",
                 Author = author ?? "",
-                PrimaryColor = theme.PrimaryColor.ToString(),
-                SecondaryColor = theme.SecondaryColor.ToString(),
-                AccentColor = theme.AccentColor.ToString(),
-                PrimaryBackground = theme.PrimaryBackground.ToString(),
-                SecondaryBackground = theme.SecondaryBackground.ToString(),
-                PrimaryTextColor = theme.PrimaryTextColor.ToString(),
-                SecondaryTextColor = theme.SecondaryTextColor.ToString(),
-                BorderColor = theme.BorderColor.ToString(),
-                ErrorColor = theme.ErrorColor.ToString(),
-                WarningColor = theme.WarningColor.ToString(),
-                SuccessColor = theme.SuccessColor.ToString(),
-                FontFamily = theme.FontFamily.ToString(),
-                FontSizeSmall = theme.FontSizeSmall,
-                FontSizeMedium = theme.FontSizeMedium,
-                FontSizeLarge = theme.FontSizeLarge,
-                FontWeight = theme.FontWeight.ToString(),
-                BorderRadius = theme.BorderRadius,
+                PrimaryColor = skin.PrimaryColor.ToString(),
+                SecondaryColor = skin.SecondaryColor.ToString(),
+                AccentColor = skin.AccentColor.ToString(),
+                PrimaryBackground = skin.PrimaryBackground.ToString(),
+                SecondaryBackground = skin.SecondaryBackground.ToString(),
+                PrimaryTextColor = skin.PrimaryTextColor.ToString(),
+                SecondaryTextColor = skin.SecondaryTextColor.ToString(),
+                BorderColor = skin.BorderColor.ToString(),
+                ErrorColor = skin.ErrorColor.ToString(),
+                WarningColor = skin.WarningColor.ToString(),
+                SuccessColor = skin.SuccessColor.ToString(),
+                FontFamily = ParseFontFamily(skin.FontFamily.ToString()).ToString(),
+                FontSizeSmall = skin.FontSizeSmall,
+                FontSizeMedium = skin.FontSizeMedium,
+                FontSizeLarge = skin.FontSizeLarge,
+                FontWeight = skin.FontWeight.ToString(),
+                BorderRadius = skin.BorderRadius,
                 BorderThickness = new SerializableThickness
                 {
-                    Left = theme.BorderThickness.Left,
-                    Top = theme.BorderThickness.Top,
-                    Right = theme.BorderThickness.Right,
-                    Bottom = theme.BorderThickness.Bottom
+                    Left = skin.BorderThickness.Left,
+                    Top = skin.BorderThickness.Top,
+                    Right = skin.BorderThickness.Right,
+                    Bottom = skin.BorderThickness.Bottom
                 }
             };
         }
+
+        private static FontFamily ParseFontFamily(string fontFamily)
+        {
+            if (string.IsNullOrWhiteSpace(fontFamily))
+                return FontFamily.Default;
+
+            // Prevent problematic generic names being interpreted as relative URIs
+            var safeFamilies = new[] { "serif", "sans-serif", "monospace" };
+            foreach (var fam in safeFamilies)
+            {
+                if (fontFamily.Contains(fam))
+                {
+                    return FontFamily.Default;
+                }
+            }
+
+            if (safeFamilies.Contains(fontFamily.Trim().ToLowerInvariant()))
+            {
+                return FontFamily.Default;
+            }
+                
+
+            return new FontFamily(fontFamily);
+        }
+
 
         private static Skin ConvertFromSerializable(SerializableSkin serializableSkin)
         {
@@ -388,7 +453,7 @@ namespace Avalonia.Accelerate.Appearance.Services
                 ErrorColor = Color.Parse(serializableSkin.ErrorColor),
                 WarningColor = Color.Parse(serializableSkin.WarningColor),
                 SuccessColor = Color.Parse(serializableSkin.SuccessColor),
-                FontFamily = new FontFamily(serializableSkin.FontFamily),
+                FontFamily = ParseFontFamily(serializableSkin.FontFamily),
                 FontSizeSmall = serializableSkin.FontSizeSmall,
                 FontSizeMedium = serializableSkin.FontSizeMedium,
                 FontSizeLarge = serializableSkin.FontSizeLarge,

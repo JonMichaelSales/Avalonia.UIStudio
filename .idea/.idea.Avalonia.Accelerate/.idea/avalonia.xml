@@ -3,6 +3,7 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="Avalonia.Accelerate.Appearance/Skins/AppSkin.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
         <entry key="Avalonia.Accelerate.Appearance/Skins/DataGridCell.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
         <entry key="Avalonia.Accelerate.Dialogs/Dialogs/ConfirmationDialog.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
         <entry key="Avalonia.Accelerate.Dialogs/Dialogs/NotificationDialog.axaml" value="Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj" />
