@@ -38,20 +38,20 @@ jobs:
 
     - name: Build Libraries (Dependencies First)
       run: |
-        dotnet build Avalonia.Accelerate.TestUtilities/Avalonia.Accelerate.TestUtilities.csproj --configuration ${{ matrix.configuration }} --no-restore
-        dotnet build Avalonia.Accelerate.Icons/Avalonia.Accelerate.Icons.csproj --configuration ${{ matrix.configuration }} --no-restore
-        dotnet build Avalonia.Accelerate.Dialogs/Avalonia.Accelerate.Dialogs.csproj --configuration ${{ matrix.configuration }} --no-restore
-        dotnet build Avalonia.Accelerate.Appearance/Avalonia.Accelerate.Appearance.csproj --configuration ${{ matrix.configuration }} --no-restore
-        dotnet build Avalonia.Accelerate.Controls/Avalonia.Accelerate.Controls.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.TestUtilities/Avalonia.Accelerate.TestUtilities.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.Icons/Avalonia.Accelerate.Icons.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.Dialogs/Avalonia.Accelerate.Dialogs.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.Appearance/Avalonia.Accelerate.Appearance.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.Controls/Avalonia.Accelerate.Controls.csproj --configuration ${{ matrix.configuration }} --no-restore
 
     - name: Build Test Driver Application
       run: dotnet build Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj --configuration ${{ matrix.configuration }} --no-restore
 
     - name: Build Test Projects
       run: |
-        dotnet build Avalonia.Accelerate.Appearance.Tests/Avalonia.Accelerate.Appearance.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
-        dotnet build Avalonia.Accelerate.Dialogs.Tests/Avalonia.Accelerate.Dialogs.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
-        dotnet build Avalonia.Accelerate.Icon.Tests/Avalonia.Accelerate.Icons.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.Appearance.Tests/Avalonia.Accelerate.Appearance.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.Dialogs.Tests/Avalonia.Accelerate.Dialogs.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+        dotnet build Avalonia.UIStudio.Icon.Tests/Avalonia.Accelerate.Icons.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
         dotnet build Avalonia.Accelerate.Controls.Tests/Avalonia.Accelerate.Controls.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
 
     - name: Run All Tests with Coverage
@@ -99,15 +99,15 @@ jobs:
 
     - name: Publish Test Driver Application
       if: matrix.configuration == 'Release'
-      run: dotnet publish Avalonia.Accelerate.Driver/Avalonia.Accelerate.Driver.csproj --configuration Release --runtime win-x64 --self-contained true --output ./publish/win-x64
+      run: dotnet publish Avalonia.UIStudio.Driver/Avalonia.Accelerate.Driver.csproj --configuration Release --runtime win-x64 --self-contained true --output ./publish/win-x64
 
     - name: Pack NuGet Packages
       if: matrix.configuration == 'Release'
       run: |
-        dotnet pack Avalonia.Accelerate.Appearance/Avalonia.Accelerate.Appearance.csproj --configuration Release --output ./nupkgs
-        dotnet pack Avalonia.Accelerate.Dialogs/Avalonia.Accelerate.Dialogs.csproj --configuration Release --output ./nupkgs
-        dotnet pack Avalonia.Accelerate.Icons/Avalonia.Accelerate.Icons.csproj --configuration Release --output ./nupkgs
-        dotnet pack Avalonia.Accelerate.Controls/Avalonia.Accelerate.Controls.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.UIStudio.Appearance/Avalonia.UIStudio.Appearance.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.UIStudio.Dialogs/Avalonia.UIStudio.Dialogs.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.UIStudio.Icons/Avalonia.UIStudio.Icons.csproj --configuration Release --output ./nupkgs
+        dotnet pack Avalonia.UIStudio.Controls/Avalonia.UIStudio.Controls.csproj --configuration Release --output ./nupkgs
 
     - name: Upload NuGet Package Artifact
       if: matrix.configuration == 'Release'
