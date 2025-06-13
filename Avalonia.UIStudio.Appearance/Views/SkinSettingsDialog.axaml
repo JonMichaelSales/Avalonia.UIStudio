@@ -310,13 +310,13 @@
                                                 <StackPanel>
                                                     <TextBlock FontWeight="Bold" Text="General Info" />
                                                     <controls:TextEditorControl
-                                                        IsReadOnly="{Binding !IsEditMode}"
+                                                        IsEditMode="{Binding IsEditMode}"
                                                         Label="Name"
                                                         PropertyName="Name"
                                                         ValidatedProperty="{Binding ValidatedProperties[Name]}"
                                                         Value="{Binding EditableSkin.Name.Value, Mode=TwoWay}" />
                                                     <controls:TextEditorControl
-                                                        IsReadOnly="{Binding !IsEditMode}"
+                                                        IsEditMode="{Binding IsEditMode}"
                                                         Label="Description"
                                                         PropertyName="Description"
                                                         ValidatedProperty="{Binding ValidatedProperties[Description]}"
@@ -425,7 +425,7 @@
                                                         Value="{Binding DataContext.EditableSkin.FontFamily.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
                                                     <controls:NumericEditorControl
                                                         DataContext="{Binding ValidatedProperties[FontSizeSmall]}"
-                                                        IsReadOnly="{Binding !IsEditMode}"
+                                                        IsEditMode="{Binding IsEditMode}"
                                                         Label="Font Size Small"
                                                         Maximum="24"
                                                         Minimum="6"
@@ -436,7 +436,7 @@
                                                         Margin="0"
                                                         Padding="0"
                                                         DataContext="{Binding ValidatedProperties[FontSizeMedium]}"
-                                                        IsReadOnly="{Binding !IsEditMode}"
+                                                        IsEditMode="{Binding IsEditMode}"
                                                         Label="Font Size Medium"
                                                         Maximum="24"
                                                         Minimum="6"
@@ -447,7 +447,7 @@
                                                         Margin="0"
                                                         Padding="0"
                                                         DataContext="{Binding ValidatedProperties[FontSizeLarge]}"
-                                                        IsReadOnly="{Binding !IsEditMode}"
+                                                        IsEditMode="{Binding IsEditMode}"
                                                         Label="Font Size Large"
                                                         Maximum="24"
                                                         Minimum="6"
@@ -484,7 +484,7 @@
                                                         Margin="0"
                                                         Padding="0"
                                                         DataContext="{Binding ValidatedProperties[BorderRadius]}"
-                                                        IsReadOnly="{Binding !IsEditMode}"
+                                                        IsEditMode="{Binding IsEditMode}"
                                                         Label="Border Radius"
                                                         Maximum="24"
                                                         Minimum="6"

@@ -1,5 +1,6 @@
 using Avalonia.Headless.XUnit;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.UIStudio.Appearance.Extensions;
 
 namespace Avalonia.UIStudio.Appearance.Tests.Extensions;
 
@@ -11,7 +12,7 @@ public class ApplicationExtensionsTests
         var app = Application.Current!;
         int initialCount = app.Resources.MergedDictionaries.Count;
 
-        app.Initialize();
+        app.IncludeSkinManagerStyles();
 
         Assert.True(app.Resources.MergedDictionaries.Count > initialCount);
 

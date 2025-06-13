@@ -8,26 +8,9 @@ using Avalonia.UIStudio.Appearance.Model;
 
 namespace Avalonia.UIStudio.Appearance.Controls
 {
-    public partial class FontFamilyEditorControl : UserControl
+    public partial class FontFamilyEditorControl : ValidatableEditorControlBase<FontFamilyEditorControl>
     {
-        public static readonly StyledProperty<ValidatedProperty?> ValidatedPropertyProperty =
-            AvaloniaProperty.Register<FontFamilyEditorControl, ValidatedProperty?>(nameof(ValidatedProperty));
-
-        public ValidatedProperty? ValidatedProperty
-        {
-            get => GetValue(ValidatedPropertyProperty);
-            set => SetValue(ValidatedPropertyProperty, value);
-        }
-
-        public static readonly StyledProperty<string?> PropertyNameProperty =
-            AvaloniaProperty.Register<FontFamilyEditorControl, string?>(nameof(PropertyName));
-
-        public string? PropertyName
-        {
-            get => GetValue(PropertyNameProperty);
-            set => SetValue(PropertyNameProperty, value);
-        }
-
+       
         public static readonly StyledProperty<string> ValueProperty =
             AvaloniaProperty.Register<FontFamilyEditorControl, string>(nameof(Value));
 
@@ -35,24 +18,6 @@ namespace Avalonia.UIStudio.Appearance.Controls
         {
             get => GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
-        }
-
-        public static readonly StyledProperty<string> LabelProperty =
-            AvaloniaProperty.Register<FontFamilyEditorControl, string>(nameof(Label));
-
-        public string Label
-        {
-            get => GetValue(LabelProperty);
-            set => SetValue(LabelProperty, value);
-        }
-
-        public static readonly StyledProperty<bool> IsReadOnlyProperty =
-            AvaloniaProperty.Register<FontFamilyEditorControl, bool>(nameof(IsReadOnly));
-
-        public bool IsReadOnly
-        {
-            get => GetValue(IsReadOnlyProperty);
-            set => SetValue(IsReadOnlyProperty, value);
         }
 
         public static readonly StyledProperty<ObservableCollection<string>> AvailableFontFamiliesProperty =
