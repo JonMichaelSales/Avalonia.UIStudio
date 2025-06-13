@@ -1,4 +1,4 @@
-﻿namespace Avalonia.UIStudio.Icons.Tests
+﻿namespace Avalonia.UIStudio.Appearance.Tests.Fixtures
 {
     public class TestAppFixture : IDisposable
     {

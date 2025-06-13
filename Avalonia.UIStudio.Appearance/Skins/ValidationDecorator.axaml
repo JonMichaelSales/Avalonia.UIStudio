@@ -1,0 +1,77 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    xmlns:converters="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
+    xmlns:viewModels="clr-namespace:Avalonia.UIStudio.Appearance.ViewModels">
+
+    <converters:BoolToBorderBrushConverter x:Key="BoolToBorderBrushConverter" />
+    <Design.PreviewWith>
+        <StackPanel
+            Width="300"
+            Margin="20"
+            Background="White">
+            <controls:ValidationDecorator Margin="20" Theme="{StaticResource ValidationDecoratorAlternate}">
+
+                <StackPanel>
+                    <TextBlock Foreground="Black" Text="Hello Stuff" />
+                </StackPanel>
+
+            </controls:ValidationDecorator>
+            <Decorator>
+                <TextBlock Foreground="Black" Text="Hi Decorator People" />
+            </Decorator>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <!--<ControlTheme x:Key="ValidationDecoratorAlternate" TargetType="controls:ValidationDecorator">
+        <Setter Property="Child" Value="{Binding Content}" />
+        <Setter Property="Template">
+            <ControlTemplate x:DataType="controls:ValidationDecorator">
+                <Border
+                    Margin="0,0,0,4"
+                    Padding="0"
+                    BorderBrush="{Binding ValidatedProperty.OriginalMessage.IsError, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToBorderBrushConverter}}"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                    <StackPanel Spacing="2">
+    -->
+    <!--  Content  -->
+    <!--
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{Binding Child}" />
+    -->
+    <!--  Error Message  -->
+    <!--
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="Red"
+                            IsVisible="{Binding !ValidatedProperty.IsValid, RelativeSource={RelativeSource TemplatedParent}}"
+                            Text="{Binding ValidatedProperty.Message, RelativeSource={RelativeSource TemplatedParent}}">
+                            <TextBlock.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                                </Transitions>
+                            </TextBlock.Transitions>
+                        </TextBlock>
+    -->
+    <!--  Suggested Value  -->
+    <!--
+                        <TextBlock
+                            FontSize="10"
+                            Foreground="Orange"
+                            IsVisible="{Binding ValidatedProperty.SuggestedValue, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            Text="{Binding ValidatedProperty.SuggestedValue, RelativeSource={RelativeSource TemplatedParent}, StringFormat='Suggested: {0}'}">
+                            <TextBlock.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                                </Transitions>
+                            </TextBlock.Transitions>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>-->
+
+
+</ResourceDictionary>

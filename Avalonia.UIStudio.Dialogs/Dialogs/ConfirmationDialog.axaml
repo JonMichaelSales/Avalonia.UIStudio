@@ -1,0 +1,106 @@
+<Window
+    x:Class="Avalonia.UIStudio.Dialogs.Dialogs.ConfirmationDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:Avalonia.UIStudio.Icons;assembly=Avalonia.UIStudio.Icons"
+    Title="Confirmation"
+    Width="400"
+    Height="250"
+    MinWidth="350"
+    MinHeight="200"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="False"
+    Icon="avares://Avalonia.UIStudio.Icons/Assets/jonBuilt.ico"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Border
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource AccentBlueBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path
+                    Width="24"
+                    Height="24"
+                    Data="{x:Static icons:ApplicationIcons.InformationGeometry}"
+                    Fill="{DynamicResource TextPrimaryBrush}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    x:Name="TitleText"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="Confirmation" />
+            </StackPanel>
+        </Border>
+
+        <!--  Content  -->
+        <Grid Grid.Row="1" Margin="20">
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="15">
+                <!--  Question Icon  -->
+                <Path
+                    Width="48"
+                    Height="48"
+                    HorizontalAlignment="Center"
+                    Data="{x:Static icons:ApplicationIcons.InformationGeometry}"
+                    Fill="{DynamicResource AccentBlueBrush}"
+                    Stretch="Uniform" />
+
+                <!--  Main Message  -->
+                <TextBlock
+                    x:Name="MessageText"
+                    MaxWidth="320"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    FontSize="14"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+
+        <!--  Footer  -->
+        <Border
+            Grid.Row="2"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <Button
+                    x:Name="CancelButton"
+                    Padding="20,8"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    Content="Cancel"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsCancel="True" />
+                <Button
+                    x:Name="ConfirmButton"
+                    Padding="20,8"
+                    Background="{DynamicResource AccentBlueBrush}"
+                    Content="Yes"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

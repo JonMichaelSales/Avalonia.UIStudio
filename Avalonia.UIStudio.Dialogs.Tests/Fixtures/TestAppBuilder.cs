@@ -1,15 +1,13 @@
-// Fixtures/TestAppBuilder.cs
-using Avalonia;
-using Avalonia.UIStudio.Icons.Tests.Fixtures;
+﻿using Avalonia.UIStudio.Dialogs.Tests.Fixtures;
 using Avalonia.Headless;
 
 [assembly: AvaloniaTestApplication(typeof(TestAppBuilder))]
-namespace Avalonia.UIStudio.Icons.Tests.Fixtures
+namespace Avalonia.UIStudio.Dialogs.Tests.Fixtures
 {
     public class TestAppBuilder
     {
         public static AppBuilder BuildAvaloniaApp() =>
             AppBuilder.Configure<App>()
-                .UseHeadless(new AvaloniaHeadlessPlatformOptions());
+                      .UseHeadless(new AvaloniaHeadlessPlatformOptions());
     }
 }

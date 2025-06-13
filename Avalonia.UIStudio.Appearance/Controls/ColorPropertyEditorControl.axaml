@@ -1,0 +1,84 @@
+<UserControl
+    x:Class="Avalonia.UIStudio.Appearance.Controls.ColorEditorControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    xmlns:converters="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:Avalonia.UIStudio.Appearance.Model"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:ObjectToColorConverter x:Key="ObjectToColorConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/AppSkin.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <SimpleTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+
+        <Style Selector="TextBlock.Label">
+            <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+        </Style>
+        <Style Selector="Rectangle.ColorPreview">
+            <Setter Property="Width" Value="64" />
+            <Setter Property="Height" Value="32" />
+        </Style>
+    </UserControl.Styles>
+    <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="150" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="Label"
+                Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+
+            <TextBlock
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                IsVisible="{Binding Message, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Text="{Binding Message, FallbackValue=OK}"
+                Theme="{StaticResource CaptionTextBlockTheme}" />
+
+            <!--  Current Value  -->
+            <Rectangle Grid.Column="2" Classes="ColorPreview">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <!--  Color Picker  -->
+            <ColorPicker
+                Grid.Column="2"
+                IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
+                Color="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+
+            <!--  Suggested Value  -->
+            <Border
+                Grid.Column="3"
+                BorderBrush="Green"
+                BorderThickness="1">
+                <Rectangle Classes="ColorPreview">
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="{Binding SuggestedValue, Converter={StaticResource ObjectToColorConverter}}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Border>
+
+        </Grid>
+    </controls:ValidationDecorator>
+</UserControl>

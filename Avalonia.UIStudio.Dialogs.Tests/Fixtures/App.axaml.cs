@@ -1,6 +1,6 @@
 using Avalonia.Markup.Xaml;
 
-namespace Avalonia.UIStudio.Icons.Tests.Fixtures
+namespace Avalonia.UIStudio.Dialogs.Tests.Fixtures
 {
     public class App : Application
     {

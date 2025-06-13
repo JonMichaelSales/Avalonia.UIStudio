@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Avalonia.Accelerate.Icons;
-using Avalonia.Accelerate.Icons.Tests;
-using Avalonia.Accelerate.TestUtilities.Rendering;
+using Avalonia.UIStudio.Icons;
+using Avalonia.UIStudio.Icons.Tests;
+using Avalonia.UIStudio.TestUtilities.Rendering;
 using Avalonia.Headless.XUnit;
 using Avalonia.Media;
 using Xunit;
 
-namespace Avalonia.Accelerate.Icons.Tests
+namespace Avalonia.UIStudio.Icons.Tests
 {
     public class ApplicationIconsTests
     {

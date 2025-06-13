@@ -1,5 +1,5 @@
 <Application
-    x:Class="Avalonia.UIStudio.Icons.Tests.Fixtures.App"
+    x:Class="Avalonia.UIStudio.Dialogs.Tests.Fixtures.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Styles>

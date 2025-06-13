@@ -1,0 +1,147 @@
+<Window
+    x:Class="Avalonia.UIStudio.Dialogs.Dialogs.ErrorDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:Avalonia.UIStudio.Icons;assembly=Avalonia.UIStudio.Icons"
+    Title="Error"
+    Width="500"
+    Height="400"
+    MinWidth="400"
+    MinHeight="300"
+    MaxHeight="700"
+    Background="{DynamicResource BackgroundBrush}"
+    CanResize="True"
+    Icon="avares://Avalonia.UIStudio.Icons/Assets/jonBuilt.ico"
+    ShowInTaskbar="False"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Border
+            Grid.Row="0"
+            Padding="20,15"
+            Background="{DynamicResource ErrorBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path
+                    Width="24"
+                    Height="24"
+                    Data="{x:Static icons:ApplicationIcons.ErrorGeometry}"
+                    Fill="{DynamicResource TextPrimaryBrush}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    x:Name="TitleText"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Text="Error" />
+            </StackPanel>
+        </Border>
+
+        <!--  Content  -->
+        <StackPanel
+            Grid.Row="1"
+            Margin="20"
+            Spacing="15">
+
+            <!--  Main Message  -->
+            <TextBlock
+                x:Name="MessageText"
+                FontSize="14"
+                Foreground="{DynamicResource TextPrimaryBrush}"
+                TextWrapping="Wrap" />
+
+            <!--  Exception Details Expander  -->
+            <Expander
+                x:Name="ExceptionExpander"
+                Header="Technical Details"
+                IsVisible="False">
+                <Border
+                    Margin="0,10,0,0"
+                    Padding="12"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                    <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                        <TextBlock
+                            x:Name="ExceptionText"
+                            FontFamily="Consolas, Monaco, 'Courier New', monospace"
+                            FontSize="11"
+                            Foreground="{DynamicResource TextSecondaryBrush}"
+                            TextWrapping="Wrap" />
+                    </ScrollViewer>
+                </Border>
+            </Expander>
+
+            <!--  Help Text  -->
+            <Border
+                Padding="12"
+                Background="{DynamicResource BackgroundLightBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        FontSize="12"
+                        FontWeight="Medium"
+                        Foreground="{DynamicResource TextPrimaryBrush}"
+                        Text="What you can do:" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Try the operation again"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• Check if the file or resource is accessible"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Text="• If the problem persists, please report this error"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--  Footer  -->
+        <Border
+            Grid.Row="2"
+            Padding="20,15"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <Button
+                    x:Name="CopyButton"
+                    Padding="12,6"
+                    Background="{DynamicResource BackgroundLightBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    Content="Copy Details"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsVisible="False" />
+                <Button
+                    x:Name="CloseButton"
+                    Padding="12,6"
+                    Background="{DynamicResource AccentBlueBrush}"
+                    Content="Close"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
