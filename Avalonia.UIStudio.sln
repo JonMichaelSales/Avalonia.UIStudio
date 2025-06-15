@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Appearanc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Appearance.Tests", "Avalonia.UIStudio.Appearance.Tests\Avalonia.UIStudio.Appearance.Tests.csproj", "{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Icons.Tests", "Avalonia.Accelerate.Icon.Tests\Avalonia.UIStudio.Icons.Tests.csproj", "{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.TestUtilities", "Avalonia.UIStudio.TestUtilities\Avalonia.UIStudio.TestUtilities.csproj", "{32F6CAA0-2919-493C-A6BD-3C211FB41E94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Controls.Tests", "Avalonia.UIStudio.Controls.Tests\Avalonia.UIStudio.Controls.Tests.csproj", "{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}"
@@ -20,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Dialogs.Tests", "Avalonia.UIStudio.Dialogs.Tests\Avalonia.UIStudio.Dialogs.Tests.csproj", "{33044973-6EF5-32AA-9D8F-C5B1DF1DBF93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Driver", "Avalonia.UIStudio.Driver\Avalonia.UIStudio.Driver.csproj", "{89D0A7F9-BF09-4605-A215-A11A0F763A4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Icons.Tests", "Avalonia.UIStudio.Icon.Tests\Avalonia.UIStudio.Icons.Tests.csproj", "{6BAA13CA-4418-4298-947D-767D418E9486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78AA3BA4-F1DB-4A54-BE96-B7D5A1C64265}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23731EF4-E3AB-41A3-8E81-6B4D3EC8E178}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32F6CAA0-2919-493C-A6BD-3C211FB41E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32F6CAA0-2919-493C-A6BD-3C211FB41E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F6CAA0-2919-493C-A6BD-3C211FB41E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{89D0A7F9-BF09-4605-A215-A11A0F763A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89D0A7F9-BF09-4605-A215-A11A0F763A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89D0A7F9-BF09-4605-A215-A11A0F763A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BAA13CA-4418-4298-947D-767D418E9486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BAA13CA-4418-4298-947D-767D418E9486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BAA13CA-4418-4298-947D-767D418E9486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BAA13CA-4418-4298-947D-767D418E9486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
