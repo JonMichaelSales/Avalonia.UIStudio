@@ -7,6 +7,8 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <AssemblyName>Avalonia.UIStudio.Appearance.Controls.Tests</AssemblyName>
+        <RootNamespace>Avalonia.UIStudio.Appearance.Controls.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

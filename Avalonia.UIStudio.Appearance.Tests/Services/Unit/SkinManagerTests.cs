@@ -40,10 +40,7 @@ public class SkinManagerTests
         var skin = new Skin
         {
             Name = "TestSkin",
-            ControlThemeUris = new Dictionary<string, string>
-            {
-                { "FakeTheme", "avares://Avalonia.UIStudio.Appearance.Tests/TestAssets/FakeControlTheme.axaml" }
-            }
+            ControlThemeUris = ["avares://Avalonia.UIStudio.Appearance.Tests/TestAssets/FakeControlTheme.axaml"]
         };
 
         var skinManager = new SkinManager(new SkinLoaderService(), new ApplicationWrapper(Application.Current!));

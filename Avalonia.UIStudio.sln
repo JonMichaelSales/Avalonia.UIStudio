@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Icons.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.TestUtilities", "Avalonia.UIStudio.TestUtilities\Avalonia.UIStudio.TestUtilities.csproj", "{32F6CAA0-2919-493C-A6BD-3C211FB41E94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Controls", "Avalonia.UIStudio.Controls\Avalonia.UIStudio.Controls.csproj", "{C2D1E507-216A-476B-A247-7BBCFE59E746}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Controls.Tests", "Avalonia.UIStudio.Controls.Tests\Avalonia.UIStudio.Controls.Tests.csproj", "{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.UIStudio.Dialogs.Tests", "Avalonia.UIStudio.Dialogs.Tests\Avalonia.UIStudio.Dialogs.Tests.csproj", "{33044973-6EF5-32AA-9D8F-C5B1DF1DBF93}"
@@ -53,10 +51,6 @@ Global
 		{32F6CAA0-2919-493C-A6BD-3C211FB41E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F6CAA0-2919-493C-A6BD-3C211FB41E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32F6CAA0-2919-493C-A6BD-3C211FB41E94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2D1E507-216A-476B-A247-7BBCFE59E746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2D1E507-216A-476B-A247-7BBCFE59E746}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2D1E507-216A-476B-A247-7BBCFE59E746}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2D1E507-216A-476B-A247-7BBCFE59E746}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FC27EDA-11A2-4DBA-B9D5-14159D3FFBB0}.Release|Any CPU.ActiveCfg = Release|Any CPU

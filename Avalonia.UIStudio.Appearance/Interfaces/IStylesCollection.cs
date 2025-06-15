@@ -1,15 +1,13 @@
 ﻿using Avalonia.Styling;
 
-namespace Avalonia.UIStudio.Appearance.Interfaces
+namespace Avalonia.UIStudio.Appearance.Interfaces;
+
+/// <summary>
+/// </summary>
+public interface IStylesCollection : IEnumerable<IStyle>
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IStylesCollection : IEnumerable<IStyle>
-    {
-        void Add(IStyle style);
-        bool Remove(IStyle style);
-        void Clear();
-        int Count { get; }
-    }
+    int Count { get; }
+    void Add(IStyle style);
+    bool Remove(IStyle style);
+    void Clear();
 }

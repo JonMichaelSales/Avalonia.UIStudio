@@ -1,5 +1,5 @@
 // Fixtures/TestAppBuilder.cs
-using Avalonia;
+
 using Avalonia.UIStudio.Icons.Tests.Fixtures;
 using Avalonia.Headless;
 

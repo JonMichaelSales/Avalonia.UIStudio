@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Avalonia.UIStudio.Icons;
-using Avalonia.UIStudio.Icons.Tests;
-using Avalonia.UIStudio.TestUtilities.Rendering;
+﻿using Avalonia.UIStudio.TestUtilities.Rendering;
 using Avalonia.Headless.XUnit;
 using Avalonia.Media;
-using Xunit;
 
 namespace Avalonia.UIStudio.Icons.Tests
 {

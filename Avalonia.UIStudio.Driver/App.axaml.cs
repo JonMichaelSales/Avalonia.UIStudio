@@ -15,6 +15,7 @@ namespace Avalonia.UIStudio.Driver
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            this.AttachDevTools();
         }
 
         public override void OnFrameworkInitializationCompleted()

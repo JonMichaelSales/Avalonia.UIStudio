@@ -1,0 +1,48 @@
+<UserControl
+    x:Class="Avalonia.UIStudio.Appearance.Controls.EnumEditorControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    xmlns:converters="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Avalonia.UIStudio.Appearance.ViewModels"
+    x:DataType="viewModels:EnumPropertyViewModel"
+    mc:Ignorable="d">
+    <UserControl.Styles>
+        <SimpleTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+
+        <Style Selector="TextBlock.Label">
+            <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+        </Style>
+        <Style Selector="Rectangle.ColorPreview">
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="24" />
+        </Style>
+    </UserControl.Styles>
+    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+        <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
+            <Grid ColumnDefinitions="200,*">
+
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Classes="Label"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:EnumEditorControl}}" />
+
+
+                <ComboBox
+                    Grid.Column="1"
+                    MinWidth="200"
+                    DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:EnumEditorControl}}"
+                    ItemsSource="{Binding Value, Converter={x:Static converters:EnumValuesConverter.Instance}}"
+                    SelectedItem="{Binding Value, Mode=TwoWay}"
+                    Theme="{StaticResource PropertyGridComboBox}" />
+
+
+            </Grid>
+        </controls:ValidationDecorator>
+    </Border>
+</UserControl>

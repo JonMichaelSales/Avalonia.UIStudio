@@ -1,0 +1,15 @@
+<Window
+    x:Class="Avalonia.UIStudio.Appearance.Views.ModalEditorDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    Title="Edit Details"
+    Loaded="Control_OnLoaded"
+    Width="400"
+    Height="300">
+
+    <Grid Margin="12">
+        <!--  Replace this with an actual editor control  -->
+        <controls:PropertyGrid x:Name="PropertyGridMain" />
+    </Grid>
+</Window>

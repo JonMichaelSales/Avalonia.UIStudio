@@ -1,61 +1,50 @@
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using System.Collections.ObjectModel;
-using System.Reactive.Linq;
+using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.UIStudio.Appearance.Model;
 
-namespace Avalonia.UIStudio.Appearance.Controls
+namespace Avalonia.UIStudio.Appearance.Controls;
+
+public partial class FontFamilyEditorControl : ValidatableEditorControlBase<FontFamilyEditorControl>
 {
-    public partial class FontFamilyEditorControl : ValidatableEditorControlBase<FontFamilyEditorControl>
+    public static readonly StyledProperty<FontFamily> ValueProperty =
+        AvaloniaProperty.Register<FontFamilyEditorControl, FontFamily>(nameof(Value));
+
+    public static readonly StyledProperty<ObservableCollection<FontFamily>> AvailableFontFamiliesProperty =
+        AvaloniaProperty.Register<FontFamilyEditorControl, ObservableCollection<FontFamily>>(nameof(AvailableFontFamilies));
+
+    public static readonly StyledProperty<FontFamily?> SuggestedValueProperty =
+        AvaloniaProperty.Register<FontFamilyEditorControl, FontFamily?>(nameof(SuggestedValue));
+
+    public FontFamilyEditorControl()
     {
-       
-        public static readonly StyledProperty<string> ValueProperty =
-            AvaloniaProperty.Register<FontFamilyEditorControl, string>(nameof(Value));
+        InitializeComponent();
 
-        public string Value
-        {
-            get => GetValue(ValueProperty);
-            set => SetValue(ValueProperty, value);
-        }
+        // Default font family list � you can customize or load from FontManager
+        var fonts = FontManager.Current.SystemFonts.ToList();
+        AvailableFontFamilies = new ObservableCollection<FontFamily>();
+        foreach (var font in fonts) AvailableFontFamilies.Add(font.Name);
+    }
 
-        public static readonly StyledProperty<ObservableCollection<string>> AvailableFontFamiliesProperty =
-            AvaloniaProperty.Register<FontFamilyEditorControl, ObservableCollection<string>>(nameof(AvailableFontFamilies));
+    public FontFamily Value
+    {
+        get => GetValue(ValueProperty);
+        set => SetValue(ValueProperty, value);
+    }
 
-        public ObservableCollection<string> AvailableFontFamilies
-        {
-            get => GetValue(AvailableFontFamiliesProperty);
-            set => SetValue(AvailableFontFamiliesProperty, value);
-        }
+    public ObservableCollection<FontFamily> AvailableFontFamilies
+    {
+        get => GetValue(AvailableFontFamiliesProperty);
+        set => SetValue(AvailableFontFamiliesProperty, value);
+    }
 
-        public static readonly StyledProperty<object?> SuggestedValueProperty =
-            AvaloniaProperty.Register<FontFamilyEditorControl, object?>(nameof(SuggestedValue));
+    public FontFamily? SuggestedValue
+    {
+        get => GetValue(SuggestedValueProperty);
+        set => SetValue(SuggestedValueProperty, value);
+    }
 
-        public object? SuggestedValue
-        {
-            get => GetValue(SuggestedValueProperty);
-            set => SetValue(SuggestedValueProperty, value);
-        }
-
-        public FontFamilyEditorControl()
-        {
-            InitializeComponent();
-
-            // Default font family list � you can customize or load from FontManager
-            var fonts = FontManager.Current.SystemFonts.ToList();
-            AvailableFontFamilies = new ObservableCollection<string>();
-            foreach (var font in fonts)
-            {
-                AvailableFontFamilies.Add(font.Name);
-            }
-            
-
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

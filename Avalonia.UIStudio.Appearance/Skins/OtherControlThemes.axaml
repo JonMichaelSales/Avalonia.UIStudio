@@ -322,10 +322,12 @@
             <Style.Animations>
                 <Animation IterationCount="Infinite" Duration="0:0:2">
                     <KeyFrame Cue="0%">
-                        <Setter Property="TranslateTransform.X" Value="{Binding $parent[ProgressBar].TemplateSettings.ContainerAnimationStartPosition}" />
+                        <Setter Property="TranslateTransform.X"
+                                Value="{Binding $parent[ProgressBar].TemplateSettings.ContainerAnimationStartPosition}" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="TranslateTransform.X" Value="{Binding $parent[ProgressBar].TemplateSettings.ContainerAnimationEndPosition}" />
+                        <Setter Property="TranslateTransform.X"
+                                Value="{Binding $parent[ProgressBar].TemplateSettings.ContainerAnimationEndPosition}" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>

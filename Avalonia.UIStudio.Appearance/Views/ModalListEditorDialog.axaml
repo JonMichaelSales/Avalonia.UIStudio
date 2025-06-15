@@ -1,0 +1,44 @@
+<Window
+    x:Class="Avalonia.UIStudio.Appearance.Views.ModalListEditorDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    Title="Edit List"
+    Width="500"
+    Height="500">
+
+    <StackPanel Margin="10" Spacing="6">
+        <ItemsControl ItemsSource="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <ContentControl>
+                            <ContentControl.Content>
+                                <TextBox
+                                    Width="300"
+                                    IsVisible="{Binding !IsStringList}"
+                                    Text="{Binding ., Mode=TwoWay}" />
+                            </ContentControl.Content>
+                        </ContentControl>
+
+                        <Button
+                            Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding .}"
+                            Content="Remove" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--  Object editor fallback (e.g. PropertyGrid)  -->
+
+
+        <StackPanel
+            Margin="0,10,0,0"
+            Orientation="Horizontal"
+            Spacing="10">
+            <Button Command="{Binding AddCommand}" Content="Add" />
+            <Button Command="{Binding CloseCommand}" Content="OK" />
+        </StackPanel>
+    </StackPanel>
+</Window>

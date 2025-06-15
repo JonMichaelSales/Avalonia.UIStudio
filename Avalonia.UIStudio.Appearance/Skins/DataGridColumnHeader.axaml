@@ -20,7 +20,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -47,7 +47,7 @@
                                 Margin="4,0,8,0"
                                 VerticalAlignment="Center"
                                 IsVisible="False">
-                                
+
                                 <!-- Ascending Arrow -->
                                 <Path
                                     Name="SortAscending"

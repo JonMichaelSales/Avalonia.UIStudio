@@ -1,0 +1,50 @@
+<UserControl
+    x:Class="Avalonia.UIStudio.Appearance.Controls.ThicknessEditorControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Styles>
+        <SimpleTheme />
+        <Style Selector="TextBlock.Label">
+            <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+        <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
+            <Grid ColumnDefinitions="200,*">
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Classes="Label"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+
+                <!--  Static View Mode  -->
+                <TextBlock
+                    Grid.Column="1"
+                    Width="200"
+                    VerticalAlignment="Center"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    IsVisible="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}"
+                    Text="{Binding ValueString, StringFormat='L:{0.Left}, T:{0.Top}, R:{0.Right}, B:{0.Bottom}', RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+
+                <!--  Edit Mode  -->
+                <StackPanel
+                    Grid.Column="1"
+                    IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}"
+                    Orientation="Horizontal"
+                    Spacing="4">
+                    <NumericUpDown Width="50" Value="{Binding Value.Left, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <NumericUpDown Width="50" Value="{Binding Value.Top, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <NumericUpDown Width="50" Value="{Binding Value.Right, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <NumericUpDown Width="50" Value="{Binding Value.Bottom, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                </StackPanel>
+            </Grid>
+        </controls:ValidationDecorator>
+    </Border>
+</UserControl>

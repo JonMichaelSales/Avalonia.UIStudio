@@ -3,10 +3,9 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
-    xmlns:converters="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="clr-namespace:Avalonia.UIStudio.Appearance.Model"
+    Margin="0"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,54 +17,28 @@
     </UserControl.Resources>
     <UserControl.Styles>
         <SimpleTheme />
-
         <Style Selector="TextBlock.Label">
             <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
         </Style>
     </UserControl.Styles>
-
-    <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="150" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock
-                Grid.Column="0"
-                VerticalAlignment="Center"
-                Classes="Label"
-                Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}" />
-
-            <TextBlock
-                Grid.Column="1"
-                VerticalAlignment="Center"
-                IsVisible="{Binding Message, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=OK}"
-                Text="{Binding Message, FallbackValue=OK}"
-                Theme="{StaticResource CaptionTextBlockTheme}" />
-
-            <NumericUpDown
-                Grid.Column="2"
-                FontSize="{StaticResource FontSizeSmall}"
-                IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
-                Maximum="{Binding Maximum, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
-                Minimum="{Binding Minimum, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
-                Value="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}" />
-
-            <!--  Suggested Value text (if present)  -->
-            <TextBlock
-                Grid.Column="3"
-                Margin="10,0"
-                VerticalAlignment="Center"
-                FontSize="11"
-                Foreground="Orange"
-                IsVisible="{Binding SuggestedValue, Converter={x:Static ObjectConverters.IsNotNull}}"
-                Text="{Binding SuggestedValue}" />
-        </Grid>
-    </controls:ValidationDecorator>
+    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+        <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
+            <Grid ColumnDefinitions="200,*">
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Classes="Label"
+                    FontSize="{StaticResource FontSizeLabel}"
+                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}, FallbackValue=LabelText}" />
+                <NumericUpDown
+                    Grid.Column="1"
+                    MinWidth="200"
+                    FontSize="{StaticResource FontSizeLabel}"
+                    IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
+                    Maximum="{Binding Maximum, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
+                    Minimum="{Binding Minimum, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
+                    Value="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}" />
+            </Grid>
+        </controls:ValidationDecorator>
+    </Border>
 </UserControl>

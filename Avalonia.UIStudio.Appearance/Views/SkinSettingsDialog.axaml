@@ -12,7 +12,7 @@
     Title="Skin Settings"
     x:DataType="viewModels:SkinSettingsViewModel"
     Background="{DynamicResource BackgroundBrush}"
-    Icon="avares://Avalonia.UIStudio.Icons/Assets/jonBuilt.ico"
+    Icon="avares://Avalonia.UIStudio.Icons/Assets/a_blue.ico"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
@@ -21,7 +21,7 @@
             <converters:BoolToEditModeContentConverter x:Key="BoolToEditModeContentConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/AppSkin.axaml" />
-                <!--<ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ValidationDecorator.axaml" />-->
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -299,16 +299,15 @@
                                     </Border.Styles>
                                     <!--  General Info  -->
                                     <StackPanel Spacing="15">
-                                    
-                                    
-                                    
+
+
                                         <Expander>
                                             <Expander.Header>
                                                 <TextBlock Text="General Info" Theme="{StaticResource SectionHeaderTheme}" />
                                             </Expander.Header>
                                             <Expander.Content>
                                                 <StackPanel>
-                                                    <TextBlock FontWeight="Bold" Text="General Info" />
+
                                                     <controls:TextEditorControl
                                                         IsEditMode="{Binding IsEditMode}"
                                                         Label="Name"
@@ -324,16 +323,16 @@
                                                 </StackPanel>
                                             </Expander.Content>
                                         </Expander>
-                                    
-                                    <!--  Color Palette  -->
-                                    
+
+                                        <!--  Color Palette  -->
+
                                         <Expander>
                                             <Expander.Header>
                                                 <TextBlock Text="Color Palette" Theme="{StaticResource SectionHeaderTheme}" />
                                             </Expander.Header>
                                             <Expander.Content>
                                                 <StackPanel>
-                                                    <TextBlock FontWeight="Bold" Text="Color Palette" />
+
                                                     <controls:ColorEditorControl
                                                         DataContext="{Binding ValidatedProperties[PrimaryColor]}"
                                                         IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
@@ -407,16 +406,16 @@
                                                 </StackPanel>
                                             </Expander.Content>
                                         </Expander>
-                                    
-                                    <!--  Typography Section  -->
-                                    
+
+                                        <!--  Typography Section  -->
+
                                         <Expander>
                                             <Expander.Header>
                                                 <TextBlock Text="Typography" Theme="{StaticResource SectionHeaderTheme}" />
                                             </Expander.Header>
                                             <Expander.Content>
                                                 <StackPanel>
-                                                    <TextBlock FontWeight="Bold" Text="Typography" />
+
                                                     <controls:FontFamilyEditorControl
                                                         DataContext="{Binding ValidatedProperties[FontFamily]}"
                                                         Label="Font Family"
@@ -457,9 +456,9 @@
                                                 </StackPanel>
                                             </Expander.Content>
                                         </Expander>
-                                    
-                                    <!--  Borders  -->
-                                    
+
+                                        <!--  Borders  -->
+
                                         <Expander>
                                             <Expander.Header>
                                                 <TextBlock Text="Borders" Theme="{StaticResource SectionHeaderTheme}" />
@@ -530,7 +529,7 @@
                                 </Border>
                             </StackPanel>
                             <!--  Validation Summary  -->
-                        <ItemsControl x:Name="ErrorsItemControl" ItemsSource="{Binding Errors}">
+                            <ItemsControl x:Name="ErrorsItemControl" ItemsSource="{Binding Errors}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Foreground="Red" Text="{Binding}" />

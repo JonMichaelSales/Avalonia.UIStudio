@@ -1,4 +1,3 @@
-<!--  Themes/AppTheme.axaml  -->
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorTheme.axaml" />

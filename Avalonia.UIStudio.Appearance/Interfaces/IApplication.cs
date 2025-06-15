@@ -1,12 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 
-namespace Avalonia.UIStudio.Appearance.Interfaces
+namespace Avalonia.UIStudio.Appearance.Interfaces;
+
+public interface IApplication
 {
-    public interface IApplication
-    {
-        IResourceDictionary Resources { get; }
-        IApplicationLifetime? ApplicationLifetime { get; }
-        IStylesCollection AppStyles { get; }
-    }
+    IResourceDictionary Resources { get; }
+    IApplicationLifetime? ApplicationLifetime { get; }
+    IStylesCollection AppStyles { get; }
 }

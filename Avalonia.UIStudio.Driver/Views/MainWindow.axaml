@@ -11,7 +11,7 @@
     x:DataType="vm:MainWindowViewModel"
     Background="{DynamicResource BackgroundBrush}"
     CanResize="True"
-    Icon="avares://Avalonia.UIStudio.Icons/Assets/jonBuilt.ico"
+    Icon="avares://Avalonia.UIStudio.Icons/Assets/a_blue.ico"
     SizeToContent="Height">
 
     <Grid>
@@ -73,6 +73,17 @@
                                 Fill="{DynamicResource TextPrimaryBrush}"
                                 Stretch="Uniform" />
                             <TextBlock Text="Skin Settings" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenPropertyGridWindowCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="{x:Static icons:ApplicationIcons.SettingsGeometry}"
+                                Fill="{DynamicResource TextPrimaryBrush}"
+                                Stretch="Uniform" />
+                            <TextBlock Text="Property Grid" />
                         </StackPanel>
                     </Button>
                 </StackPanel>

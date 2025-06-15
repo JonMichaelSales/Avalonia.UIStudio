@@ -6,6 +6,7 @@
     xmlns:converters="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Margin="0"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -24,60 +25,36 @@
             <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
         </Style>
         <Style Selector="Rectangle.ColorPreview">
-            <Setter Property="Width" Value="64" />
-            <Setter Property="Height" Value="32" />
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="24" />
         </Style>
     </UserControl.Styles>
-    <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="150" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock
-                Grid.Column="0"
-                VerticalAlignment="Center"
-                Classes="Label"
-                Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
-
-            <TextBlock
-                Grid.Column="1"
-                VerticalAlignment="Center"
-                IsVisible="{Binding Message, Converter={x:Static ObjectConverters.IsNotNull}}"
-                Text="{Binding Message, FallbackValue=OK}"
-                Theme="{StaticResource CaptionTextBlockTheme}" />
-
-            <!--  Current Value  -->
-            <Rectangle Grid.Column="2" Classes="ColorPreview">
-                <Rectangle.Fill>
-                    <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
-                </Rectangle.Fill>
-            </Rectangle>
-
-            <!--  Color Picker  -->
-            <ColorPicker
-                Grid.Column="2"
-                IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
-                Color="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
-
-            <!--  Suggested Value  -->
-            <Border
-                Grid.Column="3"
-                BorderBrush="Green"
-                BorderThickness="1">
-                <Rectangle Classes="ColorPreview">
+    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+        <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
+            <Grid ColumnDefinitions="200,*">
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Classes="Label"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+                <!--  Current Value  -->
+                <Rectangle
+                    Grid.Column="1"
+                    MinWidth="200"
+                    Classes="ColorPreview">
                     <Rectangle.Fill>
-                        <SolidColorBrush Color="{Binding SuggestedValue, Converter={StaticResource ObjectToColorConverter}}" />
+                        <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
                     </Rectangle.Fill>
                 </Rectangle>
-            </Border>
-
-        </Grid>
-    </controls:ValidationDecorator>
+                <!--  Color Picker  -->
+                <ColorPicker
+                    Grid.Column="1"
+                    MinWidth="200"
+                    FontSize="{DynamicResource FontSizeSmall}"
+                    IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
+                    Color="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+            </Grid>
+        </controls:ValidationDecorator>
+    </Border>
 </UserControl>

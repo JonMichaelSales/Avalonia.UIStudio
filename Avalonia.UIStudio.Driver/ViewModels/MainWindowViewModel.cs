@@ -11,6 +11,7 @@ using Avalonia.UIStudio.Appearance.ViewModels;
 using Avalonia.UIStudio.Appearance.Views;
 using Avalonia.UIStudio.Dialogs.Interfaces;
 using Avalonia.UIStudio.Dialogs.Services;
+using Avalonia.UIStudio.Driver.Views;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 
@@ -83,6 +84,7 @@ namespace Avalonia.UIStudio.Driver.ViewModels
         /// Command to open the skin settings dialog
         /// </summary>
         public ReactiveCommand<Unit, Unit> OpenSkinSettingsCommand { get; private set; } = null!;
+        public ReactiveCommand<Unit, Unit> OpenPropertyGridWindowCommand { get; private set; } = null!;
 
         /// <summary>
         /// Command to show an information dialog
@@ -134,6 +136,7 @@ namespace Avalonia.UIStudio.Driver.ViewModels
         private void InitializeCommands()
         {
             OpenSkinSettingsCommand = ReactiveCommand.CreateFromTask(OpenSkinSettingsAsync);
+            OpenPropertyGridWindowCommand =ReactiveCommand.CreateFromTask(OpenPropertyGridWindowAsync);
             ShowInfoDialogCommand = ReactiveCommand.CreateFromTask(ShowInfoDialogAsync);
             ShowWarningDialogCommand = ReactiveCommand.CreateFromTask(ShowWarningDialogAsync);
             ShowErrorDialogCommand = ReactiveCommand.CreateFromTask(ShowErrorDialogAsync);
@@ -209,6 +212,34 @@ namespace Avalonia.UIStudio.Driver.ViewModels
             {
                 _logger.LogError(ex, "Failed to open skin settings dialog");
                 await ShowErrorAsync("Settings Error", "Failed to open skin settings dialog", ex);
+            }
+        }
+        
+        private async Task OpenPropertyGridWindowAsync()
+        {
+            try
+            {
+                
+                _logger.LogDebug("Opening property grid window");
+
+                PropertyGridWindow propertyGridWindow = new PropertyGridWindow(_skinManager.CurrentSkin);
+                
+
+                if (GetMainWindow() is { } mainWindow)
+                {
+                    await propertyGridWindow.ShowDialog(mainWindow);
+                }
+                else
+                {
+                    propertyGridWindow.Show((Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime).MainWindow);
+                }
+
+                _logger.LogInformation("Property grid window closed");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to open property grid window");
+                await ShowErrorAsync("Property Grid Error", "Failed to open property grid window", ex);
             }
         }
 

@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Media.Imaging;
-using Avalonia.VisualTree;
-using Avalonia.Platform;
-using Avalonia.Skia;
-using Avalonia.Layout;
-
 
 
 namespace Avalonia.UIStudio.TestUtilities.Rendering

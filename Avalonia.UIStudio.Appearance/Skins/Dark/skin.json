@@ -1,45 +1,37 @@
 {
-  "Description": "Auto-converted theme with ControlThemes",
-  "Version": "1.0",
-  "Author": "System",
-  "CreatedDate": "2025-05-31T11:09:01.842464",
-  "FontFamily": "Segoe UI, San Francisco, Helvetica, Arial, sans-serif",
-  "FontSizeSmall": 11,
-  "FontSizeMedium": 12,
-  "FontSizeLarge": 14,
-  "FontWeight": "Normal",
-  "BorderRadius": 3,
-  "BorderThickness": {
-    "Left": 1,
-    "Top": 1,
-    "Right": 1,
-    "Bottom": 1
+  "name": "Dark",
+  "description": "",
+  "version": "1.0",
+  "author": "",
+  "createdDate": "2025-06-12T07:35:54.6021258-07:00",
+  "primaryColor": "#ff2c313d",
+  "secondaryColor": "#ff3d4654",
+  "accentColor": "#ff3498db",
+  "primaryBackground": "#ff222831",
+  "secondaryBackground": "#ff464f62",
+  "primaryTextColor": "White",
+  "secondaryTextColor": "#ffbbcde5",
+  "borderColor": "#ff8cb7de",
+  "errorColor": "#ffff5442",
+  "warningColor": "#fff39c12",
+  "successColor": "#ff2ecc71",
+  "fontFamily": "Segoe UI",
+  "fontSizeSmall": 12,
+  "fontSizeMedium": 14,
+  "fontSizeLarge": 20,
+  "fontWeight": "Normal",
+  "borderRadius": 3,
+  "borderThickness": {
+    "left": 1,
+    "top": 1,
+    "right": 1,
+    "bottom": 1
   },
-  "PrimaryColor": "#2C313D",
-  "SecondaryColor": "#3D4654",
-  "AccentColor": "#3498DB",
-  "PrimaryBackground": "#222831",
-  "SecondaryBackground": "#464F62",
-  "PrimaryTextColor": "#FFFFFF",
-  "SecondaryTextColor": "#BBCDE5",
-  "BorderColor": "#5D6778",
-  "ErrorColor": "#E74C3C",
-  "WarningColor": "#F39C12",
-  "SuccessColor": "#2ECC71",
-  "Name": "Dark",
-
-  "BaseTheme": "",
-
-  "ControlThemes": [
+  "ControlThemeUris": [
     "ControlThemes/TextBlock.axaml",
     "ControlThemes/Button.axaml"
   ],
-
-  "Assets": {
-    "Logo": "ControlThemes/Assets/jackrabbit.png"
-  },
-
-  "AdvancedTypography": {
+  "Typography": {
     "DisplayLarge": 57,
     "DisplayMedium": 45,
     "DisplaySmall": 36,
@@ -61,7 +53,9 @@
     "LineHeight": 1.5,
     "LetterSpacing": 0,
     "EnableLigatures": true
-  }
-
+  },
+  "AssetUris": [
+    "ControlThemes/Assets/jackrabbit.png"
+  ]
 
 }

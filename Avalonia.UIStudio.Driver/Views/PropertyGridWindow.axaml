@@ -1,0 +1,33 @@
+<Window
+    x:Class="Avalonia.UIStudio.Driver.Views.PropertyGridWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls;assembly=Avalonia.UIStudio.Appearance"
+    xmlns:controls1="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="clr-namespace:ReactiveUI;assembly=ReactiveUI"
+    xmlns:views="clr-namespace:Avalonia.UIStudio.Driver.Views"
+    Title="PropertyGridWindow"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="views:PropertyGridWindow"
+    Icon="avares://Avalonia.UIStudio.Icons/Assets/a_blue.ico"
+    Loaded="Control_OnLoaded"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorTheme.axaml" />
+                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/CustomThemes.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!--  Include the skin manager ControlTheme resources  -->
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Styles>
+        <SimpleTheme />
+        <SimpleTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+    </Window.Styles>
+    <StackPanel x:Name="MainPanel" HorizontalAlignment="Center" />
+</Window>
