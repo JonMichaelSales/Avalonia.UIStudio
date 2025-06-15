@@ -13,6 +13,7 @@
                 <TextBlock
                     Grid.Column="0"
                     VerticalAlignment="Center"
+                    Theme="{StaticResource StatsTitleTheme}"
                     FontSize="{DynamicResource FontSizeLabel}"
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ModalEditorLauncherControl}}" />
 

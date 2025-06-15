@@ -3,7 +3,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
-    xmlns:converters1="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Avalonia.UIStudio.Appearance.Model"
@@ -63,20 +62,20 @@
                 Label="{Binding DisplayName}"
                 Value="{Binding Value}" />
         </DataTemplate>
-        <DataTemplate DataType="model:TypographyScale">
-            <controls:ModalEditorLauncherControl
-                IsEditMode="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}"
-                Label="{Binding DisplayName}"
-                Value="{Binding Value}" />
-        </DataTemplate>
+        <!-- <DataTemplate DataType="model:TypographyScale"> -->
+        <!--     <controls:ModalEditorLauncherControl -->
+        <!--         IsEditMode="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}" -->
+        <!--         Label="{Binding DisplayName}" -->
+        <!--         Value="{Binding Value}" /> -->
+        <!-- </DataTemplate> -->
         <DataTemplate DataType="viewModels:StringListPropertyViewModel">
-            <controls:ModalEditorLauncherControl
+            <controls:ModalListEditorLauncherControl
                 IsEditMode="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}"
                 Label="{Binding DisplayName}"
                 Value="{Binding Value}" />
         </DataTemplate>
         <DataTemplate DataType="viewModels:ObjectListPropertyViewModel">
-            <views:ModalListEditorDialog
+            <controls:ModalListEditorLauncherControl
                 IsEditMode="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}"
                 Label="{Binding DisplayName}"
                 Value="{Binding Value}" />

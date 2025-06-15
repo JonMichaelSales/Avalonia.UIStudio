@@ -267,7 +267,7 @@
         <Setter Property="Padding" Value="16,8" />
         <Setter Property="MinWidth" Value="120" />
         <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}" />
-        <Setter Property="FontWeight" Value="Medium" />
+        
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Transitions">
@@ -304,6 +304,13 @@
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             <Setter Property="Opacity" Value="0.9" />
         </Style>
+    </ControlTheme>
+    
+    <ControlTheme x:Key="SquareOutlineButton" TargetType="Button" BasedOn="{StaticResource OutlineButtonTheme}">
+        <Setter Property="CornerRadius" Value="0,0,0,0" />
+        <Setter Property="Padding" Value="16,0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
     </ControlTheme>
 
     <!--  Ghost Button Theme  -->

@@ -10,6 +10,7 @@
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Expander.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TabControl.Theme.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TextBox.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/OtherControlThemes.axaml" />
 
         <!--  New Themes  -->
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Window.Theme.axaml" />

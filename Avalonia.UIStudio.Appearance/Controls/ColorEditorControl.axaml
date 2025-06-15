@@ -41,7 +41,8 @@
                 <!--  Current Value  -->
                 <Rectangle
                     Grid.Column="1"
-                    MinWidth="200"
+                    Width="60"
+                    IsVisible="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
                     Classes="ColorPreview">
                     <Rectangle.Fill>
                         <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
@@ -50,7 +51,7 @@
                 <!--  Color Picker  -->
                 <ColorPicker
                     Grid.Column="1"
-                    MinWidth="200"
+                    Width="60"
                     FontSize="{DynamicResource FontSizeSmall}"
                     IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
                     Color="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />

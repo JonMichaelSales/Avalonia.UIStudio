@@ -32,9 +32,9 @@
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}, FallbackValue=LabelText}" />
                 <NumericUpDown
                     Grid.Column="1"
-                    MinWidth="200"
+                    Width="200"
                     FontSize="{StaticResource FontSizeLabel}"
-                    IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
+                    IsReadOnly="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
                     Maximum="{Binding Maximum, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
                     Minimum="{Binding Minimum, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
                     Value="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}" />

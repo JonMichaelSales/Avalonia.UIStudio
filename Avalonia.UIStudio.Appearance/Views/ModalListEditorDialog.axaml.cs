@@ -8,6 +8,7 @@ public partial class ModalListEditorDialog : Window
     {
         DataContext = list;
         InitializeComponent();
+        ItemsControlMain.ItemsSource = list;
     }
 
 }

@@ -21,6 +21,7 @@
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     Classes="Label"
+                    Theme="{StaticResource StatsTitleTheme}"
                     FontSize="{DynamicResource FontSizeLabel}"
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
 
@@ -38,11 +39,17 @@
                     Grid.Column="1"
                     IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}"
                     Orientation="Horizontal"
-                    Spacing="4">
-                    <NumericUpDown Width="50" Value="{Binding Value.Left, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
-                    <NumericUpDown Width="50" Value="{Binding Value.Top, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
-                    <NumericUpDown Width="50" Value="{Binding Value.Right, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
-                    <NumericUpDown Width="50" Value="{Binding Value.Bottom, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    >
+                    <StackPanel.Styles>
+                        <Style Selector="NumericUpDown" >
+                            <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
+                            <Setter Property="Margin" Value="0,0,0,0" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <NumericUpDown Value="{Binding Value.Left, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <NumericUpDown Value="{Binding Value.Top, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <NumericUpDown Value="{Binding Value.Right, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <NumericUpDown Value="{Binding Value.Bottom, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
                 </StackPanel>
             </Grid>
         </controls:ValidationDecorator>

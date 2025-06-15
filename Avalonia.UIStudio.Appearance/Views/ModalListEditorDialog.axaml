@@ -8,7 +8,7 @@
     Height="500">
 
     <StackPanel Margin="10" Spacing="6">
-        <ItemsControl ItemsSource="{Binding Items}">
+        <ItemsControl x:Name="ItemsControlMain" ItemsSource="{Binding Items}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Spacing="4">
