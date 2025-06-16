@@ -1,4 +1,4 @@
-<img src="docs/logo.png" alt="Avalonia.Accelerate.Appearance" width="300" />
+
 
 # 🎨 Avalonia.Accelerate.Appearance
 

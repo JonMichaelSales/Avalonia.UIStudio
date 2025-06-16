@@ -20,10 +20,17 @@
         <Style Selector="TextBlock.Label">
             <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
         </Style>
+      <Style Selector="NumericUpDown">
+            <Setter Property="Padding" Value="0" />
+      </Style>
     </UserControl.Styles>
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid ColumnDefinitions="200,*">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="200" Width="*" />
+                <ColumnDefinition MinWidth="200" Width="Auto" />
+              </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
                     VerticalAlignment="Center"
@@ -32,7 +39,8 @@
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}, FallbackValue=LabelText}" />
                 <NumericUpDown
                     Grid.Column="1"
-                    Width="200"
+                    HorizontalAlignment="Right"
+                    MinWidth="100"
                     FontSize="{StaticResource FontSizeLabel}"
                     IsReadOnly="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"
                     Maximum="{Binding Maximum, RelativeSource={RelativeSource AncestorType=controls:NumericEditorControl}}"

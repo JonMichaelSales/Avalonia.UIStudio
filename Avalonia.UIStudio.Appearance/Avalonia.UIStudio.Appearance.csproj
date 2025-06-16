@@ -8,7 +8,7 @@
     <Title>Avalonia.UIStudio.Appearance</Title>
     <Authors>Jon M. Sales</Authors>
     <Description>A skin manager library with import/export service and ADA skin validation. 20 built-in skins.</Description>
-    <PackageIcon>docs\logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -18,21 +18,13 @@
     <ApplicationIcon>a_blue.ico</ApplicationIcon>
   </PropertyGroup>
 
-
   <ItemGroup>
-    <None Remove="Skins\Dark\ControlThemes\Assets\jackrabbit.png" />
-    <None Update="jonBuiltTransparentBack.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Update="docs\logo.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Update="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    
+    <Content Include="jonBuiltTransparentBack.png" Pack="true" PackagePath="" />
+    <Content Include="docs\logo.png" Pack="true" PackagePath="">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
@@ -91,6 +83,13 @@
       <DependentUpon>PropertyGrid.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="docs\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

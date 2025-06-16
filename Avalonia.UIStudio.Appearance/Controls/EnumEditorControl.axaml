@@ -23,7 +23,11 @@
     </UserControl.Styles>
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid ColumnDefinitions="200,*">
+            <Grid >
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="200" Width="*" />
+                <ColumnDefinition MinWidth="200" Width="Auto" />
+              </Grid.ColumnDefinitions>
 
                 <TextBlock
                     Grid.Column="0"
@@ -35,10 +39,12 @@
 
                 <ComboBox
                     Grid.Column="1"
-                    MinWidth="200"
+                    MinWidth="120"
+                    HorizontalAlignment="Right"
                     DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:EnumEditorControl}}"
                     ItemsSource="{Binding Value, Converter={x:Static converters:EnumValuesConverter.Instance}}"
                     SelectedItem="{Binding Value, Mode=TwoWay}"
+                    FontSize="{DynamicResource FontSizeLabel}"
                     Theme="{StaticResource PropertyGridComboBox}" />
 
 

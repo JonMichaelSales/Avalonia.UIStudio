@@ -8,10 +8,10 @@
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource AccentBlueBrush}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="CornerRadius" Value="0" />
         <Setter Property="MinWidth" Value="120" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeLabel}" />
-        <Setter Property="Padding" Value="5,2" />
+        <Setter Property="Padding" Value="5,1" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
         <Setter Property="Template">
@@ -251,7 +251,7 @@
         </Style>
     </ControlTheme>
     <ControlTheme x:Key="PropertyGridComboBox" TargetType="ComboBox">
-        <Setter Property="Padding" Value="{DynamicResource ComboBoxPadding}" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="MaxDropDownHeight" Value="504" />
         <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
@@ -261,7 +261,7 @@
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="MinHeight" Value="{DynamicResource ComboBoxMinHeight}" />
+        
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -281,7 +281,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}" />
+                            CornerRadius="0" />
                         <Border
                             x:Name="HighlightBackground"
                             Grid.Column="0"
@@ -289,7 +289,7 @@
                             Background="{DynamicResource BackgroundLightBrush}"
                             BorderBrush="{DynamicResource BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}"
+                            CornerRadius="0"
                             IsVisible="False" />
                         <TextBlock
                             x:Name="PlaceholderTextBlock"
@@ -432,7 +432,51 @@
         </Style>
 
     </ControlTheme>
-
+  <!--<ControlTheme x:Key="{x:Type NumericUpDown}"
+                 TargetType="NumericUpDown">
+    <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+    <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <ButtonSpinner Name="PART_Spinner"
+                         HorizontalContentAlignment="Stretch"
+                         VerticalContentAlignment="Stretch"
+                         IsTabStop="False"
+                         Padding="0"
+                         FontSize="{DynamicResource FontSizeSmall"
+                         MinWidth="0"
+                         AllowSpin="{TemplateBinding AllowSpin}"
+                         Background="{TemplateBinding Background}"
+                         BorderBrush="{TemplateBinding BorderBrush}"
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}"
+                         CornerRadius="{TemplateBinding CornerRadius}"
+                         ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}">
+            <TextBox Name="PART_TextBox"
+                     MinWidth="20"
+                     Margin="2,0"
+                     Padding="{TemplateBinding Padding}"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                     AcceptsReturn="False"
+                     Background="{TemplateBinding Background}"
+                     BorderThickness="0"
+                     IsReadOnly="{TemplateBinding IsReadOnly}"
+                     Text="{TemplateBinding Text}"
+                     TextAlignment="{TemplateBinding TextAlignment}"
+                     TextWrapping="NoWrap"
+                     Watermark="{TemplateBinding Watermark}"
+                     InnerLeftContent="{Binding InnerLeftContent, RelativeSource={RelativeSource TemplatedParent}}"
+                     InnerRightContent="{Binding InnerRightContent, RelativeSource={RelativeSource TemplatedParent}}"/>
+          </ButtonSpinner>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>-->
 
     <Design.PreviewWith>
         <StackPanel>
