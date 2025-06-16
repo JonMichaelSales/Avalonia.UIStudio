@@ -23,7 +23,11 @@
     </UserControl.Styles>
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid ColumnDefinitions="200,*">
+            <Grid >
+                            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="200" Width="*" />
+                <ColumnDefinition MinWidth="200" Width="Auto" />
+              </Grid.ColumnDefinitions>
                 <Grid.Styles>
                     <Style Selector="TextBlock.Label">
                         <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
@@ -40,7 +44,8 @@
 
                 <TextBox
                     Grid.Column="1"
-                    MinWidth="200"
+                    MinWidth="120"
+                    HorizontalAlignment="Right"
                     FontSize="{StaticResource FontSizeLabel}"
                     IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:TextEditorControl}}"
                     Text="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:TextEditorControl}}"

@@ -31,30 +31,48 @@
     </UserControl.Styles>
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid ColumnDefinitions="200,*">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="200" Width="Auto" />
+                <ColumnDefinition MinWidth="200" Width="Auto" />
+              </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
+                    
                     VerticalAlignment="Center"
                     Classes="Label"
                     FontSize="{DynamicResource FontSizeLabel}"
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
                 <!--  Current Value  -->
+              <Grid Grid.Column="1" ColumnDefinitions="*,Auto,Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Rectangle Grid.Column="0" />
+                            
+                <TextBlock
+                  Grid.Column="1"
+                      Text="{Binding Value, Converter={StaticResource ObjectToColorConverter}, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
+                      Width="75"
+                      FontSize="{DynamicResource FontSizeSmall}"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center" />
+                
+                
                 <Rectangle
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Width="60"
                     IsVisible="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
                     Classes="ColorPreview">
-                    <Rectangle.Fill>
-                        <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
-                    </Rectangle.Fill>
+                  <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+                  </Rectangle.Fill>
                 </Rectangle>
                 <!--  Color Picker  -->
                 <ColorPicker
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Width="60"
                     FontSize="{DynamicResource FontSizeSmall}"
                     IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
                     Color="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+              </Grid>
             </Grid>
         </controls:ValidationDecorator>
     </Border>

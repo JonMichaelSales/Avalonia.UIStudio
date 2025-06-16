@@ -20,31 +20,39 @@
     <UserControl.Styles>
         <SimpleTheme />
 
-        <Style Selector="TextBlock.Label">
-            <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
-        </Style>
+      <Style Selector="TextBlock.Label">
+        <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+      </Style>
     </UserControl.Styles>
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid ColumnDefinitions="200,*">
+            <Grid >
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="200" Width="*" />
+                <ColumnDefinition MinWidth="200" Width="Auto" />
+              </Grid.ColumnDefinitions>
 
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     Classes="Label"
+                    FontSize="{DynamicResource FontSizeLabel}"
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}" />
                 <ComboBox
                     Grid.Row="0"
                     Grid.Column="1"
-                    MinWidth="200"
+                    HorizontalAlignment="Right"
+                    MinWidth="100"
+                    FontSize="{DynamicResource FontSizeSmall}"
                     IsEnabled="{Binding !IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}"
                     ItemsSource="{Binding AvailableFontFamilies, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}"
                     SelectedItem="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:FontFamilyEditorControl}}"
-                    Theme="{StaticResource PropertyGridComboBox}">
+                    Theme="{StaticResource PropertyGridComboBox}">                  
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock
+                          <TextBlock Margin="5,0,5,0"
+                                Theme="{DynamicResource StatsTitleTheme}"
                                 VerticalAlignment="Center"
                                 FontFamily="{Binding}"
                                 FontSize="{DynamicResource FontSizeSmall}"

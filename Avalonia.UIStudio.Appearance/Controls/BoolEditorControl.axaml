@@ -23,7 +23,11 @@
     </UserControl.Styles>
 
     <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-        <Grid ColumnDefinitions="200,*">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition MinWidth="200" Width="Auto" />
+          <ColumnDefinition MinWidth="200" Width="Auto" />
+        </Grid.ColumnDefinitions>
 
             
             <Grid.Styles>
@@ -36,13 +40,15 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="Label"
+                FontSize="{DynamicResource FontSizeLabel}"
                 Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}, FallbackValue=Label}" />
 
           
 
             <ToggleSwitch
                 Grid.Column="1"
-                MinWidth="200"
+                MinWidth="120"
+                HorizontalAlignment="Right"
                 FontSize="{DynamicResource FontSizeLabel}"
                 IsEnabled="{Binding !IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}}"
                 IsChecked="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}}" />

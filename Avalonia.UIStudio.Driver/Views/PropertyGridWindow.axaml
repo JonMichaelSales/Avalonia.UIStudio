@@ -11,6 +11,8 @@
     Title="PropertyGridWindow"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Background="{DynamicResource BackgroundDark}"
+    Foreground="{DynamicResource TextPrimaryDark}"
     x:DataType="views:PropertyGridWindow"
     Icon="avares://Avalonia.UIStudio.Icons/Assets/a_blue.ico"
     Loaded="Control_OnLoaded"

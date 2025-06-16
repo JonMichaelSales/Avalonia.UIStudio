@@ -7,8 +7,17 @@
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
     mc:Ignorable="d">
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+      <Border.Styles>
+        <Style Selector="TextBlock.Label">
+          <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+        </Style>
+      </Border.Styles>
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid ColumnDefinitions="200,*">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition MinWidth="200" Width="*" />
+              <ColumnDefinition MinWidth="200" Width="Auto" />
+            </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
                     VerticalAlignment="Center"
@@ -19,6 +28,7 @@
                 <Button
                     Grid.Column="1"
                     Margin="4,0"
+                    HorizontalAlignment="Right"
                     Click="LaunchEditor_Click"
                     Content="{Binding LaunchLabel, RelativeSource={RelativeSource AncestorType=controls:ModalListEditorLauncherControl}}"
                     IsEnabled="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ModalListEditorLauncherControl}}"
