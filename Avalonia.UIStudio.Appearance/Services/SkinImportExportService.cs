@@ -70,12 +70,6 @@ public class SkinImportExportService : ISkinImportExportService
                     BodyLarge = skin.Typography.BodyLarge,
                     BodyMedium = skin.Typography.BodyMedium,
                     BodySmall = skin.Typography.BodySmall,
-                    HeaderFontFamily = skin.HeaderFontFamily?.ToString(),
-                    BodyFontFamily = skin.BodyFontFamily?.ToString(),
-                    MonospaceFontFamily = skin.MonospaceFontFamily?.ToString(),
-                    LineHeight = skin.LineHeight,
-                    LetterSpacing = skin.LetterSpacing,
-                    EnableLigatures = skin.EnableLigatures
                 };
 
             var json = JsonSerializer.Serialize(serializableSkin, JsonOptions);
@@ -200,16 +194,6 @@ public class SkinImportExportService : ISkinImportExportService
                     BodyMedium = typography.BodyMedium,
                     BodySmall = typography.BodySmall
                 };
-
-                if (typography.HeaderFontFamily != null)
-                    baseSkin.HeaderFontFamily = new FontFamily(typography.HeaderFontFamily);
-                if (typography.BodyFontFamily != null)
-                    baseSkin.BodyFontFamily = new FontFamily(typography.BodyFontFamily);
-                if (typography.MonospaceFontFamily != null)
-                    baseSkin.MonospaceFontFamily = new FontFamily(typography.MonospaceFontFamily);
-                baseSkin.LineHeight = typography.LineHeight;
-                baseSkin.LetterSpacing = typography.LetterSpacing;
-                baseSkin.EnableLigatures = typography.EnableLigatures;
             }
 
             return baseSkin;
@@ -305,10 +289,7 @@ public class SkinImportExportService : ISkinImportExportService
                 var skin = ConvertFromSerializable(serializableSkin);
                 var validator = new SkinValidator();
                 var validationResult = validator.ValidateSkin(skin);
-
-                result.Errors.AddRange(validationResult.Errors);
-                result.Warnings.AddRange(validationResult.Warnings);
-                result.IsValid = validationResult.IsValid && result.Errors.Count == 0;
+                return validationResult;
             }
             catch (Exception ex)
             {
@@ -414,7 +395,7 @@ public class SkinImportExportService : ISkinImportExportService
             ErrorColor = Color.Parse(serializableSkin.ErrorColor),
             WarningColor = Color.Parse(serializableSkin.WarningColor),
             SuccessColor = Color.Parse(serializableSkin.SuccessColor),
-            FontFamily = ParseFontFamily(serializableSkin.FontFamily),
+            FontFamily = serializableSkin.FontFamily,
             FontSizeSmall = serializableSkin.FontSizeSmall,
             FontSizeMedium = serializableSkin.FontSizeMedium,
             FontSizeLarge = serializableSkin.FontSizeLarge,

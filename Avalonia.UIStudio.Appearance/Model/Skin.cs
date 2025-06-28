@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media;
 using Avalonia.UIStudio.Appearance.Extensions;
+using Newtonsoft.Json;
 
 namespace Avalonia.UIStudio.Appearance.Model;
 
@@ -26,7 +27,7 @@ public class Skin
         SecondaryBackground = Color.Parse("#464F62"); // GunMetal Light
         PrimaryTextColor = Color.Parse("#FFFFFF");
         SecondaryTextColor = Color.Parse("#CCCCCC");
-        FontFamily = new FontFamily("Segoe UI, San Francisco, Helvetica, Arial, sans-serif");
+        FontFamily = "Segoe UI, San Francisco, Helvetica, Arial, sans-serif";
         FontSizeSmall = 10;
         FontSizeMedium = 12;
         FontSizeLarge = 16;
@@ -39,7 +40,7 @@ public class Skin
         SuccessColor = Color.Parse("#2ECC71");
         HeaderFontFamily = FontFamily;
         BodyFontFamily = FontFamily;
-        MonospaceFontFamily = new FontFamily("Consolas, Monaco, 'Courier New', monospace");
+        MonospaceFontFamily = "Consolas, Monaco, 'Courier New', monospace";
         BaseSkin = null;
         Name = "Dark";
     }
@@ -257,6 +258,26 @@ public class Skin
     ///     Gets or sets the font family used for monospace content (e.g., code blocks).
     /// </summary>
     public FontFamily? MonospaceFontFamily { get; set; }
+
+
+    [JsonIgnore]
+    public string FontFamilyString
+    {
+        get
+        {
+            try
+            {
+                
+                return FontFamily.ToString();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
+        }
+    }
 
     // Line height and spacing for typographic elements
     /// <summary>

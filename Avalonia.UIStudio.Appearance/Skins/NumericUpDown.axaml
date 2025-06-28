@@ -1,0 +1,67 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme x:Key="{x:Type NumericUpDown}" TargetType="NumericUpDown">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="Padding" Value="{DynamicResource SmallPadding}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="ButtonSpinnerLocation" Value="Left" />
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DataValidationErrors>
+                    <ButtonSpinner
+                        Name="PART_Spinner"
+                        MinWidth="0"
+                        MinHeight="18"
+                        Padding="0"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        AllowSpin="{TemplateBinding AllowSpin}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        IsTabStop="False"
+                        ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
+                        Theme="{StaticResource SplitButtonSpinner}">
+                        <TextBox
+                            Name="PART_TextBox"
+                            MinWidth="20"
+                            Margin="7,0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            AcceptsReturn="False"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0"
+                            FontFamily="{TemplateBinding FontFamily}"
+                            FontSize="{TemplateBinding FontSize}"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
+                            InnerLeftContent="{Binding InnerLeftContent, RelativeSource={RelativeSource TemplatedParent}}"
+                            InnerRightContent="{Binding InnerRightContent, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                            Text="{TemplateBinding Text}"
+                            TextAlignment="{TemplateBinding TextAlignment}"
+                            TextWrapping="NoWrap"
+                            Watermark="{TemplateBinding Watermark}" />
+                    </ButtonSpinner>
+                </DataValidationErrors>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    <Design.PreviewWith>
+        <NumericUpDown
+            Width="200"
+            ButtonSpinnerLocation="Right"
+            Maximum="100"
+            Minimum="0"
+            ShowButtonSpinner="True"
+            Watermark="Enter number..."
+            Value="42" />
+    </Design.PreviewWith>
+</ResourceDictionary>

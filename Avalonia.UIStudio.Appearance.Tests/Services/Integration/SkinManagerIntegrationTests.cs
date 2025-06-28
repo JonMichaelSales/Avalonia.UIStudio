@@ -1,5 +1,6 @@
 ﻿using Avalonia.Headless.XUnit;
 using Avalonia.Media;
+using Avalonia.UIStudio.Appearance.Interfaces;
 using Avalonia.UIStudio.Appearance.Model;
 using Avalonia.UIStudio.Appearance.Services;
 
@@ -10,13 +11,16 @@ namespace Avalonia.UIStudio.Appearance.Tests.Services.Integration
 
         private readonly SkinManager? _skinManager;
 
-        
+
         public SkinManagerIntegrationTests()
         {
-            // Use real SkinLoaderService so ControlThemeUris can be tested too (if desired)
+            var app = Application.Current!;
             var skinLoaderService = new SkinLoaderService();
-            var appWrapper = new ApplicationWrapper(Application.Current!);
-            _skinManager = new SkinManager(skinLoaderService, appWrapper);
+            var registry = new SkinRegistryService(skinLoaderService);
+            var applier = new SkinApplierService((IApplication)Application.Current);
+            var persistence = new SkinPersistenceService(registry, applier);
+
+            _skinManager = new SkinManager(registry, applier, persistence);
         }
 
         [AvaloniaFact]

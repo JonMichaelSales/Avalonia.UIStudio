@@ -26,14 +26,6 @@ public static class TypographyExtensions
             BodyLarge = scale.BodyLarge,
             BodyMedium = scale.BodyMedium,
             BodySmall = scale.BodySmall,
-
-            HeaderFontFamily = skin.HeaderFontFamily?.ToString(),
-            BodyFontFamily = skin.BodyFontFamily?.ToString(),
-            MonospaceFontFamily = skin.MonospaceFontFamily?.ToString(),
-
-            LineHeight = skin.LineHeight,
-            LetterSpacing = skin.LetterSpacing,
-            EnableLigatures = skin.EnableLigatures
         };
     }
 

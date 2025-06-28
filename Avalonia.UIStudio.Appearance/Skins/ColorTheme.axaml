@@ -31,6 +31,7 @@
     <Color x:Key="AccentCyan">#56B6C2</Color>
 
 
+
     <!--  Status colors  -->
     <Color x:Key="ErrorColor">#E74C3C</Color>
     <Color x:Key="WarningColor">#F39C12</Color>
@@ -44,6 +45,7 @@
     <SolidColorBrush x:Key="AccentBlueBrush" Color="{DynamicResource AccentBlue}" />
     <SolidColorBrush x:Key="PrimaryColorBrush" Color="{DynamicResource PrimaryColor}" />
     <SolidColorBrush x:Key="SecondaryColorBrush" Color="{DynamicResource SecondaryColor}" />
+    <SolidColorBrush x:Key="AccentColorBrush" Color="{DynamicResource AccentColor}" />
 
     <!--  Dynamic Background Brushes  -->
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundDark}" />
@@ -51,7 +53,7 @@
     <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{DynamicResource BackgroundDark}" />
 
     <!--  Dynamic Text Brushes  -->
-    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{DynamicResource TextPrimaryDark}" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{DynamicResource TextPrimaryLight}" />
     <SolidColorBrush x:Key="TextSecondaryBrush" Color="{DynamicResource TextSecondaryDark}" />
 
     <!--  Border Brush  -->

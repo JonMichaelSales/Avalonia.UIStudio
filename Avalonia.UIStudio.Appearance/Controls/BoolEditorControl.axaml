@@ -5,53 +5,41 @@
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Height="{DynamicResource PropertyItemHeight}"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/AppSkin.axaml" />
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ValidationDecorator.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
     <UserControl.Styles>
         <SimpleTheme />
-
         <Style Selector="TextBlock.Label">
             <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
         </Style>
     </UserControl.Styles>
-
-    <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition MinWidth="200" Width="Auto" />
-          <ColumnDefinition MinWidth="200" Width="Auto" />
-        </Grid.ColumnDefinitions>
-
-            
-            <Grid.Styles>
-                <Style Selector="TextBlock.Label">
-                    <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
-                </Style>
-            </Grid.Styles>
-
-            <TextBlock
-                Grid.Column="0"
-                VerticalAlignment="Center"
-                Classes="Label"
-                FontSize="{DynamicResource FontSizeLabel}"
-                Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}, FallbackValue=Label}" />
-
-          
-
-            <ToggleSwitch
-                Grid.Column="1"
-                MinWidth="120"
-                HorizontalAlignment="Right"
-                FontSize="{DynamicResource FontSizeLabel}"
-                IsEnabled="{Binding !IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}}"
-                IsChecked="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}}" />
-        </Grid>
-    </controls:ValidationDecorator>
+    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+        <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="200" />
+                    <ColumnDefinition Width="Auto" MinWidth="200" />
+                </Grid.ColumnDefinitions>
+                <Grid.Styles>
+                    <Style Selector="TextBlock.Label">
+                        <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+                    </Style>
+                </Grid.Styles>
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Classes="Label"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}, FallbackValue=Label}" />
+                <ToggleSwitch
+                    Grid.Column="1"
+                    Margin="5,0"
+                    HorizontalAlignment="Right"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    IsChecked="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}}"
+                    IsEnabled="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:BoolEditorControl}}"
+                    Theme="{StaticResource PropertyGridToggleSwitch}" />
+            </Grid>
+        </controls:ValidationDecorator>
+    </Border>
 </UserControl>

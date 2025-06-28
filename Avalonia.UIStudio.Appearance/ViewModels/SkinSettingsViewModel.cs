@@ -1,14 +1,19 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Reactive;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
 using Avalonia.UIStudio.Appearance.Interfaces;
 using Avalonia.UIStudio.Appearance.Model;
 using Avalonia.UIStudio.Appearance.Services;
+using Avalonia.UIStudio.Appearance.Views;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Reactive;
 
 namespace Avalonia.UIStudio.Appearance.ViewModels;
+
+
 
 public class SkinSettingsViewModel : ViewModelBase
 {
@@ -25,6 +30,7 @@ public class SkinSettingsViewModel : ViewModelBase
     private SkinSummaryInfo? _selectedSkin;
     private Color _validatedPrimaryColor;
     private SkinValidationResult? _validationResult;
+    private Skin _selectedSkinDetails;
 
     //public SkinSettingsViewModel() : this(
     //    Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance, SkinManager.Instance)
@@ -40,14 +46,15 @@ public class SkinSettingsViewModel : ViewModelBase
         AvailableSkins = new ObservableCollection<SkinSummaryInfo>();
         ApplySkinCommand = ReactiveCommand.Create(ApplySkin);
         ApplyChangesCommand = ReactiveCommand.Create(SaveChanges);
-        _skinManager.SkinChanged += _skinManager_SkinChanged;
+        OpenEditorCommand = ReactiveCommand.Create(OpenEditor);
+    _skinManager.SkinChanged += _skinManager_SkinChanged;
         _isSubscribedToSkinChanged = true;
         LoadAvailableSkins();
         LoadCurrentSkin();
     }
 
     public ObservableCollection<SkinSummaryInfo> AvailableSkins { get; }
-
+    public ReactiveCommand<Unit, Unit> OpenEditorCommand { get; }
     public ReactiveCommand<Unit, Unit> ApplySkinCommand { get; }
     public ReactiveCommand<Unit, Unit> ApplyChangesCommand { get; }
 
@@ -70,6 +77,7 @@ public class SkinSettingsViewModel : ViewModelBase
                 }
         }
     }
+    
 
     public EditableSkinViewModel? EditableSkin
     {
@@ -82,6 +90,37 @@ public class SkinSettingsViewModel : ViewModelBase
                 ValidateSkin();
             }
         }
+    }
+
+    private async void OpenEditor()
+    {
+        if (SelectedSkin is not { } skin) return;
+
+        var editorViewModel = new SkinEditorViewModel();
+        var actualSkin = _skinManager.GetSkin(skin.Name);
+        editorViewModel.LoadSkinWithValidation(actualSkin, ValidationResult);
+
+        SkinEditorDialog editorDialog = new SkinEditorDialog
+        {
+            DataContext = editorViewModel,
+            Title = $"Edit Skin: {skin.Name}"
+        };
+        editorDialog.Show();
+    }
+
+
+    public Skin SelectedSkinDetails
+    {
+        get => _selectedSkinDetails;
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedSkinDetails, value);
+        }
+    }
+
+    public static Window? GetMainWindow()
+    {
+        return (Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime).MainWindow;
     }
 
     // Renamed and fixed: ValidatedProperties is a stable dictionary
@@ -222,6 +261,7 @@ public class SkinSettingsViewModel : ViewModelBase
     private void LoadEditableSkin()
     {
         var currentSkin = _skinManager.CurrentSkin;
+        SelectedSkinDetails = _skinManager.CurrentSkin;
         if (currentSkin != null) EditableSkin = new EditableSkinViewModel(CloneSkin(currentSkin));
     }
 

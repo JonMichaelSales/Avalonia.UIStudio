@@ -33,11 +33,6 @@ public partial class ModalEditorLauncherControl : ValidatableEditorControlBase<M
         set => SetValue(LaunchLabelProperty, value);
     }
 
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
-
     private async void LaunchEditor_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (Value == null)

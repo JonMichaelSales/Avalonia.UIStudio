@@ -63,30 +63,4 @@ public class SerializableTypography
     /// <summary>
     /// </summary>
     public double BodySmall { get; set; } = 12;
-
-    /// <summary>
-    /// </summary>
-    /// <summary>
-    /// </summary>
-    public string? HeaderFontFamily { get; set; } = "Segoe UI, San Francisco, Helvetica, Arial, sans-serif";
-
-    /// <summary>
-    /// </summary>
-    public string? BodyFontFamily { get; set; } = "Segoe UI, San Francisco, Helvetica, Arial, sans-serif";
-
-    /// <summary>
-    /// </summary>
-    public string? MonospaceFontFamily { get; set; } = "Consolas, Monaco, 'Courier New', monospace";
-
-    /// <summary>
-    /// </summary>
-    public double LineHeight { get; set; } = 1.5;
-
-    /// <summary>
-    /// </summary>
-    public double LetterSpacing { get; set; } = 0;
-
-    /// <summary>
-    /// </summary>
-    public bool EnableLigatures { get; set; } = true;
 }

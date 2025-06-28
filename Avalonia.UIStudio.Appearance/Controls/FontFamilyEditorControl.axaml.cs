@@ -43,8 +43,5 @@ public partial class FontFamilyEditorControl : ValidatableEditorControlBase<Font
         set => SetValue(SuggestedValueProperty, value);
     }
 
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+  
 }

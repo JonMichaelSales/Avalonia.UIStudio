@@ -19,9 +19,4 @@ public partial class EnumEditorControl : ValidatableEditorControlBase<EnumEditor
         get => GetValue(ValueProperty);
         set => SetValue(ValueProperty, value);
     }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
 }

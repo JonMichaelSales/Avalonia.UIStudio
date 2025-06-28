@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme x:Key="ErrorButtonTheme"
+                  TargetType="Button"
+                  BasedOn="{StaticResource BaseButtonTheme}">
+        <Setter Property="Background" Value="{DynamicResource ErrorColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}" />
+    </ControlTheme>
+
+    <ControlTheme x:Key="WarningButtonTheme"
+                  TargetType="Button"
+                  BasedOn="{StaticResource BaseButtonTheme}">
+        <Setter Property="Background" Value="{DynamicResource WarningColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}" />
+    </ControlTheme>
+</ResourceDictionary>

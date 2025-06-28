@@ -9,7 +9,7 @@
 
     <ControlTheme x:Key="StatsTitleTheme" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
-        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
     </ControlTheme>
     <ControlTheme x:Key="MediumTextBlock" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />

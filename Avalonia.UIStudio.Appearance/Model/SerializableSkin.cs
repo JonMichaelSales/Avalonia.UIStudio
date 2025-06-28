@@ -186,7 +186,7 @@ public static class SkinConverterExtensions
             ErrorColor = Color.Parse(skin.ErrorColor),
             WarningColor = Color.Parse(skin.WarningColor),
             SuccessColor = Color.Parse(skin.SuccessColor),
-            FontFamily = new FontFamily(skin.FontFamily),
+            FontFamily = skin.FontFamily,
             FontSizeSmall = skin.FontSizeSmall,
             FontSizeMedium = skin.FontSizeMedium,
             FontSizeLarge = skin.FontSizeLarge,
@@ -219,14 +219,12 @@ public static class SkinConverterExtensions
                     BodyMedium = skin.AdvancedTypography?.BodyMedium ?? 14,
                     BodySmall = skin.AdvancedTypography?.BodySmall ?? 12
                 },
-            HeaderFontFamily = new FontFamily(skin.AdvancedTypography?.HeaderFontFamily ?? skin.FontFamily),
-            BodyFontFamily = new FontFamily(skin.AdvancedTypography?.BodyFontFamily ?? skin.FontFamily),
-            MonospaceFontFamily =
-                new FontFamily(skin.AdvancedTypography?.MonospaceFontFamily ??
-                               "Consolas, Monaco, 'Courier New', monospace"),
-            LineHeight = skin.AdvancedTypography?.LineHeight ?? 1.5,
-            LetterSpacing = skin.AdvancedTypography?.LetterSpacing ?? 0,
-            EnableLigatures = skin.AdvancedTypography?.EnableLigatures ?? true,
+            HeaderFontFamily = skin.HeaderFontFamily ?? skin.FontFamily,
+            BodyFontFamily = skin.BodyFontFamily ?? skin.FontFamily,
+            MonospaceFontFamily = skin.MonospaceFontFamily,
+            LineHeight = skin?.LineHeight ?? 1.5,
+            LetterSpacing = skin?.LetterSpacing ?? 0,
+            EnableLigatures = skin?.EnableLigatures ?? true,
             ControlThemeUris = skin?.ControlThemeUris ?? new List<string>(),
             StyleUris = skin?.StyleUris ?? new List<string>(),
             AssetUris = skin?.AssetUris ?? new List<string>()

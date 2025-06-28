@@ -1,0 +1,145 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Thickness x:Key="LeftRightPadding">4,2,4,2</Thickness>
+    <Design.PreviewWith>
+        <StackPanel Margin="20" Spacing="10">
+            <Button Content="Default" />
+            <Button Content="Primary Button" Theme="{StaticResource PrimaryButtonTheme}" />
+            <Button Content="Secondary Button" Theme="{StaticResource SecondaryButtonTheme}" />
+            <Button Content="Ghost Button" Theme="{StaticResource GhostButtonTheme}" />
+            <Button Content="Browse Button" Theme="{StaticResource BrowseButtonTheme}" />
+            <Button Content="Elevated Primary Button" Theme="{StaticResource ElevatedPrimaryButtonTheme}" />
+            <Button Content="Neon Button" Theme="{StaticResource NeonButtonTheme}" />
+            <Button Content="Outline Button" Theme="{StaticResource OutlineButtonTheme}" />
+            <Button Content="Warning Button" Theme="{StaticResource WarningButtonTheme}" />
+            <Button Content="Error Button" Theme="{StaticResource ErrorButtonTheme}" />
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <!--  Base Theme: shared template + binding-safe defaults  -->
+    <ControlTheme x:Key="BaseButtonTheme" TargetType="Button">
+        <Setter Property="FontFamily" Value="{DynamicResource BodyFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource LabelMediumFontSize}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="IsHitTestVisible" Value="True" />
+        <Setter Property="Background" Value="{DynamicResource AccentColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}" />
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="MinWidth" Value="100" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter
+                    Margin="{TemplateBinding Margin}"
+                    Padding="{TemplateBinding Padding}"
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Foreground="{TemplateBinding Foreground}"
+                    IsHitTestVisible="True"
+                    RecognizesAccessKey="True" />
+            </ControlTemplate>
+        </Setter>
+        <!--  Interaction pseudo-classes  -->
+        <Style Selector="^:disabled /template/ Border#border">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        <Style Selector="^:pressed /template/ Border#border">
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrushPressed}" />
+        </Style>
+    </ControlTheme>
+    <ControlTheme
+        x:Key="{x:Type Button}"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button" />
+
+    <!--  Primary Button  -->
+    <ControlTheme
+        x:Key="PrimaryButtonTheme"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColorDark}" />
+        <Setter Property="CornerRadius" Value="6" />
+    </ControlTheme>
+
+    <!--  Secondary Button  -->
+    <ControlTheme
+        x:Key="SecondaryButtonTheme"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource SecondaryColorLight}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryColorDark}" />
+        <Setter Property="CornerRadius" Value="4" />
+    </ControlTheme>
+
+    <!--  Ghost Button  -->
+    <ControlTheme
+        x:Key="GhostButtonTheme"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </ControlTheme>
+
+    <!--  Browse Button  -->
+    <ControlTheme
+        x:Key="BrowseButtonTheme"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="CornerRadius" Value="3" />
+    </ControlTheme>
+
+    <!--  Elevated Button  -->
+    <ControlTheme
+        x:Key="ElevatedPrimaryButtonTheme"
+        BasedOn="{StaticResource PrimaryButtonTheme}"
+        TargetType="Button" />
+
+    <!--  Neon Button  -->
+    <ControlTheme
+        x:Key="NeonButtonTheme"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource AccentNeonBrush}" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentNeonBrush}" />
+        <Setter Property="CornerRadius" Value="8" />
+
+    </ControlTheme>
+
+    <ControlTheme
+        x:Key="ErrorButtonTheme"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ErrorColor}" />
+        <Setter Property="IsHitTestVisible" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}" />
+    </ControlTheme>
+
+    <ControlTheme
+        x:Key="WarningButtonTheme"
+        BasedOn="{StaticResource BaseButtonTheme}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource WarningColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}" />
+    </ControlTheme>
+
+
+</ResourceDictionary>

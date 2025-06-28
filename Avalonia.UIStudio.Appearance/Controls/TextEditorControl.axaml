@@ -5,17 +5,10 @@
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Height="{DynamicResource PropertyItemHeight}"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/AppSkin.axaml" />
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/PropertyGrid.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
     <UserControl.Styles>
-        <SimpleTheme />
+
 
         <Style Selector="TextBlock.Label">
             <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
@@ -23,11 +16,11 @@
     </UserControl.Styles>
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid >
-                            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="200" Width="*" />
-                <ColumnDefinition MinWidth="200" Width="Auto" />
-              </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="200" />
+                    <ColumnDefinition Width="Auto" MinWidth="200" />
+                </Grid.ColumnDefinitions>
                 <Grid.Styles>
                     <Style Selector="TextBlock.Label">
                         <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
@@ -38,7 +31,7 @@
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     Classes="Label"
-                    FontSize="{StaticResource FontSizeLabel}"
+                    FontSize="{DynamicResource FontSizeLabel}"
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:TextEditorControl}, FallbackValue=Label}" />
 
 
@@ -46,8 +39,8 @@
                     Grid.Column="1"
                     MinWidth="120"
                     HorizontalAlignment="Right"
-                    FontSize="{StaticResource FontSizeLabel}"
-                    IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=controls:TextEditorControl}}"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    IsReadOnly="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:TextEditorControl}}"
                     Text="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:TextEditorControl}}"
                     Theme="{StaticResource PropertyGridTextBoxTheme}" />
             </Grid>

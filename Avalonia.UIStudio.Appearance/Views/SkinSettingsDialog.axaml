@@ -19,14 +19,10 @@
     <Window.Resources>
         <ResourceDictionary>
             <converters:BoolToEditModeContentConverter x:Key="BoolToEditModeContentConverter" />
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/AppSkin.axaml" />
-
-            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Window.Styles>
-        <SimpleTheme />
+
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
     </Window.Styles>
 
@@ -103,449 +99,174 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                </StackPanel>
-                <TabControl Theme="{StaticResource CustomTabControlTheme}">
-                    <TabItem Header="Skin Preview" Theme="{StaticResource CustomTabItemTheme}">
-                        <StackPanel>
-                            <Border
-                                Padding="20"
-                                Background="{DynamicResource BackgroundBrush}"
-                                BorderBrush="{DynamicResource BorderBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8">
-                                <StackPanel Spacing="15">
+                    <StackPanel>
+                        <Border
+                            Padding="20"
+                            Background="{DynamicResource BackgroundBrush}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <StackPanel Spacing="15">
 
-                                    <!--  Color Swatches  -->
-                                    <StackPanel Spacing="10">
-                                        <TextBlock
-                                            FontSize="14"
-                                            FontWeight="Medium"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="Color Palette" />
+                                <!--  Color Swatches  -->
+                                <StackPanel Spacing="10">
+                                    <TextBlock
+                                        FontSize="14"
+                                        FontWeight="Medium"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="Color Palette" />
 
-                                        <WrapPanel>
-                                            <!--  Primary Colors  -->
-                                            <StackPanel Margin="0,0,15,0" Spacing="5">
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                                    Text="Primary" />
-                                                <Border
-                                                    Width="40"
-                                                    Height="40"
-                                                    Background="{DynamicResource BackgroundBrush}"
-                                                    BorderBrush="{DynamicResource BorderBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4" />
-                                            </StackPanel>
-
-                                            <!--  Secondary Colors  -->
-                                            <StackPanel Margin="0,0,15,0" Spacing="5">
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                                    Text="Secondary" />
-                                                <Border
-                                                    Width="40"
-                                                    Height="40"
-                                                    Background="{DynamicResource BackgroundLightBrush}"
-                                                    BorderBrush="{DynamicResource BorderBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4" />
-                                            </StackPanel>
-
-                                            <!--  Accent Colors  -->
-                                            <StackPanel Margin="0,0,15,0" Spacing="5">
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                                    Text="Accent" />
-                                                <Border
-                                                    Width="40"
-                                                    Height="40"
-                                                    Background="{DynamicResource AccentBlueBrush}"
-                                                    BorderBrush="{DynamicResource BorderBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4" />
-                                            </StackPanel>
-
-                                            <!--  Status Colors  -->
-                                            <StackPanel Margin="0,0,15,0" Spacing="5">
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                                    Text="Error" />
-                                                <Border
-                                                    Width="40"
-                                                    Height="40"
-                                                    Background="{DynamicResource ErrorBrush}"
-                                                    BorderBrush="{DynamicResource BorderBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4" />
-                                            </StackPanel>
-
-                                            <StackPanel Margin="0,0,15,0" Spacing="5">
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                                    Text="Warning" />
-                                                <Border
-                                                    Width="40"
-                                                    Height="40"
-                                                    Background="{DynamicResource WarningBrush}"
-                                                    BorderBrush="{DynamicResource BorderBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4" />
-                                            </StackPanel>
-
-                                            <StackPanel Spacing="5">
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    Foreground="{DynamicResource TextSecondaryBrush}"
-                                                    Text="Success" />
-                                                <Border
-                                                    Width="40"
-                                                    Height="40"
-                                                    Background="{DynamicResource SuccessBrush}"
-                                                    BorderBrush="{DynamicResource BorderBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4" />
-                                            </StackPanel>
-                                        </WrapPanel>
-                                    </StackPanel>
-
-                                    <!--  UI Elements Preview  -->
-                                    <StackPanel Spacing="10">
-                                        <TextBlock
-                                            FontSize="14"
-                                            FontWeight="Medium"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="UI Elements" />
-
-                                        <StackPanel Orientation="Horizontal" Spacing="10">
-                                            <Button Content="Primary Button" />
-
-                                            <Button Content="Secondary Button" />
+                                    <WrapPanel>
+                                        <!--  Primary Colors  -->
+                                        <StackPanel Margin="0,0,15,0" Spacing="5">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                                Text="Primary" />
+                                            <Border
+                                                Width="40"
+                                                Height="40"
+                                                Background="{DynamicResource BackgroundBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="4" />
                                         </StackPanel>
 
-                                        <TextBox
-                                            Width="200"
-                                            Background="{DynamicResource BackgroundLightBrush}"
-                                            BorderBrush="{DynamicResource BorderBrush}"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="Sample text input"
-                                            Watermark="Placeholder text..." />
+                                        <!--  Secondary Colors  -->
+                                        <StackPanel Margin="0,0,15,0" Spacing="5">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                                Text="Secondary" />
+                                            <Border
+                                                Width="40"
+                                                Height="40"
+                                                Background="{DynamicResource BackgroundLightBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="4" />
+                                        </StackPanel>
 
-                                        <CheckBox
-                                            Content="Sample checkbox"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            IsChecked="True" />
-                                    </StackPanel>
+                                        <!--  Accent Colors  -->
+                                        <StackPanel Margin="0,0,15,0" Spacing="5">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                                Text="Accent" />
+                                            <Border
+                                                Width="40"
+                                                Height="40"
+                                                Background="{DynamicResource AccentBlueBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="4" />
+                                        </StackPanel>
 
-                                    <!--  Text Preview  -->
-                                    <StackPanel Spacing="8">
-                                        <TextBlock
-                                            FontSize="14"
-                                            FontWeight="Medium"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="Typography" />
+                                        <!--  Status Colors  -->
+                                        <StackPanel Margin="0,0,15,0" Spacing="5">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                                Text="Error" />
+                                            <Border
+                                                Width="40"
+                                                Height="40"
+                                                Background="{DynamicResource ErrorBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="4" />
+                                        </StackPanel>
 
-                                        <TextBlock
-                                            FontSize="16"
-                                            FontWeight="Bold"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="Primary Heading Text" />
+                                        <StackPanel Margin="0,0,15,0" Spacing="5">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                                Text="Warning" />
+                                            <Border
+                                                Width="40"
+                                                Height="40"
+                                                Background="{DynamicResource WarningBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="4" />
+                                        </StackPanel>
 
-                                        <TextBlock
-                                            FontSize="14"
-                                            Foreground="{DynamicResource TextPrimaryBrush}"
-                                            Text="Regular body text that would appear in the application interface." />
-
-                                        <TextBlock
-                                            FontSize="12"
-                                            Foreground="{DynamicResource TextSecondaryBrush}"
-                                            Text="Secondary text used for descriptions and less important information." />
-                                    </StackPanel>
+                                        <StackPanel Spacing="5">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                                Text="Success" />
+                                            <Border
+                                                Width="40"
+                                                Height="40"
+                                                Background="{DynamicResource SuccessBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="4" />
+                                        </StackPanel>
+                                    </WrapPanel>
                                 </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </TabItem>
-                    <TabItem Header="Skin Editor" Theme="{StaticResource CustomTabItemTheme}">
-                        <StackPanel>
-                            <StackPanel>
-                                <TextBlock
-                                    FontSize="16"
-                                    FontWeight="SemiBold"
-                                    Foreground="{DynamicResource TextPrimaryBrush}"
-                                    Text="Skin Editor - Full Properties" />
-                                <Border
-                                    MinWidth="520"
-                                    Padding="15"
-                                    Background="{DynamicResource BackgroundLightBrush}"
-                                    BorderBrush="{DynamicResource BorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="4">
-                                    <Border.Styles>
-                                        <Style Selector="TextBlock.Label">
-                                            <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
-                                        </Style>
-                                        <Style Selector="Rectangle.ColorPreview">
-                                            <Setter Property="Width" Value="64" />
-                                            <Setter Property="Height" Value="32" />
-                                        </Style>
-                                        <Style Selector="Rectangle.CurrentValue">
-                                            <Setter Property="IsVisible" Value="{Binding !DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                        </Style>
-                                    </Border.Styles>
-                                    <!--  General Info  -->
-                                    <StackPanel Spacing="15">
 
+                                <!--  UI Elements Preview  -->
+                                <StackPanel Spacing="10">
+                                    <TextBlock
+                                        FontSize="14"
+                                        FontWeight="Medium"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="UI Elements" />
 
-                                        <Expander>
-                                            <Expander.Header>
-                                                <TextBlock Text="General Info" Theme="{StaticResource SectionHeaderTheme}" />
-                                            </Expander.Header>
-                                            <Expander.Content>
-                                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <Button Content="Primary Button" />
 
-                                                    <controls:TextEditorControl
-                                                        IsEditMode="{Binding IsEditMode}"
-                                                        Label="Name"
-                                                        PropertyName="Name"
-                                                        ValidatedProperty="{Binding ValidatedProperties[Name]}"
-                                                        Value="{Binding EditableSkin.Name.Value, Mode=TwoWay}" />
-                                                    <controls:TextEditorControl
-                                                        IsEditMode="{Binding IsEditMode}"
-                                                        Label="Description"
-                                                        PropertyName="Description"
-                                                        ValidatedProperty="{Binding ValidatedProperties[Description]}"
-                                                        Value="{Binding EditableSkin.Description.Value, Mode=TwoWay}" />
-                                                </StackPanel>
-                                            </Expander.Content>
-                                        </Expander>
-
-                                        <!--  Color Palette  -->
-
-                                        <Expander>
-                                            <Expander.Header>
-                                                <TextBlock Text="Color Palette" Theme="{StaticResource SectionHeaderTheme}" />
-                                            </Expander.Header>
-                                            <Expander.Content>
-                                                <StackPanel>
-
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[PrimaryColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Primary Color"
-                                                        PropertyName="PrimaryColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.PrimaryColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[SecondaryColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Secondary Color"
-                                                        PropertyName="SecondaryColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.SecondaryColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[AccentColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Accent Color"
-                                                        PropertyName="AccentColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.AccentColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[ErrorColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Error Color"
-                                                        PropertyName="ErrorColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.ErrorColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[SuccessColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Success Color"
-                                                        PropertyName="SuccessColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.SuccessColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[WarningColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Warning Color"
-                                                        PropertyName="WarningColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.WarningColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[PrimaryBackground]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Primary Background"
-                                                        PropertyName="PrimaryBackground"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.PrimaryBackground.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[SecondaryBackground]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Secondary Background"
-                                                        PropertyName="SecondaryBackground"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.SecondaryBackground.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[PrimaryTextColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Primary Text Color"
-                                                        PropertyName="PrimaryTextColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.PrimaryTextColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:ColorEditorControl
-                                                        DataContext="{Binding ValidatedProperties[SecondaryTextColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Secondary Text Color"
-                                                        PropertyName="SecondaryTextColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.SecondaryTextColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                </StackPanel>
-                                            </Expander.Content>
-                                        </Expander>
-
-                                        <!--  Typography Section  -->
-
-                                        <Expander>
-                                            <Expander.Header>
-                                                <TextBlock Text="Typography" Theme="{StaticResource SectionHeaderTheme}" />
-                                            </Expander.Header>
-                                            <Expander.Content>
-                                                <StackPanel>
-
-                                                    <controls:FontFamilyEditorControl
-                                                        DataContext="{Binding ValidatedProperties[FontFamily]}"
-                                                        Label="Font Family"
-                                                        PropertyName="FontFamily"
-                                                        ValidatedProperty="{Binding ValidatedProperties[FontFamily]}"
-                                                        Value="{Binding DataContext.EditableSkin.FontFamily.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:NumericEditorControl
-                                                        DataContext="{Binding ValidatedProperties[FontSizeSmall]}"
-                                                        IsEditMode="{Binding IsEditMode}"
-                                                        Label="Font Size Small"
-                                                        Maximum="24"
-                                                        Minimum="6"
-                                                        PropertyName="FontSizeSmall"
-                                                        ValidatedProperty="{Binding ValidatedProperties[FontSizeSmall]}"
-                                                        Value="{Binding DataContext.EditableSkin.FontSizeSmall.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:NumericEditorControl
-                                                        Margin="0"
-                                                        Padding="0"
-                                                        DataContext="{Binding ValidatedProperties[FontSizeMedium]}"
-                                                        IsEditMode="{Binding IsEditMode}"
-                                                        Label="Font Size Medium"
-                                                        Maximum="24"
-                                                        Minimum="6"
-                                                        PropertyName="FontSizeMedium"
-                                                        ValidatedProperty="{Binding ValidatedProperties[FontSizeMedium]}"
-                                                        Value="{Binding DataContext.EditableSkin.FontSizeMedium.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                    <controls:NumericEditorControl
-                                                        Margin="0"
-                                                        Padding="0"
-                                                        DataContext="{Binding ValidatedProperties[FontSizeLarge]}"
-                                                        IsEditMode="{Binding IsEditMode}"
-                                                        Label="Font Size Large"
-                                                        Maximum="24"
-                                                        Minimum="6"
-                                                        PropertyName="FontSizeLarge"
-                                                        ValidatedProperty="{Binding ValidatedProperties[FontSizeLarge]}"
-                                                        Value="{Binding DataContext.EditableSkin.FontSizeLarge.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                </StackPanel>
-                                            </Expander.Content>
-                                        </Expander>
-
-                                        <!--  Borders  -->
-
-                                        <Expander>
-                                            <Expander.Header>
-                                                <TextBlock Text="Borders" Theme="{StaticResource SectionHeaderTheme}" />
-                                            </Expander.Header>
-                                            <Expander.Content>
-                                                <Grid Grid.RowDefinitions="Auto,Auto,Auto,Auto">
-                                                    <TextBlock
-                                                        Grid.Row="0"
-                                                        FontWeight="Bold"
-                                                        Text="Borders" />
-                                                    <controls:ColorEditorControl
-                                                        Grid.Row="1"
-                                                        DataContext="{Binding ValidatedProperties[BorderColor]}"
-                                                        IsEditMode="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                        Label="Border Color"
-                                                        PropertyName="BorderColor"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.BorderColor.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-
-                                                    <controls:NumericEditorControl
-                                                        Grid.Row="2"
-                                                        Margin="0"
-                                                        Padding="0"
-                                                        DataContext="{Binding ValidatedProperties[BorderRadius]}"
-                                                        IsEditMode="{Binding IsEditMode}"
-                                                        Label="Border Radius"
-                                                        Maximum="24"
-                                                        Minimum="6"
-                                                        PropertyName="BorderRadius"
-                                                        ValidatedProperty="{Binding ValidatedProperties[BorderRadius]}"
-                                                        Value="{Binding EditableSkin.BorderRadius.Value, Mode=TwoWay}" />
-
-                                                    <controls:TextEditorControl
-                                                        Grid.Row="3"
-                                                        DataContext="{Binding ValidatedProperties[BorderThickness]}"
-                                                        Label="Border Thickness"
-                                                        ValidatedProperty="{Binding}"
-                                                        Value="{Binding DataContext.EditableSkin.BorderThickness.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}">
-                                                        <Grid RowDefinitions="Auto,Auto">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto" MinWidth="150" />
-                                                                <ColumnDefinition Width="*" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBlock
-                                                                Grid.Row="0"
-                                                                Grid.Column="0"
-                                                                Classes="Label"
-                                                                Text="Border Thickness" />
-                                                            <TextBlock
-                                                                Grid.Row="0"
-                                                                Grid.Column="1"
-                                                                IsVisible="{Binding Message, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                                Text="{Binding Message, FallbackValue=OK}"
-                                                                Theme="{StaticResource CaptionTextBlockTheme}" />
-                                                            <TextBox
-                                                                Grid.Row="0"
-                                                                Grid.Column="2"
-                                                                IsReadOnly="{Binding !DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}"
-                                                                Text="{Binding DataContext.EditableSkin.BorderThickness.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
-                                                        </Grid>
-                                                    </controls:TextEditorControl>
-                                                </Grid>
-                                            </Expander.Content>
-                                        </Expander>
+                                        <Button Content="Secondary Button" Theme="{StaticResource OutlineButtonTheme}" />
                                     </StackPanel>
-                                </Border>
+
+                                    <TextBox
+                                        Width="200"
+                                        Background="{DynamicResource BackgroundLightBrush}"
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="Sample text input"
+                                        Watermark="Placeholder text..." />
+
+                                    <CheckBox
+                                        Content="Sample checkbox"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        IsChecked="True" />
+                                </StackPanel>
+
+                                <!--  Text Preview  -->
+                                <StackPanel Spacing="8">
+                                    <TextBlock
+                                        FontSize="14"
+                                        FontWeight="Medium"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="Typography" />
+
+                                    <TextBlock
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="Primary Heading Text" />
+
+                                    <TextBlock
+                                        FontSize="14"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        Text="Regular body text that would appear in the application interface." />
+
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextSecondaryBrush}"
+                                        Text="Secondary text used for descriptions and less important information." />
+                                </StackPanel>
                             </StackPanel>
-                            <!--  Validation Summary  -->
-                            <ItemsControl x:Name="ErrorsItemControl" ItemsSource="{Binding Errors}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Foreground="Red" Text="{Binding}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <ItemsControl x:Name="WarningsItemControl" ItemsSource="{Binding Warnings, Mode=OneWay}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Foreground="Orange" Text="{Binding}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </TabItem>
-                </TabControl>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+                <Button
+                    HorizontalAlignment="Right"
+                    Command="{Binding OpenEditorCommand}"
+                    Content="Edit Skin" />
             </StackPanel>
         </Border>
         <!--  Footer  -->
@@ -567,19 +288,13 @@
                 <Button
                     Click="ResetButton_Click"
                     Content="Reset to Default"
-                    Theme="{StaticResource SecondaryButtonTheme}" />
+                    Theme="{StaticResource OutlineButtonTheme}" />
                 <Button
                     Click="CloseButton_Click"
                     Content="Close"
                     Theme="{StaticResource DangerButtonTheme}" />
-                <Button
-                    Command="{Binding ApplyChangesCommand}"
-                    Content="Save Changes"
-                    Theme="{StaticResource PrimaryButtonTheme}" />
-                <Button
-                    Command="{Binding ApplySkinCommand}"
-                    Content="Apply Skin"
-                    Theme="{StaticResource PrimaryButtonTheme}" />
+                <Button Command="{Binding ApplyChangesCommand}" Content="Save Changes" />
+                <Button Command="{Binding ApplySkinCommand}" Content="Apply Skin" />
             </StackPanel>
         </Border>
     </Grid>

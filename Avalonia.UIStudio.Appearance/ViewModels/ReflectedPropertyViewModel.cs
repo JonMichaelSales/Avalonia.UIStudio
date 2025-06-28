@@ -17,22 +17,40 @@ public abstract class ReflectedPropertyViewModelBase<T> : PropertyViewModel
 
     public override object? Value
     {
-        get => _property.GetValue(_target);
+        get
+        {
+            if (_property.GetIndexParameters().Length > 0)
+                return null; // or throw, or log warning
+
+            return _property.GetValue(_target);
+        }
         set
         {
-            _property.SetValue(_target, value);
+            if (_property.GetIndexParameters().Length == 0)
+                _property.SetValue(_target, value);
+
             this.RaisePropertyChanged();
         }
     }
 
     public T? TypedValue
     {
-        get => (T?)_property.GetValue(_target);
+        get
+        {
+            if (_property.GetIndexParameters().Length > 0)
+                return default;
+
+            return (T?)_property.GetValue(_target);
+        }
         set
         {
-            _property.SetValue(_target, value);
-            this.RaisePropertyChanged(nameof(Value));
-            this.RaisePropertyChanged(nameof(TypedValue));
+            if (_property.GetIndexParameters().Length == 0)
+            {
+                _property.SetValue(_target, value);
+                this.RaisePropertyChanged(nameof(Value));
+                this.RaisePropertyChanged(nameof(TypedValue));
+            }
         }
     }
+
 }

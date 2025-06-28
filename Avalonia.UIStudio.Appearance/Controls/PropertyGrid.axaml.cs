@@ -1,15 +1,29 @@
-using System.Collections.ObjectModel;
-using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.ReactiveUI;
 using Avalonia.UIStudio.Appearance.Model;
 using Avalonia.UIStudio.Appearance.Services;
 using Avalonia.UIStudio.Appearance.ViewModels;
+using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Disposables;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Avalonia.UIStudio.Appearance.Controls;
 
-public partial class PropertyGrid : UserControl
+public enum PropertyGridSortMode
+{
+    Alphabetical,
+    ByType
+}
+
+public partial class PropertyGrid : ReactiveUserControl<PropertyGrid>, IReactiveObject, INotifyPropertyChanged
 {
     public static readonly StyledProperty<object?> SelectedObjectProperty =
         AvaloniaProperty.Register<PropertyGrid, object?>(nameof(SelectedObject));
@@ -17,6 +31,9 @@ public partial class PropertyGrid : UserControl
     public static readonly StyledProperty<bool> IsEditModeProperty =
         AvaloniaProperty.Register<PropertyGrid, bool>(nameof(IsEditMode));
 
+    public static readonly StyledProperty<PropertyGridSortMode> SortModeProperty =
+        AvaloniaProperty.Register<PropertyGrid, PropertyGridSortMode>(
+            nameof(SortMode), defaultValue: PropertyGridSortMode.ByType);
 
     public PropertyGrid()
     {
@@ -24,6 +41,7 @@ public partial class PropertyGrid : UserControl
         DataContext = this;
 
         this.GetObservable(SelectedObjectProperty).Subscribe(OnSelectedObjectChanged);
+        this.GetObservable(SortModeProperty).Subscribe(_ => OnSelectedObjectChanged(SelectedObject));
     }
 
     public object? SelectedObject
@@ -38,26 +56,57 @@ public partial class PropertyGrid : UserControl
         set => SetValue(IsEditModeProperty, value);
     }
 
-
-    public ObservableCollection<PropertyViewModel> Properties { get; } = new();
-
-    private void InitializeComponent()
+    public PropertyGridSortMode SortMode
     {
-        AvaloniaXamlLoader.Load(this);
+        get => GetValue(SortModeProperty);
+        set => SetValue(SortModeProperty, value);
+    }
+
+    public List<PropertyGridSortMode> SortModes { get; } = new()
+    {
+        PropertyGridSortMode.Alphabetical,
+        PropertyGridSortMode.ByType
+    };
+
+    private ObservableCollection<PropertyViewModel> _properties = new();
+    public ObservableCollection<PropertyViewModel> Properties
+    {
+        get => _properties;
+        set => RaiseAndSetIfChanged(ref _properties, value);
+    }
+
+    private ObservableCollection<PropertyGroupViewModel> _groupedProperties = new();
+    public ObservableCollection<PropertyGroupViewModel> GroupedProperties
+    {
+        get => _groupedProperties;
+        set => RaiseAndSetIfChanged(ref _groupedProperties, value);
     }
 
     private void OnSelectedObjectChanged(object? obj)
     {
-        Properties.Clear();
+        Properties = new ObservableCollection<PropertyViewModel>();
+        GroupedProperties = new ObservableCollection<PropertyGroupViewModel>();
+
         if (obj == null) return;
 
-        var props = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => p.CanRead && p.CanWrite);
+        var props = obj.GetType()
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Where(p => p.CanRead && p.CanWrite)
+            .Select(p => CreateViewModelForProperty(obj, p));
 
-        foreach (var prop in props)
+        if (SortMode == PropertyGridSortMode.Alphabetical)
         {
-            PropertyViewModel vm = CreateViewModelForProperty(obj, prop);
-            Properties.Add(vm);
+            Properties = new ObservableCollection<PropertyViewModel>(
+                props.OrderBy(p => p.DisplayName)
+            );
+        }
+        else
+        {
+            GroupedProperties = new ObservableCollection<PropertyGroupViewModel>(
+                props.GroupBy(p => p.GroupName)
+                     .OrderBy(g => g.Key)
+                     .Select(g => new PropertyGroupViewModel(g.Key, g.OrderBy(p => p.DisplayName)))
+            );
         }
     }
 
@@ -93,8 +142,31 @@ public partial class PropertyGrid : UserControl
             return new StringListPropertyViewModel(obj, prop);
         if (TypeHelpers.IsListOfObjects(type))
             return new ObjectListPropertyViewModel(obj, prop);
-        else
-            return new ObjectPropertyViewModel(obj, prop);
+
+        return new ObjectPropertyViewModel(obj, prop);
     }
 
+    // ----- ReactiveUI glue -----
+
+    public event PropertyChangingEventHandler? PropertyChanging;
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    void IReactiveObject.RaisePropertyChanged(PropertyChangedEventArgs args) =>
+        PropertyChanged?.Invoke(this, args);
+
+    void IReactiveObject.RaisePropertyChanging(PropertyChangingEventArgs args) =>
+        PropertyChanging?.Invoke(this, args);
+
+    
+
+    protected bool RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
+            return false;
+
+        PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
+        field = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        return true;
+    }
 }

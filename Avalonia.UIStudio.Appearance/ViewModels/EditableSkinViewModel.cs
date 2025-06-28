@@ -22,7 +22,7 @@ public class EditableSkinViewModel : ReactiveObject
         PrimaryTextColor = new ValidatableProperty<Color>(nameof(PrimaryTextColor), skin.PrimaryTextColor);
         SecondaryTextColor = new ValidatableProperty<Color>(nameof(SecondaryTextColor), skin.SecondaryTextColor);
 
-        FontFamily = new ValidatableProperty<string>(nameof(FontFamily), skin.FontFamily.Name);
+        FontFamily = new ValidatableProperty<FontFamily>(nameof(FontFamily), skin.FontFamily);
 
 
         FontSizeSmall = new ValidatableProperty<double>(nameof(FontSizeSmall), skin.FontSizeSmall);
@@ -51,7 +51,7 @@ public class EditableSkinViewModel : ReactiveObject
     public ValidatableProperty<Color> AccentColor { get; set; }
     public ValidatableProperty<Color> PrimaryTextColor { get; set; }
     public ValidatableProperty<Color> SecondaryTextColor { get; set; }
-    public ValidatableProperty<string> FontFamily { get; set; }
+    public ValidatableProperty<FontFamily> FontFamily { get; set; }
     public ValidatableProperty<string> HeaderFontFamily { get; set; }
     public ValidatableProperty<string> BodyFontFamily { get; set; }
     public ValidatableProperty<string> MonospaceFontFamily { get; set; }
@@ -86,7 +86,7 @@ public class EditableSkinViewModel : ReactiveObject
         Skin.PrimaryTextColor = PrimaryTextColor.Value;
         Skin.SecondaryTextColor = SecondaryTextColor.Value;
 
-        Skin.FontFamily = new FontFamily(FontFamily.Value);
+        Skin.FontFamily = FontFamily.Value;
         Skin.FontSizeSmall = FontSizeSmall.Value;
         Skin.FontSizeMedium = FontSizeMedium.Value;
         Skin.FontSizeLarge = FontSizeLarge.Value;

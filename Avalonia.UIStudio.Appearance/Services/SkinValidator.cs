@@ -28,7 +28,9 @@ public class SkinValidator
             new FontSizeValidationRule(),
             new BorderValidationRule(),
             new NameValidationRule(),
-            new AccessibilityValidationRule()
+            new AccessibilityValidationRule(),
+            
+            new SkinCompletenessValidationRule()
         };
     }
 

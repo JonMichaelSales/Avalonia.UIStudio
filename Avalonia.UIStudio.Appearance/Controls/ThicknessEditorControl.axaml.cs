@@ -21,9 +21,4 @@ public partial class ThicknessEditorControl : ValidatableEditorControlBase<Thick
         get => GetValue(ValueProperty);
         set => SetValue(ValueProperty, value);
     }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
 }

@@ -60,6 +60,9 @@ public static class AppBuilderExtensions
                                    throw new InvalidOperationException("Application.Current is not available.")));
                 services.AddTransient<IStylesCollection, AvaloniaStylesWrapper>();
                 services.AddSingleton<ISkinLoaderService, SkinLoaderService>();
+                services.AddSingleton<ISkinRegistryService, SkinRegistryService>();
+                services.AddSingleton<ISkinApplierService, SkinApplierService>();
+                services.AddSingleton<ISkinPersistenceService, SkinPersistenceService>();
                 services.AddTransient<ISkinImportExportService, SkinImportExportService>();
                 services.AddSingleton<IQuickSkinSwitcherViewModel, QuickSkinSwitcherViewModel>();
                 services.AddTransient<SkinSettingsViewModel>();

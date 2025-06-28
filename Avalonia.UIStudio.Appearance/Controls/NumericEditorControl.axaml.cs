@@ -44,9 +44,4 @@ public partial class NumericEditorControl : ValidatableEditorControlBase<Numeric
         get => GetValue(SuggestedValueProperty);
         set => SetValue(SuggestedValueProperty, value);
     }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
 }

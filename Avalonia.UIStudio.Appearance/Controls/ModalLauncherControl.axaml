@@ -5,35 +5,36 @@
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Height="{DynamicResource PropertyItemHeight}"
     mc:Ignorable="d">
 
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
-      <Border.Styles>
-        <Style Selector="TextBlock.Label">
-          <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
-        </Style>
-      </Border.Styles>
+        <Border.Styles>
+            <Style Selector="TextBlock.Label">
+                <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
+            </Style>
+        </Border.Styles>
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
             <Grid>
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="200" Width="*" />
-                <ColumnDefinition MinWidth="200" Width="Auto" />
-              </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="200" />
+                    <ColumnDefinition Width="Auto" MinWidth="200" />
+                </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Theme="{StaticResource StatsTitleTheme}"
                     FontSize="{DynamicResource FontSizeLabel}"
-                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ModalEditorLauncherControl}}" />
+                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ModalEditorLauncherControl}}"
+                    Theme="{StaticResource StatsTitleTheme}" />
 
                 <Button
                     Grid.Column="1"
-                    Margin="4,0"
+                    Margin="0,0"
                     HorizontalAlignment="Right"
                     Click="LaunchEditor_Click"
-                    Content="{Binding LaunchLabel, RelativeSource={RelativeSource AncestorType=controls:ModalEditorLauncherControl}}"
+                    Content="View Object"
                     IsEnabled="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ModalEditorLauncherControl}}"
-                    Theme="{StaticResource SquareOutlineButton}" />
+                    Theme="{StaticResource OutlineButtonTheme}" />
             </Grid>
         </controls:ValidationDecorator>
     </Border>

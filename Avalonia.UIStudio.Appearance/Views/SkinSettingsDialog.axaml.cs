@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using Avalonia.UIStudio.Appearance.Extensions;
 using Avalonia.UIStudio.Appearance.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,11 @@ public partial class SkinSettingsDialog : Window
         DataContext = Application.Current.GetRequiredService<SkinSettingsViewModel>();
     }
 
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
     public SkinSettingsDialog(IServiceProvider serviceProvider)
     {
         InitializeComponent();
@@ -40,6 +46,8 @@ public partial class SkinSettingsDialog : Window
     {
         if (DataContext is SkinSettingsViewModel viewModel) viewModel.ResetToDefault();
     }
+    
+    
 
     private void CloseButton_Click(object? sender, RoutedEventArgs e)
     {

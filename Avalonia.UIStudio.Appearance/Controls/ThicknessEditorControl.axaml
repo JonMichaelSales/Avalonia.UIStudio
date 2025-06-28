@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Height="{DynamicResource PropertyItemHeight}"
     mc:Ignorable="d">
 
     <UserControl.Styles>
@@ -16,32 +17,52 @@
 
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid ColumnDefinitions="200,*">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="200" />
+                    <ColumnDefinition Width="Auto" MinWidth="200" />
+                </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     Classes="Label"
-                    Theme="{StaticResource StatsTitleTheme}"
                     FontSize="{DynamicResource FontSizeLabel}"
-                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}"
+                    Theme="{StaticResource StatsTitleTheme}" />
 
                 <!--  Static View Mode  -->
-                <TextBlock
+                <StackPanel
                     Grid.Column="1"
-                    Width="200"
-                    VerticalAlignment="Center"
-                    FontSize="{DynamicResource FontSizeLabel}"
+                    HorizontalAlignment="Right"
                     IsVisible="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}"
-                    Text="{Binding ValueString, StringFormat='L:{0.Left}, T:{0.Top}, R:{0.Right}, B:{0.Bottom}', RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
-
+                    Orientation="Horizontal">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="{DynamicResource FontSizeLabel}"
+                        Text="{Binding Value.Left, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <TextBlock Text="," />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="{DynamicResource FontSizeLabel}"
+                        Text="{Binding Value.Top, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <TextBlock Text="," />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="{DynamicResource FontSizeLabel}"
+                        Text="{Binding Value.Right, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                    <TextBlock Text="," />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="{DynamicResource FontSizeLabel}"
+                        Text="{Binding Value.Bottom, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}" />
+                </StackPanel>
                 <!--  Edit Mode  -->
                 <StackPanel
                     Grid.Column="1"
                     IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ThicknessEditorControl}}"
-                    Orientation="Horizontal"
-                    >
+                    Orientation="Horizontal">
                     <StackPanel.Styles>
-                        <Style Selector="NumericUpDown" >
+                        <Style Selector="NumericUpDown">
                             <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
                             <Setter Property="Margin" Value="0,0,0,0" />
                         </Style>

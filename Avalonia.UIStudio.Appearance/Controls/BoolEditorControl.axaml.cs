@@ -17,9 +17,4 @@ public partial class BoolEditorControl : ValidatableEditorControlBase<TextEditor
         get => GetValue(ValueProperty);
         set => SetValue(ValueProperty, value);
     }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
 }

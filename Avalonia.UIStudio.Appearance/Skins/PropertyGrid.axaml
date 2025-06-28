@@ -1,16 +1,110 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--  PropertyGrid Theming Constants  -->
     <x:Double x:Key="FontSizeLabel">13</x:Double>
+    <x:Double x:Key="PropertyItemHeight">27</x:Double>
+    <ControlTheme x:Key="SimpleExpanderToggleButtonTheme" TargetType="ToggleButton">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}" BorderThickness="1">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <Border
+                            Grid.Column="0"
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <Path
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M 0 2 L 4 6 L 0 10 Z"
+                                Fill="{DynamicResource ThemeForegroundBrush}" />
+                        </Border>
+                        <ContentPresenter
+                            Name="PART_ContentPresenter"
+                            Grid.Column="1"
+                            Padding="{TemplateBinding Padding}"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Background="Transparent"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{Binding $parent[Expander].HeaderTemplate}" />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover /template/ Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="PropertyGridExpanderTheme" TargetType="Expander">
+
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ContentTransition">
+            <CrossFade Duration="0:0:0.2" />
+        </Setter>
+
+        <!--  Only overriding ExpandDirection Down for PropertyGrid  -->
+        <Style Selector="^[ExpandDirection=Down]">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        Background="{DynamicResource BackgroundBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <Grid RowDefinitions="Auto,*">
+                            <ToggleButton
+                                Name="PART_toggle"
+                                Grid.Row="0"
+                                Padding="6,4"
+                                HorizontalContentAlignment="Stretch"
+                                Background="{DynamicResource PrimaryColor}"
+                                Content="{TemplateBinding Header}"
+                                FontSize="{DynamicResource FontSizeLabel}"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource TextOnPrimaryBrush}"
+                                IsChecked="{TemplateBinding IsExpanded,
+                                                            Mode=TwoWay}"
+                                Theme="{StaticResource SimpleExpanderToggleButtonRightTheme}" />
+
+                            <ContentPresenter
+                                Name="PART_ContentPresenter"
+                                Grid.Row="1"
+                                Margin="0,4,0,0"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                IsVisible="{TemplateBinding IsExpanded}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:expanded /template/ ToggleButton#PART_toggle">
+                <Setter Property="Theme" Value="{StaticResource SimpleExpanderToggleButtonDownTheme}" />
+            </Style>
+        </Style>
+    </ControlTheme>
+
+
     <ControlTheme x:Key="PropertyGridTextBoxTheme" TargetType="TextBox">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
-        <Setter Property="Background" Value="{DynamicResource BackgroundLightBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
         <Setter Property="CaretBrush" Value="{DynamicResource TextPrimaryBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource AccentBlueBrush}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}" />
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="MinWidth" Value="120" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeLabel}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeLabel}" />
         <Setter Property="Padding" Value="5,1" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
@@ -175,7 +269,7 @@
     <x:Int32 x:Key="ComboBoxPopupMaxNumberOfItemsThatCanBeShownOnOneSide">7</x:Int32>
     <Thickness x:Key="ComboBoxPadding">12,5,0,7</Thickness>
     <Thickness x:Key="ComboBoxEditableTextPadding">11,5,32,6</Thickness>
-    <x:Double x:Key="ComboBoxMinHeight">24</x:Double>
+    <x:Double x:Key="ComboBoxMinHeight">26</x:Double>
     <ControlTheme x:Key="PropertyGridComboBoxItem" TargetType="ComboBoxItem">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
         <Setter Property="Background" Value="Transparent" />
@@ -261,7 +355,7 @@
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-        
+        <Setter Property="MinHeight" Value="25" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -277,7 +371,7 @@
                             x:Name="Background"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
-                            MinWidth="120"
+                            MinWidth="100"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -430,53 +524,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
             </Style>
         </Style>
-
     </ControlTheme>
-  <!--<ControlTheme x:Key="{x:Type NumericUpDown}"
-                 TargetType="NumericUpDown">
-    <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
-    <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}" />
-    <Setter Property="Padding" Value="4" />
-    <Setter Property="Template">
-      <ControlTemplate>
-        <DataValidationErrors>
-          <ButtonSpinner Name="PART_Spinner"
-                         HorizontalContentAlignment="Stretch"
-                         VerticalContentAlignment="Stretch"
-                         IsTabStop="False"
-                         Padding="0"
-                         FontSize="{DynamicResource FontSizeSmall"
-                         MinWidth="0"
-                         AllowSpin="{TemplateBinding AllowSpin}"
-                         Background="{TemplateBinding Background}"
-                         BorderBrush="{TemplateBinding BorderBrush}"
-                         BorderThickness="{TemplateBinding BorderThickness}"
-                         ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}"
-                         CornerRadius="{TemplateBinding CornerRadius}"
-                         ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}">
-            <TextBox Name="PART_TextBox"
-                     MinWidth="20"
-                     Margin="2,0"
-                     Padding="{TemplateBinding Padding}"
-                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                     AcceptsReturn="False"
-                     Background="{TemplateBinding Background}"
-                     BorderThickness="0"
-                     IsReadOnly="{TemplateBinding IsReadOnly}"
-                     Text="{TemplateBinding Text}"
-                     TextAlignment="{TemplateBinding TextAlignment}"
-                     TextWrapping="NoWrap"
-                     Watermark="{TemplateBinding Watermark}"
-                     InnerLeftContent="{Binding InnerLeftContent, RelativeSource={RelativeSource TemplatedParent}}"
-                     InnerRightContent="{Binding InnerRightContent, RelativeSource={RelativeSource TemplatedParent}}"/>
-          </ButtonSpinner>
-        </DataValidationErrors>
-      </ControlTemplate>
-    </Setter>
-  </ControlTheme>-->
 
     <Design.PreviewWith>
         <StackPanel>

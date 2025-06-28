@@ -1,4 +1,5 @@
 ﻿using Avalonia.Headless.XUnit;
+using Avalonia.UIStudio.Appearance.Interfaces;
 using Avalonia.UIStudio.Appearance.Model;
 using Avalonia.UIStudio.Appearance.Services;
 using Moq;
@@ -7,21 +8,21 @@ namespace Avalonia.UIStudio.Appearance.Tests.Services.Unit;
 
 public class SkinManagerTests
 {
-    private readonly Mock<ISkinLoaderService> _skinLoaderServiceMock;
     private readonly SkinManager _skinManager;
+    private readonly Mock<ISkinRegistryService> _registryMock;
+    private readonly Mock<ISkinApplierService> _applierMock;
+    private readonly Mock<ISkinPersistenceService> _persistenceMock;
 
     public SkinManagerTests()
     {
-        _skinLoaderServiceMock = new Mock<ISkinLoaderService>();
-
-        _skinLoaderServiceMock.Setup(s => s.LoadSkins(It.IsAny<string>()))
-            .Returns(new List<Skin>());
-
-        var appWrapper = new ApplicationWrapper(Application.Current!);
+        _registryMock = new Mock<ISkinRegistryService>();
+        _applierMock = new Mock<ISkinApplierService>();
+        _persistenceMock = new Mock<ISkinPersistenceService>();
 
         _skinManager = new SkinManager(
-            _skinLoaderServiceMock.Object,
-            appWrapper
+            _registryMock.Object,
+            _applierMock.Object,
+            _persistenceMock.Object
         );
     }
 
@@ -33,24 +34,26 @@ public class SkinManagerTests
 
         Assert.Equal(skin, _skinManager.GetSkin("TestSkin"));
     }
-    
+
     [AvaloniaFact]
-    public void ApplyControlThemes_HandlesThemeUris()
+    public void ApplySkin_LoadsControlThemeUrisWithoutException()
     {
+        var app = Application.Current!;
+        var applier = new SkinApplierService((IApplication)app);
+
         var skin = new Skin
         {
             Name = "TestSkin",
             ControlThemeUris = ["avares://Avalonia.UIStudio.Appearance.Tests/TestAssets/FakeControlTheme.axaml"]
         };
 
-        var skinManager = new SkinManager(new SkinLoaderService(), new ApplicationWrapper(Application.Current!));
-        skinManager.RegisterSkin("TestSkin", skin);
-        skinManager.ApplySkin("TestSkin");
+        var exception = Record.Exception(() => applier.ApplySkin(skin));
 
-        // No assert needed — the purpose is to force the ControlThemeUris code path
+        Assert.Null(exception);
     }
-    
-   
+
+
+
     [AvaloniaFact]
     public void RegisterSkin_DoesNothing_WhenNameOrSkinIsNull()
     {

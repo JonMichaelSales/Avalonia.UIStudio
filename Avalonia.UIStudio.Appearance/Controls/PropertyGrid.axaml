@@ -3,12 +3,22 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    xmlns:converters="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Avalonia.UIStudio.Appearance.Model"
     xmlns:viewModels="clr-namespace:Avalonia.UIStudio.Appearance.ViewModels"
     xmlns:views="clr-namespace:Avalonia.UIStudio.Appearance.Views"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/NumericUpDown.axaml" />
+                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/PropertyGrid.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <UserControl.DataTemplates>
         <DataTemplate x:DataType="viewModels:ColorPropertyViewModel">
             <controls:ColorEditorControl
@@ -33,10 +43,8 @@
         <DataTemplate DataType="viewModels:FontFamilyPropertyViewModel">
             <controls:FontFamilyEditorControl
                 IsEditMode="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}"
-                Label="Font Family"
-                PropertyName="FontFamily"
-                ValidatedProperty="{Binding ValidatedProperties[FontFamily]}"
-                Value="{Binding DataContext.EditableSkin.FontFamily.Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=views:SkinSettingsDialog}}" />
+                Label="{Binding DisplayName}"
+                Value="{Binding Value}" />
         </DataTemplate>
         <DataTemplate DataType="viewModels:EnumPropertyViewModel">
             <controls:EnumEditorControl
@@ -63,10 +71,10 @@
                 Value="{Binding Value}" />
         </DataTemplate>
         <!-- <DataTemplate DataType="model:TypographyScale"> -->
-        <!--     <controls:ModalEditorLauncherControl -->
-        <!--         IsEditMode="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}" -->
-        <!--         Label="{Binding DisplayName}" -->
-        <!--         Value="{Binding Value}" /> -->
+        <!--  <controls:ModalEditorLauncherControl  -->
+        <!--  IsEditMode="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}"  -->
+        <!--  Label="{Binding DisplayName}"  -->
+        <!--  Value="{Binding Value}" />  -->
         <!-- </DataTemplate> -->
         <DataTemplate DataType="viewModels:StringListPropertyViewModel">
             <controls:ModalListEditorLauncherControl
@@ -88,43 +96,75 @@
                 Value="{Binding Value}" />
         </DataTemplate>
     </UserControl.DataTemplates>
-
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/AppSkin.axaml" />
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/PropertyGrid.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <UserControl.Styles>
-        <SimpleTheme />
-    </UserControl.Styles>
+    <UserControl.Styles />
     <Border
-        HorizontalAlignment="Left"
         BorderBrush="{DynamicResource BorderBrush}"
         BorderThickness="{DynamicResource BorderThickness}"
         CornerRadius="0">
-        <StackPanel>
-            <CheckBox IsChecked="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:PropertyGrid}}">Is Edit Mode</CheckBox>
-            <ScrollViewer>
-                <ItemsControl ItemsSource="{Binding Properties}">
+        <Grid RowDefinitions="Auto,*">
+            <Border
+                Grid.Row="0"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="{DynamicResource BorderThickness}"
+                CornerRadius="0">
+                <TextBlock
+                    Margin="8,2"
+                    VerticalAlignment="Center"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    Text="Properties" />
+            </Border>
+            <StackPanel Grid.Row="1">
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <CheckBox
+                        Margin="8"
+                        Content="Edit"
+                        IsChecked="{Binding IsEditMode}" />
+                    <ComboBox
+                        Margin="8"
+                        ItemsSource="{Binding SortModes}"
+                        SelectedIndex="0"
+                        SelectedItem="{Binding SortMode}" />
+                </StackPanel>
+                <ScrollViewer Margin="8">
+                    <Panel>
+                        <!--  Grouped View  -->
+                        <ItemsControl
+                            x:Name="GroupedItems"
+                            IsVisible="{Binding SortMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=ByType}"
+                            ItemsSource="{Binding GroupedProperties}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:PropertyGroupViewModel">
+                                    <Expander
+                                        Margin="0,4"
+                                        Header="{Binding GroupName}"
+                                        IsExpanded="True"
+                                        Theme="{StaticResource PropertyGridExpanderTheme}">
+                                        <ItemsControl ItemsSource="{Binding Properties}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ContentControl Content="{Binding}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Expander>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <ContentControl Content="{Binding}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="0" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                </ItemsControl>
-            </ScrollViewer>
-        </StackPanel>
+                        <!--  Flat View  -->
+                        <ItemsControl
+                            x:Name="FlatItems"
+                            IsVisible="{Binding SortMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Alphabetical}"
+                            ItemsSource="{Binding Properties}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentControl Content="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Panel>
+                </ScrollViewer>
+            </StackPanel>
+        </Grid>
     </Border>
 </UserControl>

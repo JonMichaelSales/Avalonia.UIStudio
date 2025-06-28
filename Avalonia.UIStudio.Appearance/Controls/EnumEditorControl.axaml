@@ -7,10 +7,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Avalonia.UIStudio.Appearance.ViewModels"
+    Height="{DynamicResource PropertyItemHeight}"
     x:DataType="viewModels:EnumPropertyViewModel"
     mc:Ignorable="d">
     <UserControl.Styles>
-        <SimpleTheme />
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
 
         <Style Selector="TextBlock.Label">
@@ -23,11 +23,11 @@
     </UserControl.Styles>
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
-            <Grid >
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="200" Width="*" />
-                <ColumnDefinition MinWidth="200" Width="Auto" />
-              </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="200" />
+                    <ColumnDefinition Width="Auto" MinWidth="200" />
+                </Grid.ColumnDefinitions>
 
                 <TextBlock
                     Grid.Column="0"
@@ -42,9 +42,10 @@
                     MinWidth="120"
                     HorizontalAlignment="Right"
                     DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:EnumEditorControl}}"
+                    FontSize="{DynamicResource FontSizeLabel}"
+                    IsEnabled="{Binding IsEditMode}"
                     ItemsSource="{Binding Value, Converter={x:Static converters:EnumValuesConverter.Instance}}"
                     SelectedItem="{Binding Value, Mode=TwoWay}"
-                    FontSize="{DynamicResource FontSizeLabel}"
                     Theme="{StaticResource PropertyGridComboBox}" />
 
 

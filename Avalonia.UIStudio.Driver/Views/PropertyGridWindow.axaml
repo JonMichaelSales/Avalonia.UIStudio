@@ -9,27 +9,19 @@
     xmlns:reactiveUi="clr-namespace:ReactiveUI;assembly=ReactiveUI"
     xmlns:views="clr-namespace:Avalonia.UIStudio.Driver.Views"
     Title="PropertyGridWindow"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    Background="{DynamicResource BackgroundDark}"
-    Foreground="{DynamicResource TextPrimaryDark}"
     x:DataType="views:PropertyGridWindow"
+    Background="{DynamicResource BackgroundBrush}"
+    Foreground="{DynamicResource TextPrimaryBrush}"
     Icon="avares://Avalonia.UIStudio.Icons/Assets/a_blue.ico"
     Loaded="Control_OnLoaded"
+    SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorTheme.axaml" />
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/CustomThemes.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <!--  Include the skin manager ControlTheme resources  -->
-        </ResourceDictionary>
-    </Window.Resources>
+
     <Window.Styles>
-        <SimpleTheme />
-        <SimpleTheme />
-        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <FluentTheme />
+
     </Window.Styles>
-    <StackPanel x:Name="MainPanel" HorizontalAlignment="Center" />
+    <StackPanel x:Name="MainPanel" HorizontalAlignment="Center">
+        <controls:QuickSkinSwitcher />
+    </StackPanel>
 </Window>

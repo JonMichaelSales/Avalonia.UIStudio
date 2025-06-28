@@ -4,33 +4,30 @@
         <!--  Colors and Brushes  -->
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorTheme.axaml" />
         <!--  Controls  -->
-        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Button.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Border.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/ControlThemes/Button/BaseButtonTheme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/ControlThemes/Button/OutlineButton.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/ControlThemes/Button/StatusButton.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ButtonSpinner.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/CheckBox.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorPicker.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorPreviewer.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorView.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ColorSpetrum.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ComboBox.Theme.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Expander.axaml" />
-        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TabControl.Theme.axaml" />
-        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TextBox.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/NumericUpDown.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/OtherControlThemes.axaml" />
-
-        <!--  New Themes  -->
-        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Window.Theme.axaml" />
-        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Separator.Theme.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/PathIcon.Theme.axaml" />
-        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Border.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/RepeatButton.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/Separator.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TabControl.Theme.axaml" />
         <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TextBlock.Theme.axaml" />
-
-
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TextBox.Theme.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/TitleBar.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/ToggleSwitch.axaml" />
+        <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/ControlThemes/Window/Window.axaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <!--  Default Control Mappings  -->
-    <ControlTheme
-        x:Key="{x:Type Window}"
-        BasedOn="{StaticResource DefaultWindowTheme}"
-        TargetType="Window" />
-    <ControlTheme
-        x:Key="{x:Type Button}"
-        BasedOn="{StaticResource PrimaryButtonTheme}"
-        TargetType="Button" />
     <ControlTheme
         x:Key="{x:Type CheckBox}"
         BasedOn="{StaticResource CustomCheckBoxTheme}"

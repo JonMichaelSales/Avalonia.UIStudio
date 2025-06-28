@@ -1,0 +1,68 @@
+<Window
+    x:Class="Avalonia.UIStudio.Appearance.Views.SkinEditorDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.UIStudio.Appearance.Controls"
+    xmlns:viewModels="clr-namespace:Avalonia.UIStudio.Appearance.ViewModels"
+    xmlns:views="clr-namespace:Avalonia.UIStudio.Appearance.Views"
+    Title="Skin Editor"
+    Width="640"
+    Height="800"
+    x:DataType="viewModels:SkinSettingsViewModel"
+    Background="{DynamicResource BackgroundBrush}"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+        <TextBlock
+            Grid.Row="0"
+            Margin="20,20,20,10"
+            DockPanel.Dock="Top"
+            FontSize="20"
+            FontWeight="SemiBold"
+            Foreground="{DynamicResource TextPrimaryBrush}"
+            Text="Skin Editor - Full Properties" />
+
+        <Border
+            Grid.Row="1"
+            Margin="20"
+            Background="{DynamicResource BackgroundLightBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="4">
+            <ScrollViewer>
+                <controls:PropertyGrid SelectedObject="{Binding DataContext.SelectedSkinDetails, RelativeSource={RelativeSource AncestorType=views:SkinEditorDialog}}" />
+            </ScrollViewer>
+        </Border>
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="20"
+            DockPanel.Dock="Bottom">
+            <ItemsControl ItemsSource="{Binding DataContext.Errors, RelativeSource={RelativeSource AncestorType=views:SkinEditorDialog}}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Foreground="Red" Text="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <ItemsControl ItemsSource="{Binding DataContext.Warnings, RelativeSource={RelativeSource AncestorType=views:SkinEditorDialog}}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Foreground="Orange" Text="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+        </StackPanel>
+        <StackPanel
+            Grid.Row="3"
+            Margin="10,0,10,5"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="10">
+            <Button Click="Close_Click" Content="Cancel" />
+            <Button Command="{Binding ApplyChangesCommand}" Content="Save Changes" />
+        </StackPanel>
+    </Grid>
+</Window>

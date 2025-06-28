@@ -31,6 +31,9 @@ public class SkinImportExportServiceTests
             WarningColor = Color.Parse("#FFA500"),
             SuccessColor = Color.Parse("#00FF00"),
             FontFamily = new FontFamily("Segoe UI"),
+            HeaderFontFamily = new FontFamily("Segoe UI"),
+            BodyFontFamily = new FontFamily("Segoe UI"),
+            MonospaceFontFamily = new FontFamily("Consolas"),
             FontSizeSmall = 12,
             FontSizeMedium = 14,
             FontSizeLarge = 18,
@@ -70,9 +73,9 @@ public class SkinImportExportServiceTests
     {
         var skin = CreateTestSkin();
         skin.Typography = new TypographyScale();
-        skin.HeaderFontFamily = new FontFamily("Arial");
-        skin.BodyFontFamily = new FontFamily("Arial");
-        skin.MonospaceFontFamily = new FontFamily("Consolas");
+        skin.HeaderFontFamily = "Arial";
+        skin.BodyFontFamily = "Arial";
+        skin.MonospaceFontFamily = "Consolas";
         skin.LineHeight = 1.2;
         skin.LetterSpacing = 0.1;
         skin.EnableLigatures = true;
@@ -147,9 +150,9 @@ public class SkinImportExportServiceTests
     {
         var skin = CreateTestSkin();
         skin.Typography = new TypographyScale();
-        skin.HeaderFontFamily = new FontFamily("Arial");
-        skin.BodyFontFamily = new FontFamily("Arial");
-        skin.MonospaceFontFamily = new FontFamily("Consolas");
+        skin.HeaderFontFamily = "Arial";
+        skin.BodyFontFamily = "Arial";
+        skin.MonospaceFontFamily = "Consolas";
         skin.LineHeight = 1.2;
         skin.LetterSpacing = 0.1;
         skin.EnableLigatures = true;

@@ -6,20 +6,18 @@
     xmlns:converters="clr-namespace:Avalonia.UIStudio.Appearance.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Height="{DynamicResource PropertyItemHeight}"
     Margin="0"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:ObjectToColorConverter x:Key="ObjectToColorConverter" />
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://Avalonia.UIStudio.Appearance/Skins/AppSkin.axaml" />
-            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <UserControl.Styles>
         <SimpleTheme />
-        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+
 
         <Style Selector="TextBlock.Label">
             <Setter Property="Theme" Value="{StaticResource StatsTitleTheme}" />
@@ -32,47 +30,51 @@
     <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <controls:ValidationDecorator PropertyName="{Binding PropertyName}" ValidatedProperty="{Binding}">
             <Grid>
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="200" Width="Auto" />
-                <ColumnDefinition MinWidth="200" Width="Auto" />
-              </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="200" />
+                    <ColumnDefinition Width="*" MinWidth="200" />
+                </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
-                    
                     VerticalAlignment="Center"
                     Classes="Label"
                     FontSize="{DynamicResource FontSizeLabel}"
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
                 <!--  Current Value  -->
-              <Grid Grid.Column="1" ColumnDefinitions="*,Auto,Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                <Rectangle Grid.Column="0" />
-                            
-                <TextBlock
-                  Grid.Column="1"
-                      Text="{Binding Value, Converter={StaticResource ObjectToColorConverter}, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
-                      Width="75"
-                      FontSize="{DynamicResource FontSizeSmall}"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Center" />
-                
-                
-                <Rectangle
-                    Grid.Column="2"
-                    Width="60"
-                    IsVisible="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
-                    Classes="ColorPreview">
-                  <Rectangle.Fill>
-                    <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
-                  </Rectangle.Fill>
-                </Rectangle>
-                <!--  Color Picker  -->
-                <ColorPicker
-                    Grid.Column="2"
-                    Width="60"
-                    FontSize="{DynamicResource FontSizeSmall}"
-                    IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
-                    Color="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
-              </Grid>
+                <Grid
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    ColumnDefinitions="*,Auto,Auto">
+                    <Rectangle Grid.Column="0" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Width="75"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="{DynamicResource FontSizeSmall}"
+                        Text="{Binding Value, Converter={StaticResource ObjectToColorConverter}, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+
+
+                    <Rectangle
+                        Grid.Column="2"
+                        Width="60"
+                        Classes="ColorPreview"
+                        IsVisible="{Binding !IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <!--  Color Picker  -->
+                    <ColorPicker
+                        Grid.Column="2"
+                        Width="60"
+                        HorizontalAlignment="Right"
+                        FontSize="{DynamicResource FontSizeSmall}"
+                        IsVisible="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}"
+                        Color="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=controls:ColorEditorControl}}" />
+                </Grid>
             </Grid>
         </controls:ValidationDecorator>
     </Border>
